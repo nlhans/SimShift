@@ -171,7 +171,7 @@ namespace SimShift.Services
             }
 
             if (ButtonFeedback.ContainsKey(c)) ButtonFeedback[c] = value;
-            else ButtonFeedback.Add(c, value);
+        else ButtonFeedback.Add(c, value);
         }
 
         public static void SetAxisOut(JoyControls c, double value)

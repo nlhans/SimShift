@@ -139,22 +139,23 @@ namespace SimShift.Services
 
             // Phase 1: engage clutch
             ShiftPattern.Add(new ShiftPatternFrame(0, 0, true, false));
-            //ShiftPattern.Add(new ShiftPatternFrame(0, 0.7, true, false));
-            //ShiftPattern.Add(new ShiftPatternFrame(0.5, 0.4, true, false));
-            //ShiftPattern.Add(new ShiftPatternFrame(0.8, 0, true, false));
+            ShiftPattern.Add(new ShiftPatternFrame(0, 0.7, true, false));
+            ShiftPattern.Add(new ShiftPatternFrame(0.5, 0.4, true, false));
+            ShiftPattern.Add(new ShiftPatternFrame(0.8, 0, true, false));
 
             // Phase 2: disengage old gear
             ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
             ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
+            ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
 
             // Phase 3: engage new gear
-            //ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, true));
-            //ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, true));
+            ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, true));
+            ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, true));
             
             // Phase 4: disengage clutch
-            //ShiftPattern.Add(new ShiftPatternFrame(0.8, 0, false, true));
-            //ShiftPattern.Add(new ShiftPatternFrame(0.5, 0.4, false, true));
-            //ShiftPattern.Add(new ShiftPatternFrame(0.0, 0.7, false, true));
+            ShiftPattern.Add(new ShiftPatternFrame(0.8, 0, false, true));
+            ShiftPattern.Add(new ShiftPatternFrame(0.5, 0.4, false, true));
+            ShiftPattern.Add(new ShiftPatternFrame(0.0, 0.7, false, true));
             ShiftPattern.Add(new ShiftPatternFrame(0.0, 0, false, true));
         }
         #endregion
@@ -375,22 +376,16 @@ namespace SimShift.Services
             return (b == ShiftCtrlNewGear);
         }
 
-        private int subTicker = 0;
         public void TickControls()
         {
             if (IsShifting)
             {
-                subTicker++;
-                if (subTicker >  3) subTicker = 0;
 
-                if (false || subTicker == 0)
+                ShiftFrame++;
+                if (ShiftFrame >= ShiftPattern.Count)
                 {
-                    ShiftFrame++;
-                    if (ShiftFrame >= ShiftPattern.Count)
-                    {
-                        IsShifting = false;
-                        TransmissionFreezeUntill = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, 200+ShifterNewGear*50));
-                    }
+                    IsShifting = false;
+                    TransmissionFreezeUntill = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, 200 + ShifterNewGear*50));
                 }
             }
         }
