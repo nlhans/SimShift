@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using SimShift.Data;
 
 namespace SimShift.Services
 {
@@ -12,6 +13,8 @@ namespace SimShift.Services
  
         public ControlChain()
         {
+            chain.Add(Main.CruiseControl);
+            //chain.Add(Main.Speedlimiter);
             chain.Add(Main.Transmission);
             chain.Add(Main.Antistall);
 
@@ -30,13 +33,19 @@ namespace SimShift.Services
             Buttons.Add(JoyControls.GearRange2);
             Buttons.Add(JoyControls.GearUp);
             Buttons.Add(JoyControls.GearDown);
+            Buttons.Add(JoyControls.CruiseControl);
         }
 
-        public void Tick()
+        public void Tick(Ets2DataMiner data)
         {
             // We take all controller input
             var buttonValues = Buttons.ToDictionary(c => c, Main.GetButtonIn);
             var axisValues = Axis.ToDictionary(c => c, Main.GetAxisIn);
+
+            foreach (var obj in chain)
+            {
+                obj.TickTelemetry(data);
+            }
 
             // Put it serially through each control block
             // Each time a block requires a control, it receives the current value of that control
@@ -54,17 +63,12 @@ namespace SimShift.Services
             }
             foreach (var b in axisValues)
             {
-                Main.SetAxisOut(b.Key, b.Value);
+                var v = b.Value;
+                if (v > 1) v = 1;
+                if (v < 0) v = 0;
+                Main.SetAxisOut(b.Key,v);
             }
         }
 
-    }
-
-    public interface IControlChainObj
-    {
-        bool Requires(JoyControls c);
-        double GetAxis(JoyControls c, double val);
-        bool GetButton(JoyControls c, bool val);
-        void TickControls();
     }
 }

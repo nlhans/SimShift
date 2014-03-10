@@ -15,6 +15,7 @@ namespace SimShift.Services
         Gear6,
         GearRange1,
         GearRange2,
+        CruiseControl,
 
 
 

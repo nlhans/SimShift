@@ -79,7 +79,7 @@ namespace SimShift.Dialogs
             return rgb;
         }
 
-        private ShifterTableConfiguration activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Efficiency,5);
+        private ShifterTableConfiguration activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.AlsEenOpa,10);
 
         public dlGearboxShifterTable()
         {

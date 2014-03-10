@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using SimShift.Controllers;
@@ -24,10 +25,14 @@ namespace SimShift.Services
         // Modules
         public static Antistall Antistall;
         public static Transmission Transmission;
+        public static CruiseControl CruiseControl;
+        public static Speedlimiter Speedlimiter;
 
         public static ControlChain Controls;
 
         public static bool Running { get; private set; }
+
+
 
         public static void Setup()
         {
@@ -36,6 +41,8 @@ namespace SimShift.Services
                 Engine = new Ets2Engine(3550);
                 Antistall = new Antistall();
                 Transmission = new Transmission();
+                CruiseControl = new CruiseControl();
+                Speedlimiter = new Speedlimiter();
                 Telemetry = new Ets2DataMiner();
                 Controls = new ControlChain();
 
@@ -74,10 +81,7 @@ namespace SimShift.Services
 
         public static void tick(object sender, EventArgs e)
         {
-            Antistall.TickTelemetry(Telemetry);
-            Transmission.TickTelemetry(Telemetry);
-
-            Controls.Tick();
+            Controls.Tick(Telemetry);
         }
 
         #region Control mapping
@@ -100,6 +104,8 @@ namespace SimShift.Services
                     return RawJoysticksIn[0].GetButton(4);
                 case Services.JoyControls.GearUp:
                     return RawJoysticksIn[0].GetButton(5);
+                case Services.JoyControls.CruiseControl:
+                    return RawJoysticksIn[0].GetButton(0);
 
                 default:
                     return false;
@@ -112,10 +118,10 @@ namespace SimShift.Services
             switch(c)
             {
                 case Services.JoyControls.Throttle:
-                    return 1- RawJoysticksIn[0].GetAxis(2)/Math.Pow(2,15);
+                    return ((RawJoysticksIn[0].GetAxis(3)/Math.Pow(2, 16) - 0.5)*2 - 0.25)/0.75;
 
                 case Services.JoyControls.Brake:
-                    return (RawJoysticksIn[0].GetAxis(2) - Math.Pow(2, 15)) / Math.Pow(2, 15);
+                    return ((RawJoysticksIn[0].GetAxis(2) - Math.Pow(2, 15)) / Math.Pow(2, 15)- 0.25)/0.75;
 
                 case Services.JoyControls.Clutch:
                     return 0.0;
@@ -168,10 +174,17 @@ namespace SimShift.Services
                     RawJoysticksOut[0].SetButton(9, value);
                     break;
 
+                case Services.JoyControls.CruiseControl:
+                    RawJoysticksOut[0].SetButton(10, value);
+                    break;
             }
-
-            if (ButtonFeedback.ContainsKey(c)) ButtonFeedback[c] = value;
-        else ButtonFeedback.Add(c, value);
+            try
+            {
+                if (ButtonFeedback.ContainsKey(c)) ButtonFeedback[c] = value;
+                else ButtonFeedback.Add(c, value);
+            }catch
+            {
+            }
         }
 
         public static void SetAxisOut(JoyControls c, double value)
@@ -194,8 +207,11 @@ namespace SimShift.Services
                     break;
             }
 
-            if (AxisFeedback.ContainsKey(c)) AxisFeedback[c] = value;
-            else AxisFeedback.Add(c, value);
+            try
+            {
+                if (AxisFeedback.ContainsKey(c)) AxisFeedback[c] = value;
+                else AxisFeedback.Add(c, value);
+            }catch{}
         }
         #endregion
 

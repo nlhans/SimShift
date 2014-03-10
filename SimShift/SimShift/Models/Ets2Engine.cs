@@ -12,8 +12,8 @@ namespace SimShift.Models
 
         public Ets2Engine(double torques)
         {
-            MaximumRpm = 2500;
-            StallRpm = 750;
+            MaximumRpm = 2400;
+            StallRpm = 900;
             // Everything depends on the number of torques.
             MaximumPower = torques / 3550 * 1260;
             MaximumTorque = torques * 4451 / 3550;

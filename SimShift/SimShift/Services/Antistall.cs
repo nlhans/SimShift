@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using SimShift.Data;
 
 namespace SimShift.Services
@@ -31,16 +32,19 @@ namespace SimShift.Services
                     if (val > 0.025)
                     {
                         _throttle = val;
-                        return val/3;
+                        return val/1;
                     }
                     else
                     {
                         _throttle = 0;
                         return 0;
                     }
+                    break;
 
                 case JoyControls.Clutch:
-                    return 1 - _throttle*0.8;
+                    var cl = 1 - _throttle*3;
+                    if(cl<0.1) cl = 0.1;
+                    return cl;
 
                 default:
                     return val;
@@ -59,7 +63,15 @@ namespace SimShift.Services
 
         public void TickTelemetry(Ets2DataMiner telemetry)
         {
-            Stalling = (telemetry.Telemetry.speed < 1);
+            var stallRpm = Main.Transmission.GetActiveConfiguration().Engine.StallRpm;
+            var calculatedEngineRpmBySpeed =
+                Main.Transmission.GetActiveConfiguration().RpmForSpeed(telemetry.Telemetry.speed,
+                                                                       telemetry.Telemetry.gear);
+            if (calculatedEngineRpmBySpeed < 700)
+            {
+                //Debug.WriteLine("Stalling {0:0000} / {1:0000}", calculatedEngineRpmBySpeed, telemetry.Telemetry.engineRpm);
+            }
+            Stalling = (telemetry.Telemetry.speed < 1);// || calculatedEngineRpmBySpeed < stallRpm;
             Speed = telemetry.Telemetry.speed;
         }
     }
