@@ -55,8 +55,8 @@ namespace SimShift.Data
             {
                 NewFuelFlow = false;
             }
-            Debug.WriteLine(string.Format("CX: {3:0000.0} CY: {4:0000.0} CZ: {5:0000.0} RX: {0:00.00000} RY: {1:00.00000} RZ: {2:00.00000}", Telemetry.rotationX, Telemetry.rotationY, Telemetry.rotationZ,
-                Telemetry.coordinateX,Telemetry.coordinateY,Telemetry.coordinateZ));
+            //Debug.WriteLine(string.Format("CX: {3:0000.0} CY: {4:0000.0} CZ: {5:0000.0} RX: {0:00.00000} RY: {1:00.00000} RZ: {2:00.00000}", Telemetry.rotationX, Telemetry.rotationY, Telemetry.rotationZ,
+            //    Telemetry.coordinateX,Telemetry.coordinateY,Telemetry.coordinateZ));
             if (DataReceived != null)
                 DataReceived(this, new EventArgs());
         }

@@ -37,9 +37,9 @@ namespace SimShift.Dialogs
             IdleRpm = 900;
             PeakRpm = 1750;
             MaximumRpm = 2100;
-            bool volvo = true;
+            bool volvo = false;
             bool kenworth = false;
-            MaximumSpeed = 150;
+            MaximumSpeed = 300;
             if(kenworth)
             {
                 Engine = new Ets2Engine(5000);
@@ -72,7 +72,7 @@ namespace SimShift.Dialogs
                                      9.16, 7.33, 5.82, 4.66, 3.72, 3, 2.44, 1.96, 1.55, 1.24, 1, 0.8, 0.71, 0.65, 0.6
                                  };
                 for (int i = 0; i < Gears; i++)
-                    GearRatios[i] *= 2.5*18.3/3.6; // for every m/s , this much RPM's
+                    GearRatios[i] *= 2.8*18.3/3.6; // for every m/s , this much RPM's
             }
             
             switch (def)
@@ -113,10 +113,12 @@ namespace SimShift.Dialogs
                 {
                     var gearSet = false;
                     var shiftRpm = 600 + 700*load;
+                    var highestGearBeforeStalling = 0;
                     for (int gear = 0; gear < Gears; gear++)
                     {
                         var calculatedRpm = GearRatios[gear] * speed;
                         if (calculatedRpm < 600) continue;
+                        highestGearBeforeStalling = gear;
                         if (calculatedRpm > shiftRpm) continue;
 
                         gearSet = true;
@@ -124,7 +126,7 @@ namespace SimShift.Dialogs
                         break;
                     }
                     if (!gearSet)
-                        table[speed].Add(load, speed <= 6 ? 1 : Gears);
+                        table[speed].Add(load, highestGearBeforeStalling+1);
                 }
             }
 
@@ -150,6 +152,7 @@ namespace SimShift.Dialogs
                         {
                             continue;
                         }
+                        if (calculatedRpm < 900) continue;
                         if (calculatedRpm > shiftRpm) continue;
 
                         gearSet = true;

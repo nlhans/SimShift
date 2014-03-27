@@ -30,9 +30,15 @@ namespace SimShift.Services
 
         public static ControlChain Controls;
 
+        public static WorldMapper Map;
+
         public static bool Running { get; private set; }
 
-
+        public static void Save()
+        {
+            if(Map!=null)
+            Map.Export();
+        }
 
         public static void Setup()
         {
@@ -45,6 +51,7 @@ namespace SimShift.Services
                 Speedlimiter = new Speedlimiter();
                 Telemetry = new Ets2DataMiner();
                 Controls = new ControlChain();
+                Map = new WorldMapper(Telemetry);
 
                 var ps3 = JoystickInputDevice.Search("Motion").FirstOrDefault();
                 var ps3Controller = new JoystickInput(ps3);

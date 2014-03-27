@@ -52,14 +52,14 @@ namespace SimShift.Services
         {
             _tempProfilesForTrailer = true;
             // Stock: Add 3 profiles
-            Configurations.Add("Economy", new ShifterTableConfiguration(ShifterTableConfigurationDefault.Economy, 6));
-            Configurations.Add("Efficiency", new ShifterTableConfiguration(ShifterTableConfigurationDefault.Efficiency, 6));
-            Configurations.Add("Performance", new ShifterTableConfiguration(ShifterTableConfigurationDefault.Performance, 7));
-            Configurations.Add("PeakRpm", new ShifterTableConfiguration(ShifterTableConfigurationDefault.PeakRpm, 5));
-            Configurations.Add("Opa", new ShifterTableConfiguration(ShifterTableConfigurationDefault.AlsEenOpa, 10));
+            Configurations.Add("Economy", new ShifterTableConfiguration(ShifterTableConfigurationDefault.Economy, 9));
+            Configurations.Add("Efficiency", new ShifterTableConfiguration(ShifterTableConfigurationDefault.Efficiency, 9));
+            Configurations.Add("Performance", new ShifterTableConfiguration(ShifterTableConfigurationDefault.Performance, 9));
+            Configurations.Add("PeakRpm", new ShifterTableConfiguration(ShifterTableConfigurationDefault.PeakRpm, 9));
+            Configurations.Add("Opa", new ShifterTableConfiguration(ShifterTableConfigurationDefault.AlsEenOpa, 13));
 
             LoadShiftPattern("Normal");
-            SetActiveConfiguration("Economy");
+            SetActiveConfiguration("Opa");
 
             // Initialize all shfiting stuff.
             Shift(0,1,"up_1thr");
@@ -192,9 +192,9 @@ namespace SimShift.Services
                     ShiftPattern = new List<ShiftPatternFrame>();
 
                     // Phase 1: engage clutch
-                    ShiftPattern.Add(new ShiftPatternFrame(0, 1, true, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(0, 0.7, true, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.5, 0.4, true, false));
+                    ShiftPattern.Add(new ShiftPatternFrame(0, 0.6, true, false));
+                    ShiftPattern.Add(new ShiftPatternFrame(0, 0.3, true, false));
+                    ShiftPattern.Add(new ShiftPatternFrame(0.5, 0, true, false));
                     ShiftPattern.Add(new ShiftPatternFrame(0.8, 0, true, false));
 
                     // Phase 2: disengage old gear
@@ -208,9 +208,9 @@ namespace SimShift.Services
 
                     // Phase 4: disengage clutch
                     ShiftPattern.Add(new ShiftPatternFrame(0.8, 0, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.5, 0.4, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.0, 0.7, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.0, 1, false, true));
+                    ShiftPattern.Add(new ShiftPatternFrame(0.5, 0.0, false, true));
+                    ShiftPattern.Add(new ShiftPatternFrame(0.0, 0.3, false, true));
+                    ShiftPattern.Add(new ShiftPatternFrame(0.0, 0.6, false, true));
                     break;
 
                 case "down_0thr":
@@ -244,22 +244,24 @@ namespace SimShift.Services
 
                     // Phase 1: engage clutch
                     ShiftPattern.Add(new ShiftPatternFrame(0, 1, true, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.2, 1, true, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.5, 1, true, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.8, 1, true, false));
+                    ShiftPattern.Add(new ShiftPatternFrame(0, 0.7, true, false));
+                    ShiftPattern.Add(new ShiftPatternFrame(0.2, 0.4, true, false));
+                    ShiftPattern.Add(new ShiftPatternFrame(0.5, 0.2, true, false));
+                    ShiftPattern.Add(new ShiftPatternFrame(0.8, 0.1, true, false));
 
                     // Phase 2: disengage old gear
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 1, false, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 1, false, false));
+                    ShiftPattern.Add(new ShiftPatternFrame(1, 0.0, false, false));
+                    ShiftPattern.Add(new ShiftPatternFrame(1, 0.0, false, false));
 
                     // Phase 3: engage new gear
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 1, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 1, false, true));
+                    ShiftPattern.Add(new ShiftPatternFrame(1, 0.0, false, true));
+                    ShiftPattern.Add(new ShiftPatternFrame(1, 0.0, false, true));
 
                     // Phase 4: disengage clutch
-                    ShiftPattern.Add(new ShiftPatternFrame(0.8, 1, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.5, 1, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.2, 1, false, true));
+                    ShiftPattern.Add(new ShiftPatternFrame(0.8, 0.1, false, true));
+                    ShiftPattern.Add(new ShiftPatternFrame(0.5, 0.2, false, true));
+                    ShiftPattern.Add(new ShiftPatternFrame(0.2, 0.4, false, true));
+                    ShiftPattern.Add(new ShiftPatternFrame(0.0, 0.7, false, true));
                     ShiftPattern.Add(new ShiftPatternFrame(0.0, 1, false, true));
                     break;
             }

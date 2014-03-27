@@ -46,8 +46,9 @@ namespace SimShift.Services
 
         public void TickTelemetry(Ets2DataMiner data)
         {
-            limiterFactor = 1+(95 - data.Telemetry.speed*3.6)/20;
-
+            limiterFactor = 1+(95 - data.Telemetry.speed*3.6)/12;
+            limiterFactor *= Math.Max(0, Math.Min(1, 1 - (data.Telemetry.engineRpm - 1500) / 700));
+            limiterFactor = 1;
             if (limiterFactor < 0) limiterFactor = 0;
             if (limiterFactor > 1) limiterFactor = 1;
         }

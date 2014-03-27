@@ -9,11 +9,21 @@ namespace SimShift.Services
         public bool Stalling { get; private set; }
         public double Speed { get; private set; }
 
+        public double Rpm { get; private set; }
+
         private double _throttle;
+
+        public DateTime TimeStopped { get; private set; }
+        public DateTime TimeStalled { get; set; }
+
+        public bool Blip { get; private set; }
+        protected bool EngineStalled { get; set; }
+
+        public bool Override { get; private set; }
 
         public bool Requires(JoyControls c)
         {
-            switch(c)
+            switch (c)
             {
                 case JoyControls.Throttle:
                 case JoyControls.Clutch:
@@ -24,32 +34,47 @@ namespace SimShift.Services
             }
         }
 
+        private int tick = 0;
         public double GetAxis(JoyControls c, double val)
         {
             switch (c)
             {
                 case JoyControls.Throttle:
-                    if (val > 0.025)
+                    if (!Stalling) return val;
+                    if (EngineStalled) return val;
+                    if (BlipFull) return 1;
+                    if (Override) return 0;
+                    if (val < 0.025)
                     {
-                        _throttle = val;
-                        return val/1;
+                        _throttle = 0;
+                        tick++;
+                        return 1 - Rpm / (850 + Math.Sin(tick * 2 * Math.PI / 40.0) * 45 + (Blip ? 1300 : 0));
                     }
                     else
                     {
-                        _throttle = 0;
-                        return 0;
+                        var maxV = 1 - Rpm/1100.0;
+                        if (maxV > 1) maxV = 1;
+                        if (maxV < 0) maxV = 0;
+                        _throttle = val;
+                        return maxV;
                     }
                     break;
 
                 case JoyControls.Clutch:
-                    var cl = 1 - _throttle*3;
-                    if(cl<0.1) cl = 0.1;
+                    if (!Stalling) return 0;
+                    if (Blip || BlipFull) return 1;
+                    if (Override) return 1;
+
+                    var cl = 1 - _throttle*2;
+                    if (cl < 0.1) cl = 0.1;
                     return cl;
 
                 default:
                     return val;
             }
         }
+
+        protected bool BlipFull;
 
         public bool GetButton(JoyControls c, bool val)
         {
@@ -63,6 +88,8 @@ namespace SimShift.Services
 
         public void TickTelemetry(Ets2DataMiner telemetry)
         {
+            bool wasStalling = Stalling;
+            bool wasEngineStalled = EngineStalled;
             var stallRpm = Main.Transmission.GetActiveConfiguration().Engine.StallRpm;
             var calculatedEngineRpmBySpeed =
                 Main.Transmission.GetActiveConfiguration().RpmForSpeed(telemetry.Telemetry.speed,
@@ -71,8 +98,54 @@ namespace SimShift.Services
             {
                 //Debug.WriteLine("Stalling {0:0000} / {1:0000}", calculatedEngineRpmBySpeed, telemetry.Telemetry.engineRpm);
             }
-            Stalling = (telemetry.Telemetry.speed < 1);// || calculatedEngineRpmBySpeed < stallRpm;
+            Rpm = telemetry.Telemetry.engineRpm;
+            EngineStalled = (telemetry.Telemetry.engineRpm < 300);
+            Stalling = (telemetry.Telemetry.speed < 2); // || calculatedEngineRpmBySpeed < stallRpm;
             Speed = telemetry.Telemetry.speed;
+
+            if (Stalling && !wasStalling)
+            {
+                TimeStopped = DateTime.Now;
+            }
+            if (!EngineStalled && wasEngineStalled)
+            {
+                TimeStalled = DateTime.Now;
+            }
+
+            if (!EngineStalled)
+            {
+                var dt = DateTime.Now.Subtract(TimeStalled).TotalMilliseconds;
+                Blip = false;
+                if (dt < 2500)
+                    BlipFull = true;
+                if(Rpm > 2000)
+                {
+                    BlipFull = false;
+                    TimeStalled = DateTime.MinValue;
+                }
+                if(dt<3500)
+                {
+                    Override = true;
+                }else
+                {
+                    Override = false;
+                    if (Stalling && DateTime.Now.Subtract(TimeStopped).TotalMilliseconds % 13000 > 2500 &&
+                        DateTime.Now.Subtract(TimeStopped).TotalMilliseconds % 13000 < 3500)
+                    {
+                        Blip = true;
+                    }
+                    else
+                    {
+                        Blip = false;
+                        BlipFull = false;
+                    }
+                }
+            }
+            else
+            {
+                Override = false;
+            }
+
         }
     }
 }

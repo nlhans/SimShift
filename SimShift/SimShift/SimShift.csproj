@@ -57,6 +57,7 @@
     <Compile Include="Data\Ets2DataDefinition.cs" />
     <Compile Include="Data\Ets2DataMiner.cs" />
     <Compile Include="Data\SharedMemory.cs" />
+    <Compile Include="Data\WorldMapper.cs" />
     <Compile Include="Dialogs\dlGearboxShifterTable.cs">
       <SubType>Form</SubType>
     </Compile>

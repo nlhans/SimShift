@@ -19,10 +19,15 @@ namespace SimShift
         public FrmMain()
         {
             InitializeComponent();
-
+            FormClosing += new FormClosingEventHandler(FrmMain_FormClosing);
                 //FormClosed += new FormClosedEventHandler(FrmMain_FormClosed);
                /*d = new Ets2DataMiner();
 d.Data += Data;*/
+        }
+
+        void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Main.Save();
         }
         /*
         private Ets2Engine eng = new Ets2Engine(3550);
