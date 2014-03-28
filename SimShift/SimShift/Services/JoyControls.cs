@@ -1,7 +1,8 @@
 namespace SimShift.Services
 {
     public enum JoyControls
-    {Throttle,
+    {
+        Throttle,
         Brake,
         Clutch,
         GearDown,
@@ -15,6 +16,8 @@ namespace SimShift.Services
         Gear6,
         GearRange1,
         GearRange2,
+        Gear7,
+        Gear8,
         CruiseControl,
 
 

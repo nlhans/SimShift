@@ -104,6 +104,14 @@ namespace SimShift.Services
             Stalling = (telemetry.Telemetry.Speed < 2); // || calculatedEngineRpmBySpeed < stallRpm;
             Speed = telemetry.Telemetry.Speed;
 
+            if(telemetry.EnableWeirdAntistall==false)
+            {
+                Blip = false;
+                Override = false;
+                BlipFull = false;
+                return;
+            }
+
             if (Stalling && !wasStalling)
             {
                 TimeStopped = DateTime.Now;

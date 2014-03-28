@@ -132,7 +132,7 @@ namespace SimShift.Data
 
         public IDataDefinition ToGeneric()
         {
-            var generic = new GenericDataDefinition(time/1000000.0f, (paused==0?false:true), gear, gears, engineRpm, fuel, gameThrottle,
+            var generic = new GenericDataDefinition("", time/1000000.0f, (paused==0?false:true), gear, gears, engineRpm, fuel, gameThrottle,
                                                     gameBrake, speed);
             return generic;
         }

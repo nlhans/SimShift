@@ -23,6 +23,9 @@ namespace SimShift.Data
         private Timer _updateTel;
         private MemoryReader _tdu2Reader;
 
+        public bool TransmissionSupportsRanges { get { return false; } }
+        public bool EnableWeirdAntistall { get { return false; } }
+
         public Tdu2DataMiner()
         {
             _updateTel = new Timer();
@@ -58,22 +61,34 @@ namespace SimShift.Data
             if (_tdu2Reader == null || _updateTel.Enabled == false)
                 return;
             //
-            var b = ActiveProcess.MainModule.BaseAddress;
+            try
+            {
+                var b = ActiveProcess.MainModule.BaseAddress;
 
-            var gear = _tdu2Reader.ReadInt32(b + 0xC2DAD0);
-            var gears = 7;
-            var speed = _tdu2Reader.ReadFloat(b + 0xC2DB24);
-            var throttle = _tdu2Reader.ReadFloat(b+ 0xC2DB00);
-            var brake = _tdu2Reader.ReadFloat(b + 0xC2DB04);
-            var time = (float) (DateTime.Now.Subtract(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day,0,0,0)).TotalMilliseconds/1000.0);
-            var paused = false;
-            var engineRpm = _tdu2Reader.ReadFloat(b + 0xC2DB18);
-            var fuel = 0;
+                var car = _tdu2Reader.ReadString(b + 0xC2DC30, 32);
+                var gear = _tdu2Reader.ReadInt32(b + 0xC2DAD0) - 1;
+                var gears = 7;
+                var speed = _tdu2Reader.ReadFloat(b + 0xC2DB24)/3.6f;
+                var throttle = _tdu2Reader.ReadFloat(b + 0xC2DB00);
+                var brake = _tdu2Reader.ReadFloat(b + 0xC2DB04);
+                var time =
+                    (float)
+                    (DateTime.Now.Subtract(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0))
+                         .TotalMilliseconds/1000.0);
+                var paused = false;
+                var engineRpm = _tdu2Reader.ReadFloat(b + 0xC2DB18);
+                var fuel = 0;
 
-            Telemetry = new GenericDataDefinition(time, paused, gear, gears, engineRpm, fuel, throttle, brake, speed);
+                Telemetry = new GenericDataDefinition(car, time, paused, gear, gears, engineRpm, fuel, throttle, brake,
+                                                      speed);
 
-            if(DataReceived!=null)
-                DataReceived(this, new EventArgs());
+                if (DataReceived != null)
+                    DataReceived(this, new EventArgs());
+            }catch
+            {
+                Debug.WriteLine("Data abort error");
+            }
+
         }
     }
 }

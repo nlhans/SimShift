@@ -5,15 +5,6 @@ using SimShift.Models;
 
 namespace SimShift.Dialogs
 {
-
-    public enum ShifterTableConfigurationDefault
-    {
-        Economy,
-        Efficiency,
-        Performance,
-        PeakRpm,
-        AlsEenOpa
-    }
     public class ShifterTableConfiguration
     {
         public int Gears { get; private set; }
@@ -40,7 +31,26 @@ namespace SimShift.Dialogs
             bool volvo = false;
             bool kenworth = false;
             MaximumSpeed = 300;
-            if(kenworth)
+            if(true)
+            {
+                Engine = new Ets2Engine(500);
+                Gears = 7;
+                IdleRpm = 900;
+                PeakRpm = 6000;
+                MaximumRpm = 6700;
+
+                MaximumSpeed = 400;
+
+                GearRatios = new double[7]
+                                 {
+                                     332, 226.27, 149.64, 106.1, 77.55, 63.63, 56.65
+                                 };
+
+                for (int i = 0; i < Gears; i++)
+                    GearRatios[i] /= 3.6;
+
+            }
+            else if(kenworth)
             {
                 Engine = new Ets2Engine(5000);
                 Gears = 18;
@@ -144,6 +154,7 @@ namespace SimShift.Dialogs
                 for (var load = 0.0; load <= 1.0; load += 0.1)
                 {
                     var gearSet = false;
+                    
                     var shiftRpm = IdleRpm + (MaximumRpm - IdleRpm) * load;
                     for (int gear = 0; gear < Gears; gear++)
                     {
@@ -160,7 +171,7 @@ namespace SimShift.Dialogs
                         break;
                     }
                     if (!gearSet)
-                        table[speed].Add(load, speed <= 6 ? 1 : Gears);
+                        table[speed].Add(load, speed <= 12 ? 1 : Gears);
                 }
             }
 
@@ -179,6 +190,7 @@ namespace SimShift.Dialogs
 
                     var bestPower = double.MinValue;
                     var bestPowerGear = 0;
+                    var latestGearThatWasNotStalling = 1;
 
                     for (int gear = 0; gear < Gears; gear++)
                     {
@@ -187,9 +199,11 @@ namespace SimShift.Dialogs
                         {
                             calculatedRpm = Engine.StallRpm;
                         }
-                        if (calculatedRpm < 1500) continue;
+                        if (calculatedRpm < 4500) continue;
                         var pwr = Engine.CalculatePower(calculatedRpm+200, load <0.2?0.2:load);
 
+                        latestGearThatWasNotStalling = gear;
+                        if (calculatedRpm > this.MaximumRpm) continue;
                         if (pwr  >bestPower)
                         {
                             bestPower = pwr;
@@ -198,7 +212,7 @@ namespace SimShift.Dialogs
                         }
                     }
                     if (!gearSet)
-                        table[speed].Add(load, 1);
+                        table[speed].Add(load, latestGearThatWasNotStalling);
                     else
                     {
                         table[speed].Add(load, bestPowerGear + 1);
@@ -390,8 +404,11 @@ namespace SimShift.Dialogs
 
         public double RpmForSpeed(float speed, int gear)
         {
-            if (gear <= 0) return Engine.StallRpm + 50;
-            return GearRatios[gear-1]*speed*3.6;
+            if (gear > GearRatios.Length) 
+                return IdleRpm;
+            if (gear <= 0) 
+                return Engine.StallRpm + 50;
+            return GearRatios[gear - 1]*speed*3.6;
         }
     }
 }

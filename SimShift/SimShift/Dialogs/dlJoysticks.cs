@@ -75,7 +75,7 @@ namespace SimShift.Dialogs
                 }
                 bool buttonState = false;
                 _mCalibrateButton = new Timer();
-                _mCalibrateButton.Interval = 500;
+                _mCalibrateButton.Interval = 1500;
                 _mCalibrateButton.Tick += (o, args) =>
                                               {
                                                   if (buttonState)

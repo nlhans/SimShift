@@ -49,7 +49,7 @@ namespace SimShift.Services
         {
             limiterFactor = 1 + (95 - data.Telemetry.Speed * 3.6) / 12;
             limiterFactor *= Math.Max(0, Math.Min(1, 1 - (data.Telemetry.EngineRpm - 1500) / 700));
-
+            limiterFactor = 1;
             if (limiterFactor < 0) limiterFactor = 0;
             if (limiterFactor > 1) limiterFactor = 1;
         }

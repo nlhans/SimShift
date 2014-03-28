@@ -29,6 +29,8 @@ namespace SimShift.Services
             Buttons.Add(JoyControls.Gear4);
             Buttons.Add(JoyControls.Gear5);
             Buttons.Add(JoyControls.Gear6);
+            Buttons.Add(JoyControls.Gear7);
+            Buttons.Add(JoyControls.Gear8);
             Buttons.Add(JoyControls.GearR);
             Buttons.Add(JoyControls.GearRange1);
             Buttons.Add(JoyControls.GearRange2);

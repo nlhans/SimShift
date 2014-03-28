@@ -78,6 +78,7 @@
       <DependentUpon>dlJoysticks.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\ShifterTableConfiguration.cs" />
+    <Compile Include="Dialogs\ShifterTableConfigurationDefault.cs" />
     <Compile Include="Dialogs\ShifterTableLookupResult.cs" />
     <Compile Include="Dialogs\ucGearboxShifterGraph.cs">
       <SubType>UserControl</SubType>
@@ -110,6 +111,8 @@
     <Compile Include="Services\ShiftPatternFrame.cs" />
     <Compile Include="Services\Speedlimiter.cs" />
     <Compile Include="Services\Transmission.cs" />
+    <Compile Include="Utils\IniReader.cs" />
+    <Compile Include="Utils\IniValueObject.cs" />
     <EmbeddedResource Include="Dialogs\dlGearboxShifterTable.resx">
       <DependentUpon>dlGearboxShifterTable.cs</DependentUpon>
       <SubType>Designer</SubType>

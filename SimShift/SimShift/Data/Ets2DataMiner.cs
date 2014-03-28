@@ -13,6 +13,10 @@ namespace SimShift.Data
         public bool IsActive { get; set; }
         public bool RunEvent { get; set; }
         public Process ActiveProcess { get; set; }
+
+        public bool TransmissionSupportsRanges { get { return true; } }
+        public bool EnableWeirdAntistall { get { return true; } }
+
         public void EvtStart()
         {
             _telemetryUpdater.Start();

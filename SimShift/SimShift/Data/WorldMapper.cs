@@ -80,6 +80,7 @@ namespace SimShift.Data
 
         public void Export()
         {
+            if (cells == null) return;
             StringBuilder export = new StringBuilder();
 
             foreach(var c in cells)

@@ -9,6 +9,8 @@ namespace SimShift.Services
 {
     public class Transmission : IControlChainObj
     {
+        public int RangeSize = 6;
+
         public int ShiftFrame = 0;
         public List<ShiftPatternFrame> ShiftPattern; 
         public Dictionary<string, ShifterTableConfiguration> Configurations = new Dictionary<string, ShifterTableConfiguration>();
@@ -23,8 +25,8 @@ namespace SimShift.Services
         public int ShiftCtrlOldRange { get; private set; }
         public int ShiftCtrlNewRange { get; private set; }
 
-        public int ShifterOldGear { get { return ShiftCtrlOldGear + ShiftCtrlOldRange * 6; } }
-        public int ShifterNewGear { get { return ShiftCtrlNewGear + ShiftCtrlNewRange * 6; } }
+        public int ShifterOldGear { get { return ShiftCtrlOldGear + ShiftCtrlOldRange * RangeSize; } }
+        public int ShifterNewGear { get { return ShiftCtrlNewGear + ShiftCtrlNewRange * RangeSize; } }
 
         public DateTime TransmissionFreezeUntill { get; private set; }
         public bool TransmissionFrozen { get { return TransmissionFreezeUntill > DateTime.Now; } }
@@ -60,7 +62,7 @@ namespace SimShift.Services
             Configurations.Add("Opa", new ShifterTableConfiguration(ShifterTableConfigurationDefault.AlsEenOpa, 13));
 
             LoadShiftPattern("Normal");
-            SetActiveConfiguration("Opa");
+            SetActiveConfiguration("Performance");
 
             // Initialize all shfiting stuff.
             Shift(0,1,"up_1thr");
@@ -91,10 +93,10 @@ namespace SimShift.Services
             ShiftCtrlOldGear = fromGear;
             if (ShiftCtrlOldGear == -1) ShiftCtrlOldRange = 0;
             else if (ShiftCtrlOldGear == 0) ShiftCtrlOldRange = 0;
-            else if (ShiftCtrlOldGear >= 1 && ShiftCtrlOldGear <= 6) ShiftCtrlOldRange = 0;
-            else if (ShiftCtrlOldGear >= 7 && ShiftCtrlOldGear <= 12) ShiftCtrlOldRange = 1;
-            else if (ShiftCtrlOldGear >= 13 && ShiftCtrlOldGear <= 18) ShiftCtrlOldRange = 2;
-            ShiftCtrlOldGear -= ShiftCtrlOldRange * 6;
+            else if (ShiftCtrlOldGear >= 1 && ShiftCtrlOldGear <= RangeSize) ShiftCtrlOldRange = 0;
+            else if (ShiftCtrlOldGear >= RangeSize + 1 && ShiftCtrlOldGear <= 2 * RangeSize) ShiftCtrlOldRange = 1;
+            else if (ShiftCtrlOldGear >= 2 * RangeSize + 1 && ShiftCtrlOldGear <= 3 * RangeSize) ShiftCtrlOldRange = 2;
+            ShiftCtrlOldGear -= ShiftCtrlOldRange * RangeSize;
 
             // Determine new range
             if (toGear == -1)
@@ -107,19 +109,19 @@ namespace SimShift.Services
                 ShiftCtrlNewGear = 0;
                 ShiftCtrlNewRange = 0;
             }
-            else if (toGear >= 1 && toGear <= 6)
+            else if (toGear >= 1 && toGear <= RangeSize)
             {
                 ShiftCtrlNewGear = toGear;
                 ShiftCtrlNewRange = 0;
             }
-            else if (toGear >= 7 && toGear <= 12)
+            else if (toGear >= RangeSize+1 && toGear <= RangeSize * 2)
             {
-                ShiftCtrlNewGear = toGear - 6;
+                ShiftCtrlNewGear = toGear - RangeSize;
                 ShiftCtrlNewRange = 1;
             }
-            else if (toGear >= 13 && toGear <= 18)
+            else if (toGear >= RangeSize*2+1 && toGear <= RangeSize * 3)
             {
-                ShiftCtrlNewGear = toGear - 12;
+                ShiftCtrlNewGear = toGear - RangeSize*2;
                 ShiftCtrlNewRange = 2;
             }
 
@@ -128,26 +130,10 @@ namespace SimShift.Services
 
         }
 
-
-        private bool IsGearInRange(int gear, int range)
-        {
-            if (range == 0)
-            {
-                if (gear >= -1 && gear <= 6) return true;
-            }
-            if (range == 1)
-            {
-                if (gear >= 7 && gear <= 12) return true;
-            }
-            if (range == 2)
-            {
-                if (gear >= 13 && gear <= 18) return true;
-            }
-            return false;
-        }
-
         private void LoadShiftPattern(string pattern)
         {
+            var engageLength = 6.0f;
+            var disengageLength = 6.0f;
             switch(pattern)
             {
                 // very slow
@@ -155,15 +141,17 @@ namespace SimShift.Services
                     // TODO: Patterns are not loaded from files yet.
                     ShiftPattern = new List<ShiftPatternFrame>();
 
-
                     // Phase 1: engage clutch
+                    /*
                     ShiftPattern.Add(new ShiftPatternFrame(0, 1, true, false));
                     ShiftPattern.Add(new ShiftPatternFrame(0, 0.7, true, false));
                     ShiftPattern.Add(new ShiftPatternFrame(0.5, 0.4, true, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.8, 0, true, false));
+                    ShiftPattern.Add(new ShiftPatternFrame(0.8, 0, true, false));*/
+                    for (int i = 0; i < engageLength; i++)
+                        ShiftPattern.Add(new ShiftPatternFrame(1.0/engageLength, 1 - 1.0/engageLength, true, false));
 
-                    // Phase 2: disengage old gear
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
+                        // Phase 2: disengage old gear
+                        ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
                     ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
                     ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
                     ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
@@ -182,10 +170,13 @@ namespace SimShift.Services
                     ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, true));
 
                     // Phase 4: disengage clutch
+                    /*
                     ShiftPattern.Add(new ShiftPatternFrame(0.8, 0, false, true));
                     ShiftPattern.Add(new ShiftPatternFrame(0.5, 0.4, false, true));
                     ShiftPattern.Add(new ShiftPatternFrame(0.0, 0.7, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.0,1, false, true));
+                    ShiftPattern.Add(new ShiftPatternFrame(0.0,1, false, true));*/
+                    for (int i = 0; i < disengageLength; i++)
+                        ShiftPattern.Add(new ShiftPatternFrame(1 - 1.0 / engageLength, 1.0 / engageLength, false, true));
                     break;
 
                 case "up_1thr":
@@ -272,6 +263,11 @@ namespace SimShift.Services
         #region Transmission telemetry logic
         public void TickTelemetry(IDataMiner data)
         {
+            if (data.TransmissionSupportsRanges)
+                RangeSize = 6;
+            else
+                RangeSize = 8;
+
             // TODO: Add generic telemetry object
             GameGear = data.Telemetry.Gear;
             if (IsShifting) return;
@@ -318,14 +314,14 @@ namespace SimShift.Services
         {
             switch (c)
             {
-                // Only required when changing
+                    // Only required when changing
                 case JoyControls.Throttle:
                     return true;
 
                 case JoyControls.Clutch:
                     return IsShifting;
 
-                // All gears.
+                    // All gears.
                 case JoyControls.GearR:
                 case JoyControls.Gear1:
                 case JoyControls.Gear2:
@@ -333,9 +329,15 @@ namespace SimShift.Services
                 case JoyControls.Gear4:
                 case JoyControls.Gear5:
                 case JoyControls.Gear6:
+                    return true;
+
                 case JoyControls.GearRange2:
                 case JoyControls.GearRange1:
-                    return true;
+                    return Main.Data.Active.TransmissionSupportsRanges;
+
+                case JoyControls.Gear7:
+                case JoyControls.Gear8:
+                    return !Main.Data.Active.TransmissionSupportsRanges;
 
                 case JoyControls.GearUp:
                 case JoyControls.GearDown:
@@ -383,6 +385,10 @@ namespace SimShift.Services
                     return GetShiftButton(5);
                 case JoyControls.Gear6:
                     return GetShiftButton(6);
+                case JoyControls.Gear7:
+                    return GetShiftButton(7);
+                case JoyControls.Gear8:
+                    return GetShiftButton(8);
                 case JoyControls.GearR:
                     return GetShiftButton(-1);
                 case JoyControls.GearRange1:
@@ -473,6 +479,7 @@ namespace SimShift.Services
 
         private bool GetRangeButton(int r)
         {
+            if (Main.Data.Active == null || !Main.Data.Active.TransmissionSupportsRanges) return false;
             if (IsShifting && ShiftCtrlNewRange != ShiftCtrlOldRange)
             {
                 // Going to range 1 when old gear was outside range 1,
@@ -573,7 +580,8 @@ namespace SimShift.Services
                 ShiftFrame++;
                 if (ShiftFrame > ShiftPattern.Count)
                     ShiftFrame = 0;
-                if (shiftRetry < 10 && ShiftFrame>4 && ShiftPattern[ShiftFrame-3].UseNewGear && GameGear != ShifterNewGear)
+                if (shiftRetry < 10 && ShiftFrame > 4 && ShiftPattern[ShiftFrame - 3].UseNewGear &&
+                    GameGear != ShifterNewGear)
                 {
                     // So we are shifting, check lagging by 1, and new gear doesn't work
                     // We re-shfit
@@ -587,19 +595,19 @@ namespace SimShift.Services
 
                         ShiftFrame = 0;
 
-                    RangeButtonFreeze1Untill = DateTime.Now;
-                    RangeButtonFreeze2Untill = DateTime.Now;
+                        RangeButtonFreeze1Untill = DateTime.Now;
+                        RangeButtonFreeze2Untill = DateTime.Now;
 
                     }
                 }
-                else
-                if (ShiftFrame >= ShiftPattern.Count)
+                else if (ShiftFrame >= ShiftPattern.Count)
                 {
                     IsShifting = false;
                     TransmissionFreezeUntill = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, 200 + ShifterNewGear*50));
                 }
             }
         }
+
         #endregion
 
         }

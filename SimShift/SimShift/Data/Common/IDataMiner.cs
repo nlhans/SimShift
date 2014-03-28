@@ -14,6 +14,9 @@ namespace SimShift.Data.Common
         bool RunEvent { get; set; }
         Process ActiveProcess { get; set; }
 
+        bool TransmissionSupportsRanges { get; }
+        bool EnableWeirdAntistall { get; }
+
         void EvtStart();
         void EvtStop();
     }

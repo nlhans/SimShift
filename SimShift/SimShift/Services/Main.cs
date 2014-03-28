@@ -107,6 +107,8 @@ namespace SimShift.Services
                 case Services.JoyControls.Gear4:
                 case Services.JoyControls.Gear5:
                 case Services.JoyControls.Gear6:
+                case Services.JoyControls.Gear7:
+                case Services.JoyControls.Gear8:
                 case Services.JoyControls.GearR:
                     return false;
 
@@ -130,8 +132,8 @@ namespace SimShift.Services
             {
                 case Services.JoyControls.Throttle:
                     var t = ((RawJoysticksIn[0].GetAxis(3)/Math.Pow(2, 16) - 0.5)*2);
-                    t = t*t;
-                    t *= 0.8;
+                   //t = t*t;
+                    //t *= 0.8;
                     return t;
 
                 case Services.JoyControls.Brake:
@@ -174,6 +176,14 @@ namespace SimShift.Services
 
                 case Services.JoyControls.Gear6:
                     RawJoysticksOut[0].SetButton(6, value);
+                    break;
+
+                case Services.JoyControls.Gear7:
+                    RawJoysticksOut[0].SetButton(11, value);
+                    break;
+
+                case Services.JoyControls.Gear8:
+                    RawJoysticksOut[0].SetButton(12, value);
                     break;
 
                 case Services.JoyControls.GearR:
