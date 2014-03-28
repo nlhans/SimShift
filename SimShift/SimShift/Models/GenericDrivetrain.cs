@@ -96,6 +96,12 @@ namespace SimShift.Models
             return CalculateThrottleByTorque(rpm, torqueRequired);
         }
 
+        public double CalculateSpeedForRpm(int gear, float rpm)
+        {
+            if (GearRatios == null || gear < 0 || gear > GearRatios.Length) return 0;
+            return rpm / GearRatios[gear]/3.6;
+        }
+
         public double[] GearRatios { get; private set; }
         public int Gears { get; private set; }
 

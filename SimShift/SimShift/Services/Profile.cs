@@ -16,6 +16,7 @@ namespace SimShift.Services
         public string ShiftCurve { get; private set; }
         public List<ConfigurableShiftPattern> ShiftPattern { get; private set; }
         public string SpeedLimiter { get; private set; }
+        public string TractionControl { get; private set; }
 
         private Profiles Car { get; set; }
 
@@ -44,6 +45,7 @@ namespace SimShift.Services
             Main.Load(Main.Drivetrain, "Settings/Drivetrain/" + Car.UniqueID + ".ini");
             Main.Load(Main.Transmission, "Settings/ShiftCurve/" + ShiftCurve + ".ini");
             Main.Load(Main.Speedlimiter, "Settings/SpeedLimiter/" + SpeedLimiter + ".ini");
+            Main.Load(Main.TractionControl, "Settings/TractionControl/" + TractionControl + ".ini");
         }
 
         #region Implementation of IConfigurable
@@ -68,7 +70,10 @@ namespace SimShift.Services
                     ShiftCurve = obj.ReadAsString();
                     break;
                 case "SpeedLimiter":
-                    SpeedLimiter= obj.ReadAsString();
+                    SpeedLimiter = obj.ReadAsString();
+                    break;
+                case "TractionControl":
+                    TractionControl = obj.ReadAsString();
                     break;
                 case "ShiftPattern":
                     var file = obj.ReadAsString(2);

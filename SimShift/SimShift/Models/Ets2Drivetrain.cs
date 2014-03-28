@@ -128,6 +128,10 @@ namespace SimShift.Models
 
         public double[] GearRatios { get; private set; }
         public int Gears { get; private set; }
+        public double CalculateSpeedForRpm(int gear, float rpm)
+        {
+            return GearRatios[gear] * rpm;
+        }
 
         #region Implementation of IConfigurable
 

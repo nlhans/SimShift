@@ -73,7 +73,7 @@ namespace SimShift.Services
         }
 
         public int SpeedLimit { get; private set; }
-        public int SpeedSlope { get; private set; }
+        public float SpeedSlope { get; private set; }
         public bool Enabled { get; private set; } 
 
         public void ApplyParameter(IniValueObject obj)
@@ -85,7 +85,7 @@ namespace SimShift.Services
                     break;
 
                 case "Slope":
-                    SpeedSlope = obj.ReadAsInteger();
+                    SpeedSlope = obj.ReadAsFloat();
                     break;
 
                 case "Disable":

@@ -32,6 +32,7 @@ namespace SimShift.Services
         public static IDrivetrain Drivetrain;
         public static Speedlimiter Speedlimiter;
         public static Transmission Transmission;
+        public static TractionControl TractionControl;
         public static ProfileSwitcher ProfileSwitcher;
 
         public static ControlChain Controls;
@@ -75,8 +76,9 @@ namespace SimShift.Services
                 CruiseControl = new CruiseControl();
                 Drivetrain = new GenericDrivetrain();
                 Transmission = new Transmission();
-                Speedlimiter = new Speedlimiter();
+                TractionControl = new TractionControl();
                 ProfileSwitcher = new ProfileSwitcher();
+                Speedlimiter = new Speedlimiter();
 
                 // Controls
                 Controls = new ControlChain();
@@ -173,7 +175,8 @@ namespace SimShift.Services
             switch(c)
             {
                 case Services.JoyControls.Throttle:
-                    var t = ((RawJoysticksIn[0].GetAxis(3)/Math.Pow(2, 16) - 0.5)*2);
+                    var t = ((RawJoysticksIn[0].GetAxis(3)/Math.Pow(2, 16) - 0.5)*2-0.25)/0.75;
+                    if (t < 0) t = 0;
                    //t = t*t;
                     //t *= 0.8;
                     return t;

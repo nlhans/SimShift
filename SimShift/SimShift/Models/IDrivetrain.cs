@@ -16,5 +16,6 @@ namespace SimShift.Models
 
         double[] GearRatios { get; }
         int Gears { get; }
+        double CalculateSpeedForRpm(int gear, float rpm);
     }
 }

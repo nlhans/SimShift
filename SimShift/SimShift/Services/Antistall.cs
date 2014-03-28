@@ -102,7 +102,7 @@ namespace SimShift.Services
 
             Rpm = telemetry.Telemetry.EngineRpm;
             EngineStalled = (telemetry.Telemetry.EngineRpm < 300);
-            Stalling = (telemetry.Telemetry.Speed < SpeedCutoff); // 2
+            Stalling = (Math.Abs(telemetry.Telemetry.Speed) < SpeedCutoff); // 2
             Speed = telemetry.Telemetry.Speed;
 
             if(telemetry.EnableWeirdAntistall==false)

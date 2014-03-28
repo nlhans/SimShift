@@ -118,6 +118,7 @@
     <Compile Include="Services\ShiftPattern.cs" />
     <Compile Include="Services\ShiftPatternFrame.cs" />
     <Compile Include="Services\Speedlimiter.cs" />
+    <Compile Include="Services\TractionControl.cs" />
     <Compile Include="Services\Transmission.cs" />
     <Compile Include="Utils\IniReader.cs" />
     <Compile Include="Utils\IniValueObject.cs" />

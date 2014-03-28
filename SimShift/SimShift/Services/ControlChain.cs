@@ -15,6 +15,7 @@ namespace SimShift.Services
         public ControlChain()
         {
             chain.Add(Main.CruiseControl);
+            chain.Add(Main.TractionControl);
             chain.Add(Main.Speedlimiter);
             chain.Add(Main.Transmission);
             chain.Add(Main.Antistall);
