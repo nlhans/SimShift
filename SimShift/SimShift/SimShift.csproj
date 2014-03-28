@@ -105,6 +105,7 @@
     <Compile Include="Services\Antistall.cs" />
     <Compile Include="Services\ControlChain.cs" />
     <Compile Include="Services\CruiseControl.cs" />
+    <Compile Include="Services\IConfigurable.cs" />
     <Compile Include="Services\IControlChainObj.cs" />
     <Compile Include="Services\JoyControls.cs" />
     <Compile Include="Services\Main.cs" />

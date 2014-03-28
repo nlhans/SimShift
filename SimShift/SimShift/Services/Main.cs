@@ -6,6 +6,7 @@ using System.Text;
 using SimShift.Controllers;
 using SimShift.Data;
 using SimShift.Models;
+using SimShift.Utils;
 
 namespace SimShift.Services
 {
@@ -51,8 +52,8 @@ namespace SimShift.Services
                 Speedlimiter = new Speedlimiter();
                 Controls = new ControlChain();
                 Data = new DataArbiter();
-                
 
+                Load(Antistall, "Settings/Antistall/easy.ini");
 
                 Data.AppActive += (s, e) => { Map = new WorldMapper(Data.Active); };
                 Data.AppInactive += (s, e) => { Map = null; };
@@ -67,6 +68,29 @@ namespace SimShift.Services
 
                 requiresSetup = false;
             }
+        }
+
+        public static void Load(IConfigurable target, string iniFile)
+        {
+            var acceptableConfigurations = target.AcceptsConfigs;
+
+            // Reset to default
+            target.ResetParameters();
+
+            // Load custom settings from INI file
+            using(var ini = new IniReader(iniFile,true))
+            {
+                ini.AddHandler((x) =>
+                                   {
+                                       if (acceptableConfigurations.Any(y => y == x.Group))
+                                       {
+                                           target.ApplyParameter(x);
+                                       }
+                                   });
+                ini.Parse();
+            }
+
+            // DONE :)
         }
 
         public static void Start()

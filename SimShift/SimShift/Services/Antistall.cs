@@ -1,11 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using SimShift.Data;
 using SimShift.Data.Common;
+using SimShift.Utils;
 
 namespace SimShift.Services
 {
-    public class Antistall : IControlChainObj
+    public class Antistall : IControlChainObj, IConfigurable
     {
         public bool Stalling { get; private set; }
         public double Speed { get; private set; }
@@ -21,6 +23,12 @@ namespace SimShift.Services
         protected bool EngineStalled { get; set; }
 
         public bool Override { get; private set; }
+
+#region Configurable parametrs
+        public double MinClutch { get; private set; }
+        public double SpeedCutoff { get; private set; }
+        public double ThrottleSensitivity { get; private set; }
+#endregion
 
         public bool Requires(JoyControls c)
         {
@@ -66,8 +74,8 @@ namespace SimShift.Services
                     if (Blip || BlipFull) return 1;
                     if (Override) return 1;
 
-                    var cl = 1 - _throttle*2;
-                    if (cl < 0.1) cl = 0.1;
+                    var cl = 1 - _throttle * ThrottleSensitivity; // 2
+                    if (cl < MinClutch) cl = MinClutch; // 0.1
                     return cl;
 
                 default:
@@ -101,7 +109,7 @@ namespace SimShift.Services
             }
             Rpm = telemetry.Telemetry.EngineRpm;
             EngineStalled = (telemetry.Telemetry.EngineRpm < 300);
-            Stalling = (telemetry.Telemetry.Speed < 2); // || calculatedEngineRpmBySpeed < stallRpm;
+            Stalling = (telemetry.Telemetry.Speed < SpeedCutoff); // 2
             Speed = telemetry.Telemetry.Speed;
 
             if(telemetry.EnableWeirdAntistall==false)
@@ -156,5 +164,46 @@ namespace SimShift.Services
             }
 
         }
+
+        #region Configurable parameters management
+
+        public IEnumerable<string> AcceptsConfigs { get { return new[] {"Antistall"}; } }
+
+        public void ResetParameters()
+        {
+            // Reset to default
+            Speed = 2;
+            MinClutch = 0.1;
+            ThrottleSensitivity = 2;
+        }
+
+        public void ApplyParameter(IniValueObject obj)
+        {
+            switch(obj.Key)
+            {
+                case "Speed":
+                    SpeedCutoff = obj.ReadAsDouble();
+                    break;
+                case "MinClutch":
+                    MinClutch = obj.ReadAsDouble();
+                    break;
+                case "ThrottleSensitivity":
+                    ThrottleSensitivity = obj.ReadAsDouble();
+                    break;
+            }
+        }
+
+        public IEnumerable<IniValueObject> ExportParameters()
+        {
+            var group = new List<string>(new [] { "Antistall" });
+            var parameters = new List<IniValueObject>();
+            
+            parameters.Add(new IniValueObject(group, "Speed", SpeedCutoff.ToString("0.00")));
+            parameters.Add(new IniValueObject(group, "MinClutch", SpeedCutoff.ToString("0.00")));
+            parameters.Add(new IniValueObject(group, "ThrottleSensitivity", SpeedCutoff.ToString("0.00")));
+
+            return parameters;
+        }
+        #endregion
     }
 }
