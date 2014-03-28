@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using SimShift.Data.Common;
 
 namespace SimShift.Data
 {
@@ -12,14 +13,17 @@ namespace SimShift.Data
         private Ets2DataMiner source;
         public List<WorldMapCell> cells; 
 
-        public WorldMapper(Ets2DataMiner dataSource)
+        public WorldMapper(IDataMiner dataSource)
         {
-            source = dataSource;
-            source.DataReceived += OnDataReceived;
+            if (dataSource.Application == "eurotrucks2")
+            {
+                source = dataSource as Ets2DataMiner;
+                source.DataReceived += OnDataReceived;
 
-            cells = new List<WorldMapCell>();
+                cells = new List<WorldMapCell>();
 
-            Import();
+                Import();
+            }
         }
 
         public WorldMapCell LookupCell(float x, float z)
@@ -38,9 +42,9 @@ namespace SimShift.Data
 
         private void OnDataReceived(object sender, EventArgs args)
         {
-            var x = source.Telemetry.coordinateX;
-            var y = source.Telemetry.coordinateY;
-            var z = source.Telemetry.coordinateZ;
+            var x = source.MyTelemetry.coordinateX;
+            var y = source.MyTelemetry.coordinateY;
+            var z = source.MyTelemetry.coordinateZ;
 
             var activeCell = LookupCell(x,z);
 

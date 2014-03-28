@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using SimShift.Data.Common;
 
 namespace SimShift.Data
 {
@@ -128,5 +129,12 @@ namespace SimShift.Data
 
         [FieldOffset(140)]
         public float trailerWeight;
+
+        public IDataDefinition ToGeneric()
+        {
+            var generic = new GenericDataDefinition(time/1000000.0f, (paused==0?false:true), gear, gears, engineRpm, fuel, gameThrottle,
+                                                    gameBrake, speed);
+            return generic;
+        }
     }
 }

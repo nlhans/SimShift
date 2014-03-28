@@ -19,10 +19,10 @@ namespace SimShift.Services
         public static List<JoystickInput> RawJoysticksIn = new List<JoystickInput>();
         public static List<JoystickOutput> RawJoysticksOut = new List<JoystickOutput>();
 
-        public static Ets2DataMiner Telemetry;
         public static Ets2Engine Engine;
 
         // Modules
+        public static DataArbiter Data;
         public static Antistall Antistall;
         public static Transmission Transmission;
         public static CruiseControl CruiseControl;
@@ -49,9 +49,13 @@ namespace SimShift.Services
                 Transmission = new Transmission();
                 CruiseControl = new CruiseControl();
                 Speedlimiter = new Speedlimiter();
-                Telemetry = new Ets2DataMiner();
                 Controls = new ControlChain();
-                Map = new WorldMapper(Telemetry);
+                Data = new DataArbiter();
+                
+
+
+                Data.AppActive += (s, e) => { Map = new WorldMapper(Data.Active); };
+                Data.AppInactive += (s, e) => { Map = null; };
 
                 var ps3 = JoystickInputDevice.Search("Motion").FirstOrDefault();
                 var ps3Controller = new JoystickInput(ps3);
@@ -72,7 +76,7 @@ namespace SimShift.Services
             //
             if (!Running)
             {
-                Telemetry.DataReceived += tick;
+                Data.DataReceived += tick;
                 Running = true;
             }
         }
@@ -81,14 +85,14 @@ namespace SimShift.Services
         {
             if (Running)
             {
-                Telemetry.DataReceived -= tick;
+                Data.DataReceived -= tick;
                 Running = false;
             }
         }
 
         public static void tick(object sender, EventArgs e)
         {
-            Controls.Tick(Telemetry);
+            Controls.Tick(Data.Active);
         }
 
         #region Control mapping
@@ -125,7 +129,10 @@ namespace SimShift.Services
             switch(c)
             {
                 case Services.JoyControls.Throttle:
-                    return ((RawJoysticksIn[0].GetAxis(3)/Math.Pow(2, 16) - 0.5)*2 - 0.25)/0.75;
+                    var t = ((RawJoysticksIn[0].GetAxis(3)/Math.Pow(2, 16) - 0.5)*2);
+                    t = t*t;
+                    t *= 0.8;
+                    return t;
 
                 case Services.JoyControls.Brake:
                     return ((RawJoysticksIn[0].GetAxis(2) - Math.Pow(2, 15)) / Math.Pow(2, 15)- 0.25)/0.75;

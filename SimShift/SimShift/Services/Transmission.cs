@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using SimShift.Data;
+using SimShift.Data.Common;
 using SimShift.Dialogs;
 
 namespace SimShift.Services
@@ -269,19 +270,19 @@ namespace SimShift.Services
         #endregion
 
         #region Transmission telemetry logic
-        public void TickTelemetry(Ets2DataMiner data)
+        public void TickTelemetry(IDataMiner data)
         {
             // TODO: Add generic telemetry object
-            GameGear = data.Telemetry.gear;
+            GameGear = data.Telemetry.Gear;
             if (IsShifting) return;
             if (TransmissionFrozen) return;
             if (Configurations.ContainsKey(Active) == false) return;
             shiftRetry = 0;
             
-            var lookupResult = Configurations[Active].Lookup(data.Telemetry.speed*3.6, transmissionThrottle);
+            var lookupResult = Configurations[Active].Lookup(data.Telemetry.Speed*3.6, transmissionThrottle);
             var idealGear = lookupResult.Gear;
 
-            if (data.Telemetry.gear == 0 && ShiftCtrlNewGear != 0)
+            if (data.Telemetry.Gear == 0 && ShiftCtrlNewGear != 0)
             {
                 Debug.WriteLine("Timeout");
                 ShiftCtrlNewGear = 0;
@@ -293,21 +294,21 @@ namespace SimShift.Services
             {
                 if (GameGear != -1)
                 {
-                    Debug.WriteLine("Shift from " + data.Telemetry.gear + " to  " + idealGear);
-                    Shift(data.Telemetry.gear, -1, "up_1thr");
+                    Debug.WriteLine("Shift from " + data.Telemetry.Gear + " to  " + idealGear);
+                    Shift(data.Telemetry.Gear, -1, "up_1thr");
                 }
                 return;
             }
 
-            if (idealGear != data.Telemetry.gear)
+            if (idealGear != data.Telemetry.Gear)
             {
-                var upShift = idealGear > data.Telemetry.gear;
-                var fullThrottle = data.Telemetry.gameThrottle > 0.6;
+                var upShift = idealGear > data.Telemetry.Gear;
+                var fullThrottle = data.Telemetry.Throttle > 0.6;
 
                 var shiftStyle =( upShift ? "up" : "down") + "_" + (fullThrottle ? "1" : "0") + "thr";
 
-                Debug.WriteLine("Shift from " + data.Telemetry.gear + " to  " + idealGear);
-                Shift(data.Telemetry.gear, idealGear, shiftStyle);
+                Debug.WriteLine("Shift from " + data.Telemetry.Gear + " to  " + idealGear);
+                Shift(data.Telemetry.Gear, idealGear, shiftStyle);
             }
         }
         #endregion

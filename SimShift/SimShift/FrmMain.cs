@@ -120,10 +120,10 @@ d.Data += Data;*/
 
                 }
 
-                label1.Text += "Gear: " + d.Telemetry.gear + "\r\nAcc: " + d.Telemetry.accelerationZ + "\r\nRPM: " + d.Telemetry.engineRpm + "\r\nSpeed: " + d.Telemetry.speed + "\r\nFuel:" + d.Telemetry.fuel + "\r\nFlow:" + d.FuelFlow + "\r\nThrottle:" + d.Telemetry.gameThrottle + "\r\nMax? FuelFlow:" + (d.FuelFlow / d.Telemetry.gameThrottle);
-                //double expectedFuelFlow = 90.4802*Math.Exp(0.0009516195*d.Telemetry.engineRpm)*d.Telemetry.gameThrottle/7;
+                label1.Text += "Gear: " + d.MyTelemetry.gear + "\r\nAcc: " + d.MyTelemetry.accelerationZ + "\r\nRPM: " + d.MyTelemetry.engineRpm + "\r\nSpeed: " + d.MyTelemetry.speed + "\r\nFuel:" + d.MyTelemetry.fuel + "\r\nFlow:" + d.FuelFlow + "\r\nThrottle:" + d.MyTelemetry.gameThrottle + "\r\nMax? FuelFlow:" + (d.FuelFlow / d.MyTelemetry.gameThrottle);
+                //double expectedFuelFlow = 90.4802*Math.Exp(0.0009516195*d.MyTelemetry.engineRpm)*d.MyTelemetry.gameThrottle/7;
                 //label1.Text += "\r\nE: " + expectedFuelFlow;
-                double actualFuelFlow = d.FuelFlow / d.Telemetry.gameThrottle;
+                double actualFuelFlow = d.FuelFlow / d.MyTelemetry.gameThrottle;
                 if ((actualFuelFlow > 10000 || actualFuelFlow < 0) && !powerMeasurement)
                 {
                     //
@@ -137,28 +137,28 @@ d.Data += Data;*/
                         if (coastMeasurement)
                         {
                             double rpmSlope = 193.82136079395202687988053386429; //  2500 / (45 / 3.6);
-                            double virtualRpm = rpmSlope*d.Telemetry.speed;
+                            double virtualRpm = rpmSlope*d.MyTelemetry.speed;
                             rpmindex = (int) virtualRpm/25;
                         }else
                         {
-                            rpmindex = (int)d.Telemetry.engineRpm / 25;
+                            rpmindex = (int)d.MyTelemetry.engineRpm / 25;
                             
                         }
                         rpmindex *= 25;
 
-                        if (d.Telemetry.gameThrottle >= 0.95)
+                        if (d.MyTelemetry.gameThrottle >= 0.95)
                         {
                             if (rpmPower100.ContainsKey(rpmindex) == false)
                                 rpmPower100.Add(rpmindex, new List<double>());
 
-                            rpmPower100[rpmindex].Add((powerMeasurement) ? d.Telemetry.accelerationZ : actualFuelFlow);
+                            rpmPower100[rpmindex].Add((powerMeasurement) ? d.MyTelemetry.accelerationZ : actualFuelFlow);
                         }
-                        else if (d.Telemetry.gameThrottle<0.1)
+                        else if (d.MyTelemetry.gameThrottle<0.1)
                         {
                             if (rpmPower0.ContainsKey(rpmindex) == false)
                                 rpmPower0.Add(rpmindex, new List<double>());
 
-                            rpmPower0[rpmindex].Add(d.Telemetry.accelerationZ);
+                            rpmPower0[rpmindex].Add(d.MyTelemetry.accelerationZ);
                         }
                     }
                 }

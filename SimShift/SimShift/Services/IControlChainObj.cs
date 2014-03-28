@@ -1,4 +1,5 @@
 using SimShift.Data;
+using SimShift.Data.Common;
 
 namespace SimShift.Services
 {
@@ -8,6 +9,6 @@ namespace SimShift.Services
         double GetAxis(JoyControls c, double val);
         bool GetButton(JoyControls c, bool val);
         void TickControls();
-        void TickTelemetry(Ets2DataMiner data);
+        void TickTelemetry(IDataMiner data);
     }
 }

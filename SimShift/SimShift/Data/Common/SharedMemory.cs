@@ -5,7 +5,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 
-namespace SimShift.Data
+namespace SimShift.Data.Common
 {
     public class SharedMemory<T>
     {

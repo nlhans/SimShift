@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SimShift.Data;
+using SimShift.Data.Common;
 
 namespace SimShift.Services
 {
@@ -36,7 +37,7 @@ namespace SimShift.Services
             Buttons.Add(JoyControls.CruiseControl);
         }
 
-        public void Tick(Ets2DataMiner data)
+        public void Tick(IDataMiner data)
         {
             // We take all controller input
             var buttonValues = Buttons.ToDictionary(c => c, Main.GetButtonIn);

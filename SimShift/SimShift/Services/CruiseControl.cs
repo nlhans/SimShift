@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using SimShift.Data;
+using SimShift.Data.Common;
 
 namespace SimShift.Services
 {
@@ -70,9 +71,9 @@ if (t < 0) t = 0;
             }
         }
 
-        public void TickTelemetry(Ets2DataMiner data)
+        public void TickTelemetry(IDataMiner data)
         {
-            Speed = data.Telemetry.speed;
+            Speed = data.Telemetry.Speed;
         }
 
         public void TickControls()

@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using SimShift.Data;
+using SimShift.Data.Common;
 
 namespace SimShift.Services
 {
@@ -86,22 +87,22 @@ namespace SimShift.Services
             //
         }
 
-        public void TickTelemetry(Ets2DataMiner telemetry)
+        public void TickTelemetry(IDataMiner telemetry)
         {
             bool wasStalling = Stalling;
             bool wasEngineStalled = EngineStalled;
             var stallRpm = Main.Transmission.GetActiveConfiguration().Engine.StallRpm;
             var calculatedEngineRpmBySpeed =
-                Main.Transmission.GetActiveConfiguration().RpmForSpeed(telemetry.Telemetry.speed,
-                                                                       telemetry.Telemetry.gear);
+                Main.Transmission.GetActiveConfiguration().RpmForSpeed(telemetry.Telemetry.Speed,
+                                                                       telemetry.Telemetry.Gear);
             if (calculatedEngineRpmBySpeed < 700)
             {
-                //Debug.WriteLine("Stalling {0:0000} / {1:0000}", calculatedEngineRpmBySpeed, telemetry.Telemetry.engineRpm);
+                //Debug.WriteLine("Stalling {0:0000} / {1:0000}", calculatedEngineRpmBySpeed, telemetry.MyTelemetry.engineRpm);
             }
-            Rpm = telemetry.Telemetry.engineRpm;
-            EngineStalled = (telemetry.Telemetry.engineRpm < 300);
-            Stalling = (telemetry.Telemetry.speed < 2); // || calculatedEngineRpmBySpeed < stallRpm;
-            Speed = telemetry.Telemetry.speed;
+            Rpm = telemetry.Telemetry.EngineRpm;
+            EngineStalled = (telemetry.Telemetry.EngineRpm < 300);
+            Stalling = (telemetry.Telemetry.Speed < 2); // || calculatedEngineRpmBySpeed < stallRpm;
+            Speed = telemetry.Telemetry.Speed;
 
             if (Stalling && !wasStalling)
             {
