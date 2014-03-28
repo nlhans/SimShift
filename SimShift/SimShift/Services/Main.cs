@@ -20,20 +20,20 @@ namespace SimShift.Services
         public static List<JoystickInput> RawJoysticksIn = new List<JoystickInput>();
         public static List<JoystickOutput> RawJoysticksOut = new List<JoystickOutput>();
 
-        public static IDrivetrain Drivetrain;
 
         public static DataArbiter Data;
+        public static WorldMapper Map;
         
         // Modules
         public static Antistall Antistall;
-        public static Transmission Transmission;
         public static CruiseControl CruiseControl;
+        public static IDrivetrain Drivetrain;
         public static Speedlimiter Speedlimiter;
+        public static Transmission Transmission;
+
+
 
         public static ControlChain Controls;
-
-
-        public static WorldMapper Map;
 
 
         public static bool Running { get; private set; }
@@ -55,11 +55,10 @@ namespace SimShift.Services
 
                 RawJoysticksIn.Add(ps3Controller);
                 RawJoysticksOut.Add(vJoy);
+                Data = new DataArbiter();
 
-
-
-
-
+                Data.AppActive += (s, e) => { Map = new WorldMapper(Data.Active); };
+                Data.AppInactive += (s, e) => { Map = null; };
 
                 Antistall = new Antistall();
                 CruiseControl = new CruiseControl();
@@ -67,17 +66,13 @@ namespace SimShift.Services
                 Transmission = new Transmission();
                 Speedlimiter = new Speedlimiter();
 
-                Controls = new ControlChain();
-                Data = new DataArbiter();
-
                 Load(Antistall, "Settings/Antistall/easy.ini");
                 Load(CruiseControl, "Settings/CruiseControl/easy.ini");
                 Load(Drivetrain, "Settings/Drivetrain/TDU2_Merc.ini");
                 Load(Transmission, "Settings/ShiftCurve/Performance.10kmh.slow.ini");
                 Load(Speedlimiter, "Settings/SpeedLimiter/255.ini");
 
-                Data.AppActive += (s, e) => { Map = new WorldMapper(Data.Active); };
-                Data.AppInactive += (s, e) => { Map = null; };
+                Controls = new ControlChain();
 
                 requiresSetup = false;
             }

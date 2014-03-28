@@ -596,6 +596,7 @@ namespace SimShift.Services
         public int speedHoldoff { get; private set; }
         public int ShiftDeadSpeed { get; private set; }
         public int ShiftDeadTime { get; private set; }
+        public string GeneratedShiftTable { get; private set; }
 
         public void ApplyParameter(IniValueObject obj)
         {
@@ -608,10 +609,14 @@ namespace SimShift.Services
                     ShiftDeadTime = obj.ReadAsInteger();
                     break;
 
+                case "GenerateSpeedHoldoff":
+                    speedHoldoff = obj.ReadAsInteger();
+                    break;
+
                 case "Generate":
                     var def = ShifterTableConfigurationDefault.PeakRpm;
-
-                    switch(obj.ReadAsString())
+                    GeneratedShiftTable = obj.ReadAsString();
+                    switch (GeneratedShiftTable)
                     {
                         case "Economy":
                             def = ShifterTableConfigurationDefault.Economy;
@@ -632,17 +637,19 @@ namespace SimShift.Services
 
                     configuration = new ShifterTableConfiguration(def, Main.Drivetrain, speedHoldoff);
                     break;
-
-                case "GenerateSpeedHoldoff":
-                    speedHoldoff = obj.ReadAsInteger();
-                    break;
             }
         }
 
 
         public IEnumerable<IniValueObject> ExportParameters()
         {
-            throw new NotImplementedException();
+            List<IniValueObject> obj = new List<IniValueObject>();
+            obj.Add(new IniValueObject(AcceptsConfigs, "ShiftDeadSpeed", ShiftDeadSpeed.ToString()));
+            obj.Add(new IniValueObject(AcceptsConfigs, "ShiftDeadTime", ShiftDeadTime.ToString()));
+            obj.Add(new IniValueObject(AcceptsConfigs, "GenerateSpeedHoldoff", speedHoldoff.ToString()));
+            obj.Add(new IniValueObject(AcceptsConfigs, "Generate", GeneratedShiftTable));
+            //TODO: Tables not supported yet.
+            return obj;
         }
 
         #endregion

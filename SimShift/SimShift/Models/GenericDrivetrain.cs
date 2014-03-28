@@ -20,6 +20,7 @@ namespace SimShift.Models
         private Dictionary<double, GenericEngineData> Engine = new Dictionary<double, GenericEngineData>();
         public double StallRpm { get; private set; }
         public double MaximumRpm { get; private set; }
+        protected float GearReverse { get; set; }
 
         #region Implementation of IDrivetrain
 
@@ -146,7 +147,10 @@ namespace SimShift.Models
                         GearRatios[obj.ReadAsInteger(0)] = obj.ReadAsFloat(1);
                         break;
 
-                        // TODO: Reverse Gear "GearR"
+                    case "GearR":
+                        GearReverse = obj.ReadAsFloat();
+                        break;
+
                 }
             }
         
@@ -154,7 +158,21 @@ namespace SimShift.Models
 
         public IEnumerable<IniValueObject> ExportParameters()
         {
-            throw new System.NotImplementedException();
+            List<IniValueObject> obj = new List<IniValueObject>();
+
+            obj.Add(new IniValueObject(new string[] {"Engine"}, "Idle", StallRpm.ToString()));
+            obj.Add(new IniValueObject(new string[] {"Engine"}, "Max", MaximumRpm.ToString()));
+            foreach (var frame in Engine)
+                obj.Add(new IniValueObject(new string[] {"Engine"}, "Power",
+                                           string.Format("({0},{1},{2})", frame.Key, frame.Value.N, frame.Value.P)));
+
+            obj.Add(new IniValueObject(new string[] {"Gearbox"}, "Gears", Gears.ToString()));
+            obj.Add(new IniValueObject(new string[] {"Gearbox"}, "GearR", GearReverse.ToString()));
+            for (int g = 0; g < Gears; g++)
+                obj.Add(new IniValueObject(new string[] {"Gearbox"}, "Gear",
+                                           string.Format("({0},{1})", g, GearRatios[g])));
+
+            return obj;
         }
 
         #endregion
