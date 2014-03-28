@@ -20,10 +20,11 @@ namespace SimShift.Services
         public static List<JoystickInput> RawJoysticksIn = new List<JoystickInput>();
         public static List<JoystickOutput> RawJoysticksOut = new List<JoystickOutput>();
 
-        public static Ets2Engine Engine;
+        public static IDrivetrain Drivetrain;
+
+        public static DataArbiter Data;
         
         // Modules
-        public static DataArbiter Data;
         public static Antistall Antistall;
         public static Transmission Transmission;
         public static CruiseControl CruiseControl;
@@ -31,7 +32,9 @@ namespace SimShift.Services
 
         public static ControlChain Controls;
 
+
         public static WorldMapper Map;
+
 
         public static bool Running { get; private set; }
 
@@ -57,17 +60,21 @@ namespace SimShift.Services
 
 
 
-                Engine = new Ets2Engine(3550);
+
                 Antistall = new Antistall();
-                Transmission = new Transmission();
                 CruiseControl = new CruiseControl();
+                Drivetrain = new GenericDrivetrain();
+                Transmission = new Transmission();
                 Speedlimiter = new Speedlimiter();
+
                 Controls = new ControlChain();
                 Data = new DataArbiter();
 
                 Load(Antistall, "Settings/Antistall/easy.ini");
-                Load(Speedlimiter, "Settings/SpeedLimiter/255.ini");
+                Load(CruiseControl, "Settings/CruiseControl/easy.ini");
+                Load(Drivetrain, "Settings/Drivetrain/TDU2_Merc.ini");
                 Load(Transmission, "Settings/ShiftCurve/Performance.10kmh.slow.ini");
+                Load(Speedlimiter, "Settings/SpeedLimiter/255.ini");
 
                 Data.AppActive += (s, e) => { Map = new WorldMapper(Data.Active); };
                 Data.AppInactive += (s, e) => { Map = null; };

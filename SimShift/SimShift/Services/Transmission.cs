@@ -73,7 +73,7 @@ namespace SimShift.Services
 
         public Transmission()
         {
-            configuration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.PeakRpm, 20);
+            configuration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.PeakRpm, Main.Drivetrain, 20);
 
             LoadShiftPattern("up_1thr", "normal");
 
@@ -590,7 +590,7 @@ namespace SimShift.Services
         public IEnumerable<string> AcceptsConfigs { get { return new [] { "ShiftCurve" }; } }
         public void ResetParameters()
         {
-            configuration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.PeakRpm, 10);
+            configuration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.PeakRpm, Main.Drivetrain, 10);
         }
 
         public int speedHoldoff { get; private set; }
@@ -630,7 +630,7 @@ namespace SimShift.Services
                             break;
                     }
 
-                    configuration = new ShifterTableConfiguration(def, speedHoldoff);
+                    configuration = new ShifterTableConfiguration(def, Main.Drivetrain, speedHoldoff);
                     break;
 
                 case "GenerateSpeedHoldoff":

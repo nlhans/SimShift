@@ -30,7 +30,7 @@ d.Data += Data;*/
             Main.Save();
         }
         /*
-        private Ets2Engine eng = new Ets2Engine(3550);
+        private Ets2Drivetrain eng = new Ets2Drivetrain(3550);
         public Dictionary<float, List<double>> rpmPower100 = new Dictionary<float, List<double>>();
         public Dictionary<float, List<double>> rpmPower0 = new Dictionary<float, List<double>>(); 
         private Ets2DataMiner d;

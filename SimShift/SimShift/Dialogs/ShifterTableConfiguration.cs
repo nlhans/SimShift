@@ -9,84 +9,19 @@ namespace SimShift.Dialogs
 {
     public class ShifterTableConfiguration
     {
-        public int Gears { get; private set; }
-        public double[] GearRatios { get; private set; }
-
         public int MaximumSpeed { get; private set; }
 
-        public double IdleRpm { get; private set; }
-        public double PeakRpm { get; private set; }
-        public double MaximumRpm { get; private set; }
-
-        public Ets2Engine Engine { get; private set; }
+        public IDrivetrain Drivetrain { get; private set; }
         public Ets2Aero Air { get; private set; }
 
         // Speed / Load / [Gear]
         public Dictionary<int, Dictionary<double, int>> table;
 
-        public ShifterTableConfiguration(ShifterTableConfigurationDefault def, int spdPerGear)
+        public ShifterTableConfiguration(ShifterTableConfigurationDefault def, IDrivetrain drivetrain, int spdPerGear)
         {
             Air = new Ets2Aero();
-            IdleRpm = 900;
-            PeakRpm = 1750;
-            MaximumRpm = 2100;
-            bool volvo = false;
-            bool kenworth = false;
-            MaximumSpeed = 300;
-            if (true)
-            {
-                Engine = new Ets2Engine(500);
-                Gears = 7;
-                IdleRpm = 900;
-                PeakRpm = 6000;
-                MaximumRpm = 6700;
-
-                MaximumSpeed = 400;
-
-                GearRatios = new double[7]
-                                 {
-                                     332, 226.27, 149.64, 106.1, 77.55, 63.63, 56.65
-                                 };
-
-                for (int i = 0; i < Gears; i++)
-                    GearRatios[i] /= 3.6;
-
-            }
-            else if (kenworth)
-            {
-                Engine = new Ets2Engine(5000);
-                Gears = 18;
-                GearRatios = new double[18]
-                                 {
-                                     14.89, 12.41, 10.4, 8.66, 7.32, 6.09, 5.05, 4.21, 3.54, 2.95, 2.47, 2.06, 1.74,
-                                     1.45, 1.2, 1.00, 0.84, 0.70
-                                 };
-
-                for (int i = 0; i < Gears; i++)
-                    GearRatios[i] *= 3.36*18.3/3.6; // for every m/s , this much RPM's
-            }
-            else if (volvo)
-            {
-                Engine = new Ets2Engine(3550);
-                Gears = 12;
-                GearRatios = new double[12]
-                                 {
-                                     11.73, 9.21, 7.09, 5.57, 4.35, 3.41, 2.7, 2.12, 1.63, 1.28, 1.0, 0.78
-                                 };
-                for (int i = 0; i < Gears; i++)
-                    GearRatios[i] *= 3.4*18.3/3.6; // for every m/s , this much RPM's
-            }
-            else
-            {
-                Engine = new Ets2Engine(9500);
-                Gears = 15;
-                GearRatios = new double[15]
-                                 {
-                                     9.16, 7.33, 5.82, 4.66, 3.72, 3, 2.44, 1.96, 1.55, 1.24, 1, 0.8, 0.71, 0.65, 0.6
-                                 };
-                for (int i = 0; i < Gears; i++)
-                    GearRatios[i] *= 2.8*18.3/3.6; // for every m/s , this much RPM's
-            }
+            Drivetrain = drivetrain;
+            MaximumSpeed = 400;
 
             switch (def)
             {
@@ -127,9 +62,9 @@ namespace SimShift.Dialogs
                     var gearSet = false;
                     var shiftRpm = 600 + 700*load;
                     var highestGearBeforeStalling = 0;
-                    for (int gear = 0; gear < Gears; gear++)
+                    for (int gear = 0; gear < Drivetrain.Gears; gear++)
                     {
-                        var calculatedRpm = GearRatios[gear] * speed;
+                        var calculatedRpm = Drivetrain.GearRatios[gear] * speed;
                         if (calculatedRpm < 600) continue;
                         highestGearBeforeStalling = gear;
                         if (calculatedRpm > shiftRpm) continue;
@@ -157,12 +92,12 @@ namespace SimShift.Dialogs
                 for (var load = 0.0; load <= 1.0; load += 0.1)
                 {
                     var gearSet = false;
-                    
-                    var shiftRpm = IdleRpm + (MaximumRpm - IdleRpm) * load;
-                    for (int gear = 0; gear < Gears; gear++)
+
+                    var shiftRpm = Drivetrain.StallRpm + (Drivetrain.MaximumRpm - Drivetrain.StallRpm) * load;
+                    for (int gear = 0; gear < Drivetrain.Gears; gear++)
                     {
-                        var calculatedRpm = GearRatios[gear] * speed;
-                        if (calculatedRpm < Engine.StallRpm)
+                        var calculatedRpm = Drivetrain.GearRatios[gear] * speed;
+                        if (calculatedRpm < Drivetrain.StallRpm)
                         {
                             continue;
                         }
@@ -174,7 +109,7 @@ namespace SimShift.Dialogs
                         break;
                     }
                     if (!gearSet)
-                        table[speed].Add(load, speed <= 12 ? 1 : Gears);
+                        table[speed].Add(load, speed <= 12 ? 1 : Drivetrain.Gears);
                 }
             }
 
@@ -195,18 +130,18 @@ namespace SimShift.Dialogs
                     var bestPowerGear = 0;
                     var latestGearThatWasNotStalling = 1;
 
-                    for (int gear = 0; gear < Gears; gear++)
+                    for (int gear = 0; gear < Drivetrain.Gears; gear++)
                     {
-                        var calculatedRpm = GearRatios[gear] * speed;
-                        if (calculatedRpm < Engine.StallRpm)
+                        var calculatedRpm = Drivetrain.GearRatios[gear] * speed;
+                        if (calculatedRpm < Drivetrain.StallRpm)
                         {
-                            calculatedRpm = Engine.StallRpm;
+                            calculatedRpm = Drivetrain.StallRpm;
                         }
                         if (calculatedRpm < 4500) continue;
-                        var pwr = Engine.CalculatePower(calculatedRpm+200, load <0.2?0.2:load);
+                        var pwr = Drivetrain.CalculatePower(calculatedRpm+200, load <0.2?0.2:load);
 
                         latestGearThatWasNotStalling = gear;
-                        if (calculatedRpm > this.MaximumRpm) continue;
+                        if (calculatedRpm > Drivetrain.MaximumRpm) continue;
                         if (pwr  >bestPower)
                         {
                             bestPower = pwr;
@@ -242,19 +177,19 @@ namespace SimShift.Dialogs
                     var bestFuelEfficiency = double.MinValue;
                     var bestFuelGear = 0;
 
-                    for (int gear = 0; gear < Gears; gear++)
+                    for (int gear = 0; gear < Drivetrain.Gears; gear++)
                     {
-                        var calculatedRpm = GearRatios[gear] * speed;
+                        var calculatedRpm = Drivetrain.GearRatios[gear] * speed;
 
-                        if (calculatedRpm < Engine.StallRpm) continue;
-                        if (calculatedRpm > Engine.MaximumRpm) continue;
+                        if (calculatedRpm < Drivetrain.StallRpm) continue;
+                        if (calculatedRpm > Drivetrain.MaximumRpm) continue;
 
                         var thr = (load < 0.10)
                                       ? 0.10
                                       : load;
 
-                        var pwr = Engine.CalculatePower(calculatedRpm, thr);
-                        var fuel = Engine.CalculateFuelConsumption(calculatedRpm, thr);
+                        var pwr = Drivetrain.CalculatePower(calculatedRpm, thr);
+                        var fuel = Drivetrain.CalculateFuelConsumption(calculatedRpm, thr);
                         var efficiency = pwr / fuel;
 
                         if (efficiency > bestFuelEfficiency)
@@ -289,21 +224,21 @@ namespace SimShift.Dialogs
                     var bestFuelEfficiency = double.MaxValue;
                     var bestFuelGear = 0;
 
-                    for (int gear = 0; gear < Gears; gear++)
+                    for (int gear = 0; gear < Drivetrain.Gears; gear++)
                     {
-                        var calculatedRpm = GearRatios[gear] * speed;
+                        var calculatedRpm = Drivetrain.GearRatios[gear] * speed;
 
-                        if (calculatedRpm < Engine.StallRpm) continue;
-                        if (calculatedRpm > Engine.MaximumRpm) continue;
+                        if (calculatedRpm < Drivetrain.StallRpm) continue;
+                        if (calculatedRpm > Drivetrain.MaximumRpm) continue;
 
-                        var thr = Engine.CalculateThrottleByPower(calculatedRpm, req);
+                        var thr = Drivetrain.CalculateThrottleByPower(calculatedRpm, req);
 
                         if (thr > 1) continue;
                         if (thr < 0) continue;
 
                         if (double.IsNaN(thr) || double.IsInfinity(thr)) continue;
 
-                        var fuel = Engine.CalculateFuelConsumption(calculatedRpm, thr);
+                        var fuel = Drivetrain.CalculateFuelConsumption(calculatedRpm, thr);
 
                         if(bestFuelEfficiency > fuel)
                         {
@@ -341,7 +276,7 @@ namespace SimShift.Dialogs
                         while (endI < speeds.Count-1 && table[speeds[endI]][load] == g)
                             endI++;
                         g++;
-                    } while (endI-startI < minimum && g < Gears);
+                    } while (endI - startI < minimum && g < Drivetrain.Gears);
 
                     for (int j = startI; j <= endI; j++)
                         table[speeds[j]][load] = g-1;
@@ -407,11 +342,11 @@ namespace SimShift.Dialogs
 
         public double RpmForSpeed(float speed, int gear)
         {
-            if (gear > GearRatios.Length) 
-                return IdleRpm;
+            if (gear > Drivetrain.GearRatios.Length)
+                return Drivetrain.StallRpm;
             if (gear <= 0) 
-                return Engine.StallRpm + 50;
-            return GearRatios[gear - 1]*speed*3.6;
+                return Drivetrain.StallRpm + 50;
+            return Drivetrain.GearRatios[gear - 1] * speed * 3.6;
         }
     }
 }

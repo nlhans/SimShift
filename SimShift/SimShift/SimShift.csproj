@@ -99,7 +99,9 @@
       <DependentUpon>FrmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Ets2Aero.cs" />
-    <Compile Include="Models\Ets2Engine.cs" />
+    <Compile Include="Models\Ets2Drivetrain.cs" />
+    <Compile Include="Models\GenericDrivetrain.cs" />
+    <Compile Include="Models\IDrivetrain.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Antistall.cs" />

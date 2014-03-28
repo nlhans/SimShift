@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using SimShift.Models;
 
 namespace SimShift.Dialogs
 {
@@ -79,7 +80,7 @@ namespace SimShift.Dialogs
             return rgb;
         }
 
-        private ShifterTableConfiguration activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.PeakRpm, 9);
+        private ShifterTableConfiguration activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.PeakRpm, new Ets2Drivetrain("Volvo"), 9);
 
         public dlGearboxShifterTable()
         {
@@ -138,8 +139,8 @@ namespace SimShift.Dialogs
 
             List<Color> gearColors = new List<Color>();
             gearColors.Add(Color.White);
-            for(int gear = 0; gear < activeConfiguration.Gears; gear++)
-                gearColors.Add(HSL2RGB(gear/1.0/activeConfiguration.Gears,0.5,0.5));
+            for (int gear = 0; gear < activeConfiguration.Drivetrain.Gears; gear++)
+                gearColors.Add(HSL2RGB(gear / 1.0 / activeConfiguration.Drivetrain.Gears, 0.5, 0.5));
 
             var spdBins = 0;
             var spdBinsData = new List<double>();

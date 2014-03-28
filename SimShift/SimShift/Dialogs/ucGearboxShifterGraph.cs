@@ -81,9 +81,9 @@ namespace SimShift.Dialogs
                         if (gear < 0 || gear > 12)
                             break;
 
-                        rpm = speed * config.GearRatios[gear - 1] * 3.6;
-                        var fuel = config.Engine.CalculateFuelConsumption(rpm, load);
-                        var power = config.Engine.CalculateTorqueP(rpm<500?500:rpm, throttle*load/100.0) - config.Air.CalculateTorque(speed);
+                        rpm = speed * config.Drivetrain.GearRatios[gear - 1] * 3.6;
+                        var fuel = config.Drivetrain.CalculateFuelConsumption(rpm, load);
+                        var power = config.Drivetrain.CalculateTorqueP(rpm<500?500:rpm, throttle*load/100.0) - config.Air.CalculateTorque(speed);
                         
                         if (shiftTimeout > time) power = 0;
                         double acceleration = power/2500;
@@ -98,7 +98,7 @@ namespace SimShift.Dialogs
 
                         if (bestGear.Gear != gear && time > shiftDeadtime)
                         {
-                            Debug.WriteLine("[" + Math.Round(time, 2) + "] Shift to " + bestGear.Gear + " @ " + Math.Round(speed * 3.6, 1) + "kmh & " + Math.Round(rpm) + " to " + Math.Round(speed * config.GearRatios[bestGear.Gear - 1] * 3.6) + " rpm");
+                            //Debug.WriteLine("[" + Math.Round(time, 2) + "] Shift to " + bestGear.Gear + " @ " + Math.Round(speed * 3.6, 1) + "kmh & " + Math.Round(rpm) + " to " + Math.Round(speed * config.GearRatios[bestGear.Gear - 1] * 3.6) + " rpm");
                             gear = bestGear.Gear;
                             shiftTimeout = time + 0.3;
                             shiftDeadtime = time + 0.1*gear;// +0.7;
