@@ -109,6 +109,7 @@
     <Compile Include="Services\IControlChainObj.cs" />
     <Compile Include="Services\JoyControls.cs" />
     <Compile Include="Services\Main.cs" />
+    <Compile Include="Services\ShiftPattern.cs" />
     <Compile Include="Services\ShiftPatternFrame.cs" />
     <Compile Include="Services\Speedlimiter.cs" />
     <Compile Include="Services\Transmission.cs" />

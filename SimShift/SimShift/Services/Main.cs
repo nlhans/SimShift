@@ -21,7 +21,7 @@ namespace SimShift.Services
         public static List<JoystickOutput> RawJoysticksOut = new List<JoystickOutput>();
 
         public static Ets2Engine Engine;
-
+        
         // Modules
         public static DataArbiter Data;
         public static Antistall Antistall;
@@ -45,6 +45,18 @@ namespace SimShift.Services
         {
             if (requiresSetup)
             {
+                var ps3 = JoystickInputDevice.Search("Motion").FirstOrDefault();
+                var ps3Controller = new JoystickInput(ps3);
+
+                var vJoy = new JoystickOutput();
+
+                RawJoysticksIn.Add(ps3Controller);
+                RawJoysticksOut.Add(vJoy);
+
+
+
+
+
                 Engine = new Ets2Engine(3550);
                 Antistall = new Antistall();
                 Transmission = new Transmission();
@@ -54,17 +66,11 @@ namespace SimShift.Services
                 Data = new DataArbiter();
 
                 Load(Antistall, "Settings/Antistall/easy.ini");
+                Load(Speedlimiter, "Settings/SpeedLimiter/255.ini");
+                Load(Transmission, "Settings/ShiftCurve/Performance.10kmh.slow.ini");
 
                 Data.AppActive += (s, e) => { Map = new WorldMapper(Data.Active); };
                 Data.AppInactive += (s, e) => { Map = null; };
-
-                var ps3 = JoystickInputDevice.Search("Motion").FirstOrDefault();
-                var ps3Controller = new JoystickInput(ps3);
-
-                var vJoy = new JoystickOutput();
-
-                RawJoysticksIn.Add(ps3Controller);
-                RawJoysticksOut.Add(vJoy);
 
                 requiresSetup = false;
             }
@@ -72,20 +78,19 @@ namespace SimShift.Services
 
         public static void Load(IConfigurable target, string iniFile)
         {
-            var acceptableConfigurations = target.AcceptsConfigs;
-
             // Reset to default
             target.ResetParameters();
 
             // Load custom settings from INI file
-            using(var ini = new IniReader(iniFile,true))
+            using (var ini = new IniReader(iniFile, true))
             {
                 ini.AddHandler((x) =>
                                    {
-                                       if (acceptableConfigurations.Any(y => y == x.Group))
+                                       if (target.AcceptsConfigs.Any(y => y == x.Group))
                                        {
                                            target.ApplyParameter(x);
                                        }
+
                                    });
                 ini.Parse();
             }

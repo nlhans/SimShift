@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using SimShift.Data;
 using SimShift.Data.Common;
+using SimShift.Utils;
 
 namespace SimShift.Services
 {
-    public class Speedlimiter : IControlChainObj
+    public class Speedlimiter : IControlChainObj, IConfigurable
     {
         private double limiterFactor;
 
@@ -42,16 +43,73 @@ namespace SimShift.Services
         }
 
         public void TickControls()
-        {//
+        {
         }
 
         public void TickTelemetry(IDataMiner data)
         {
-            limiterFactor = 1 + (95 - data.Telemetry.Speed * 3.6) / 12;
-            limiterFactor *= Math.Max(0, Math.Min(1, 1 - (data.Telemetry.EngineRpm - 1500) / 700));
-            limiterFactor = 1;
-            if (limiterFactor < 0) limiterFactor = 0;
-            if (limiterFactor > 1) limiterFactor = 1;
+            if (!Enabled)
+            {
+                limiterFactor = 1;
+            }
+            else
+            {
+                limiterFactor = 1 + (SpeedLimit - data.Telemetry.Speed*3.6)/SpeedSlope;
+
+                if (limiterFactor < 0) limiterFactor = 0;
+                if (limiterFactor > 1) limiterFactor = 1;
+            }
         }
+
+        #region Implementation of IConfigurable
+
+        public IEnumerable<string> AcceptsConfigs { get { return new[] {"Speedlimit"}; } }
+
+        public void ResetParameters()
+        {
+            SpeedLimit = 255;
+            SpeedSlope = 10;
+            Enabled = true;
+        }
+
+        public int SpeedLimit { get; private set; }
+        public int SpeedSlope { get; private set; }
+        public bool Enabled { get; private set; } 
+
+        public void ApplyParameter(IniValueObject obj)
+        {
+            switch(obj.Key)
+            {
+                case "Limit":
+                    SpeedLimit = obj.ReadAsInteger();
+                    break;
+
+                case "Slope":
+                    SpeedSlope = obj.ReadAsInteger();
+                    break;
+
+                case "Disable":
+                    Enabled = false;
+                    break;
+            }
+        }
+
+        public IEnumerable<IniValueObject> ExportParameters()
+        {
+            List<IniValueObject> exportedObjects = new List<IniValueObject>();
+
+            if(Enabled==false)
+            {
+                exportedObjects.Add(new IniValueObject(AcceptsConfigs, "Disable", "1"));
+            }
+            else
+            {
+                exportedObjects.Add(new IniValueObject(AcceptsConfigs, "Limit", SpeedLimit.ToString()));
+                exportedObjects.Add(new IniValueObject(AcceptsConfigs, "Slope", SpeedSlope.ToString()));
+            }
+            return exportedObjects;
+        }
+
+        #endregion
     }
 }

@@ -99,14 +99,7 @@ namespace SimShift.Services
         {
             bool wasStalling = Stalling;
             bool wasEngineStalled = EngineStalled;
-            var stallRpm = Main.Transmission.GetActiveConfiguration().Engine.StallRpm;
-            var calculatedEngineRpmBySpeed =
-                Main.Transmission.GetActiveConfiguration().RpmForSpeed(telemetry.Telemetry.Speed,
-                                                                       telemetry.Telemetry.Gear);
-            if (calculatedEngineRpmBySpeed < 700)
-            {
-                //Debug.WriteLine("Stalling {0:0000} / {1:0000}", calculatedEngineRpmBySpeed, telemetry.MyTelemetry.engineRpm);
-            }
+
             Rpm = telemetry.Telemetry.EngineRpm;
             EngineStalled = (telemetry.Telemetry.EngineRpm < 300);
             Stalling = (telemetry.Telemetry.Speed < SpeedCutoff); // 2

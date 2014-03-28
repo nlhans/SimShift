@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using SimShift.Models;
+using SimShift.Services;
+using SimShift.Utils;
 
 namespace SimShift.Dialogs
 {
@@ -31,7 +33,7 @@ namespace SimShift.Dialogs
             bool volvo = false;
             bool kenworth = false;
             MaximumSpeed = 300;
-            if(true)
+            if (true)
             {
                 Engine = new Ets2Engine(500);
                 Gears = 7;
@@ -50,7 +52,7 @@ namespace SimShift.Dialogs
                     GearRatios[i] /= 3.6;
 
             }
-            else if(kenworth)
+            else if (kenworth)
             {
                 Engine = new Ets2Engine(5000);
                 Gears = 18;
@@ -61,9 +63,9 @@ namespace SimShift.Dialogs
                                  };
 
                 for (int i = 0; i < Gears; i++)
-                    GearRatios[i] *= 3.36 * 18.3 / 3.6; // for every m/s , this much RPM's
-            }else
-            if (volvo)
+                    GearRatios[i] *= 3.36*18.3/3.6; // for every m/s , this much RPM's
+            }
+            else if (volvo)
             {
                 Engine = new Ets2Engine(3550);
                 Gears = 12;
@@ -73,7 +75,8 @@ namespace SimShift.Dialogs
                                  };
                 for (int i = 0; i < Gears; i++)
                     GearRatios[i] *= 3.4*18.3/3.6; // for every m/s , this much RPM's
-            }else
+            }
+            else
             {
                 Engine = new Ets2Engine(9500);
                 Gears = 15;
@@ -84,7 +87,7 @@ namespace SimShift.Dialogs
                 for (int i = 0; i < Gears; i++)
                     GearRatios[i] *= 2.8*18.3/3.6; // for every m/s , this much RPM's
             }
-            
+
             switch (def)
             {
                 case ShifterTableConfigurationDefault.PeakRpm:
@@ -104,8 +107,8 @@ namespace SimShift.Dialogs
                     break;
             }
 
-
-            MinimumSpeedPerGear(spdPerGear);
+            if (spdPerGear > 0)
+                MinimumSpeedPerGear(spdPerGear);
 
 
         }
