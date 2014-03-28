@@ -15,14 +15,18 @@ namespace SimShift.Data
 
         public IDataDefinition Telemetry { get; private set; }
 
+
         public int verbose = 0;
 
         public event EventHandler AppActive;
         public event EventHandler AppInactive;
 
+        public event EventHandler CarChanged;
         public event EventHandler DataReceived;
 
         private Timer _checkApplications;
+
+        private string lastCar;
 
         public DataArbiter()
         {
@@ -44,6 +48,14 @@ namespace SimShift.Data
                                                 Telemetry = app.Telemetry;
                                                 if (DataReceived != null)
                                                     DataReceived(s, e);
+
+                                                if (lastCar != Telemetry.Car && CarChanged != null)
+                                                {
+
+                                                    lastCar = Telemetry.Car;
+                                                    CarChanged(s, e);
+                                                }
+                                                lastCar = Telemetry.Car;
                                             }
                                         };
             }
@@ -51,7 +63,6 @@ namespace SimShift.Data
             _checkApplications = new Timer();
             _checkApplications.Interval = 1000;
             _checkApplications.Elapsed += _checkApplications_Elapsed;
-            _checkApplications.Start();
         }
 
         void _checkApplications_Elapsed(object sender, ElapsedEventArgs e)
@@ -89,6 +100,11 @@ namespace SimShift.Data
                         AppActive(this, new EventArgs());
                 }
             }
+        }
+
+        public void Run()
+        {
+            _checkApplications.Start();
         }
     }
 }

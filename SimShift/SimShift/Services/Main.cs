@@ -23,18 +23,18 @@ namespace SimShift.Services
 
         public static DataArbiter Data;
         public static WorldMapper Map;
-        
+
+        public static Profiles CarProfile;
+
         // Modules
         public static Antistall Antistall;
         public static CruiseControl CruiseControl;
         public static IDrivetrain Drivetrain;
         public static Speedlimiter Speedlimiter;
         public static Transmission Transmission;
-
-
+        public static ProfileSwitcher ProfileSwitcher;
 
         public static ControlChain Controls;
-
 
         public static bool Running { get; private set; }
 
@@ -48,33 +48,40 @@ namespace SimShift.Services
         {
             if (requiresSetup)
             {
+                requiresSetup = false;
+
+                // Joysticks
                 var ps3 = JoystickInputDevice.Search("Motion").FirstOrDefault();
                 var ps3Controller = new JoystickInput(ps3);
-
                 var vJoy = new JoystickOutput();
 
                 RawJoysticksIn.Add(ps3Controller);
                 RawJoysticksOut.Add(vJoy);
+
+                // Data source
                 Data = new DataArbiter();
+
+                Data.CarChanged += (s, e) =>
+                                       {
+                                           CarProfile = new Profiles(Data.Active.Application, Data.Telemetry.Car);
+                                           LoadNextProfile();
+                                       };
 
                 Data.AppActive += (s, e) => { Map = new WorldMapper(Data.Active); };
                 Data.AppInactive += (s, e) => { Map = null; };
 
+                // Modules
                 Antistall = new Antistall();
                 CruiseControl = new CruiseControl();
                 Drivetrain = new GenericDrivetrain();
                 Transmission = new Transmission();
                 Speedlimiter = new Speedlimiter();
+                ProfileSwitcher = new ProfileSwitcher();
 
-                Load(Antistall, "Settings/Antistall/easy.ini");
-                Load(CruiseControl, "Settings/CruiseControl/easy.ini");
-                Load(Drivetrain, "Settings/Drivetrain/TDU2_Merc.ini");
-                Load(Transmission, "Settings/ShiftCurve/Performance.10kmh.slow.ini");
-                Load(Speedlimiter, "Settings/SpeedLimiter/255.ini");
-
+                // Controls
                 Controls = new ControlChain();
 
-                requiresSetup = false;
+                Data.Run();
             }
         }
 
@@ -82,21 +89,25 @@ namespace SimShift.Services
         {
             // Reset to default
             target.ResetParameters();
-
-            // Load custom settings from INI file
-            using (var ini = new IniReader(iniFile, true))
+            try
             {
-                ini.AddHandler((x) =>
-                                   {
-                                       if (target.AcceptsConfigs.Any(y => y == x.Group))
+                // Load custom settings from INI file
+                using (var ini = new IniReader(iniFile, true))
+                {
+                    ini.AddHandler((x) =>
                                        {
-                                           target.ApplyParameter(x);
-                                       }
+                                           if (target.AcceptsConfigs.Any(y => y == x.Group))
+                                           {
+                                               target.ApplyParameter(x);
+                                           }
 
-                                   });
-                ini.Parse();
+                                       });
+                    ini.Parse();
+                }
+            }catch
+            {
+                Debug.WriteLine("Failed to load configuration from " + iniFile);
             }
-
             // DONE :)
         }
 
@@ -280,6 +291,17 @@ namespace SimShift.Services
         {
             if (ButtonFeedback.ContainsKey(ctrl)) return ButtonFeedback[ctrl];
             return false;
+        }
+
+        private static int profileIndexLoaded = 0;
+        public static void LoadNextProfile()
+        {
+            CarProfile.Load(CarProfile.Loaded.Skip(profileIndexLoaded).FirstOrDefault().Name);
+            profileIndexLoaded++;
+            if (profileIndexLoaded >= CarProfile.Loaded.Count)
+            {
+                profileIndexLoaded = 0;
+            }
         }
     }
 }

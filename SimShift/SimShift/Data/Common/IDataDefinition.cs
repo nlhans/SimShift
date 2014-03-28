@@ -2,6 +2,7 @@ namespace SimShift.Data.Common
 {
     public interface IDataDefinition
     {
+        string Car { get; }
         float Time { get; }
         bool Paused { get; }
         int Gear { get; }

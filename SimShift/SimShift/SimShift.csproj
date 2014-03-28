@@ -105,12 +105,16 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Antistall.cs" />
+    <Compile Include="Services\ConfigurableShiftPattern.cs" />
     <Compile Include="Services\ControlChain.cs" />
     <Compile Include="Services\CruiseControl.cs" />
     <Compile Include="Services\IConfigurable.cs" />
     <Compile Include="Services\IControlChainObj.cs" />
     <Compile Include="Services\JoyControls.cs" />
     <Compile Include="Services\Main.cs" />
+    <Compile Include="Services\Profile.cs" />
+    <Compile Include="Services\Profiles.cs" />
+    <Compile Include="Services\ProfileSwitcher.cs" />
     <Compile Include="Services\ShiftPattern.cs" />
     <Compile Include="Services\ShiftPatternFrame.cs" />
     <Compile Include="Services\Speedlimiter.cs" />

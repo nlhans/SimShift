@@ -18,6 +18,7 @@ namespace SimShift.Services
             chain.Add(Main.Speedlimiter);
             chain.Add(Main.Transmission);
             chain.Add(Main.Antistall);
+            chain.Add(Main.ProfileSwitcher);
 
             Axis.Add(JoyControls.Throttle);
             Axis.Add(JoyControls.Brake);

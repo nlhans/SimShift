@@ -15,6 +15,8 @@ namespace SimShift.Services
         public int RangeSize = 6;
         public int Gears = 6;
 
+        public static bool InReverse { get; set; }
+
         public ShiftPattern ActiveShiftPattern {get { return ShiftPatterns[ActiveShiftPatternStr]; }}
 
         public string ActiveShiftPatternStr;
@@ -67,8 +69,6 @@ namespace SimShift.Services
             }
         }
 
-        public bool DrivingInReverse { get; private set; }
-
         private double transmissionThrottle;
 
         public Transmission()
@@ -80,6 +80,14 @@ namespace SimShift.Services
             // Initialize all shfiting stuff.
             Shift(0, 1, "up_1thr");
             IsShifting = false;
+        }
+
+        public void LoadShiftPatterns(List<ConfigurableShiftPattern> patterns)
+        {
+            foreach(var p in patterns)
+            {
+                LoadShiftPattern(p.Region, p.File);
+            }
         }
 
         #region Transmission Shift logics
@@ -289,7 +297,7 @@ namespace SimShift.Services
                 return;
             }
 
-            if (DrivingInReverse)
+            if (InReverse)
             {
                 if (GameGear != -1)
                 {
