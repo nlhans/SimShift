@@ -312,6 +312,11 @@ namespace SimShift.Services
                 var lookupResult = configuration.Lookup(data.Telemetry.Speed*3.6, transmissionThrottle);
                 idealGear = lookupResult.Gear;
 
+                if(idealGear == 0)
+                {
+                    
+                }
+
                 if (data.Telemetry.Gear == 0 && ShiftCtrlNewGear != 0)
                 {
                     Debug.WriteLine("Timeout");

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using SimShift.Models;
+using SimShift.Services;
 
 namespace SimShift.Dialogs
 {
@@ -84,6 +85,10 @@ namespace SimShift.Dialogs
 
         public dlGearboxShifterTable()
         {
+            var myEngine = new GenericDrivetrain();
+            Main.Load(myEngine, "Settings/Drivetrain/TestDrive2.F430_Scuderia_S.ini");
+            activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Performance, myEngine,
+                                                                10);
             // 
             // sim
             // 

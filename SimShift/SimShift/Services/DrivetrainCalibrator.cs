@@ -171,21 +171,27 @@ namespace SimShift.Services
                         {
                             stage = DrivetrainCalibrationStage.FinishIdleRpm;
 
-                            MeasurementSettletime = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, 750));
+                            MeasurementSettletime = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, 2750));
                         }
                     }
                         previousEngineRpm = data.Telemetry.EngineRpm;
                     break;
                 case DrivetrainCalibrationStage.FinishIdleRpm:
-                    if(MeasurementSettled)
+                    if (MeasurementSettled)
                     {
                         Debug.WriteLine("Idle RPM: " + data.Telemetry.EngineRpm);
+                        if (data.Telemetry.EngineRpm < 300)
+                        {
+                            stage = DrivetrainCalibrationStage.StartIdleRpm;
+                        }
+                        else
+                        {
+                            Main.Drivetrain.StallRpm = data.Telemetry.EngineRpm;
 
-                        Main.Drivetrain.StallRpm = data.Telemetry.EngineRpm;
-
-                        stage = DrivetrainCalibrationStage.StartMaxRpm;
-                        maxRpmTarget = data.Telemetry.EngineRpm + 100;
-                        previousThrottle = 0;
+                            stage = DrivetrainCalibrationStage.StartMaxRpm;
+                            maxRpmTarget = data.Telemetry.EngineRpm + 100;
+                            previousThrottle = 0;
+                        }
                     }
                     break;
 
@@ -309,7 +315,7 @@ namespace SimShift.Services
                                 stage = DrivetrainCalibrationStage.None;
 
                                 Main.Store(Main.Drivetrain.ExportParameters(), Main.Drivetrain.File);
-
+                                Main.Load(Main.Drivetrain, Main.Drivetrain.File);
                             }
 
                             if (!calibrationPreDone)
