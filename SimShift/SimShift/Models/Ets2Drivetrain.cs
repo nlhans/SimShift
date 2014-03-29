@@ -9,8 +9,8 @@ namespace SimShift.Models
         public double MaximumTorque { get; private set; }
         public double MaximumPower { get; private set; }
 
-        public double StallRpm { get; private set; }
-        public double MaximumRpm { get; private set; }
+        public double StallRpm { get; set; }
+        public double MaximumRpm { get; set; }
 
         public Ets2Drivetrain(string truck)
         {
@@ -126,8 +126,11 @@ namespace SimShift.Models
             return CalculateThrottleByTorque(rpm, torqueRequired);
         }
 
-        public double[] GearRatios { get; private set; }
-        public int Gears { get; private set; }
+        public double[] GearRatios { get; set; }
+        public int Gears { get; set; }
+        public bool Calibrated { get; set; }
+        public string File { get; set; }
+
         public double CalculateSpeedForRpm(int gear, float rpm)
         {
             return GearRatios[gear] * rpm;

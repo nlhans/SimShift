@@ -18,8 +18,14 @@ namespace SimShift.Models
         }
 
         private Dictionary<double, GenericEngineData> Engine = new Dictionary<double, GenericEngineData>();
-        public double StallRpm { get; private set; }
-        public double MaximumRpm { get; private set; }
+
+        public GenericDrivetrain()
+        {
+            Calibrated = true;
+        }
+
+        public double StallRpm { get;  set; }
+        public double MaximumRpm { get; set; }
         protected float GearReverse { get; set; }
 
         #region Implementation of IDrivetrain
@@ -96,14 +102,17 @@ namespace SimShift.Models
             return CalculateThrottleByTorque(rpm, torqueRequired);
         }
 
+        public string File { get; set; }
+
         public double CalculateSpeedForRpm(int gear, float rpm)
         {
-            if (GearRatios == null || gear < 0 || gear > GearRatios.Length) return 0;
+            if (GearRatios == null || gear < 0 || gear >= GearRatios.Length) return 0;
             return rpm / GearRatios[gear]/3.6;
         }
 
-        public double[] GearRatios { get; private set; }
-        public int Gears { get; private set; }
+        public double[] GearRatios { get; set; }
+        public int Gears { get; set; }
+        public bool Calibrated { get; set; }
 
         #endregion
 
@@ -117,9 +126,8 @@ namespace SimShift.Models
         public void ResetParameters()
         {
             Engine = new Dictionary<double, GenericEngineData>();
-            StallRpm = 1000;
-            MaximumRpm = 6000;
-
+            StallRpm = 900;
+            MaximumRpm = 2500;
         }
 
         public void ApplyParameter(IniValueObject obj)

@@ -57,11 +57,12 @@ namespace SimShift.Services
                     {
                         _throttle = 0;
                         tick++;
+
                         return 1 - Rpm / (850 + Math.Sin(tick * 2 * Math.PI / 40.0) * 45 + (Blip ? 1300 : 0));
                     }
                     else
                     {
-                        var maxV = 1 - Rpm/1100.0;
+                        var maxV = 1 - Rpm/1300.0;
                         if (maxV > 1) maxV = 1;
                         if (maxV < 0) maxV = 0;
                         _throttle = val;

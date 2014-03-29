@@ -17,6 +17,8 @@ namespace SimShift.Services
 
         public static bool InReverse { get; set; }
 
+        public bool GetHomeMode { get; set; }
+
         public ShiftPattern ActiveShiftPattern {get { return ShiftPatterns[ActiveShiftPatternStr]; }}
 
         public string ActiveShiftPatternStr;
@@ -275,6 +277,9 @@ namespace SimShift.Services
 
         public void TickTelemetry(IDataMiner data)
         {
+            int idealGear = data.Telemetry.Gear;
+
+
             if (data.TransmissionSupportsRanges)
                 RangeSize = 6;
             else
@@ -286,15 +291,34 @@ namespace SimShift.Services
             if (TransmissionFrozen) return;
             shiftRetry = 0;
 
-            var lookupResult = configuration.Lookup(data.Telemetry.Speed*3.6, transmissionThrottle);
-            var idealGear = lookupResult.Gear;
-
-            if (data.Telemetry.Gear == 0 && ShiftCtrlNewGear != 0)
+            if (GetHomeMode)
             {
-                Debug.WriteLine("Timeout");
-                ShiftCtrlNewGear = 0;
-                TransmissionFreezeUntill = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, 250));
-                return;
+                if(idealGear < 1)
+                {
+                    idealGear = 1;
+                }
+
+                var lowRpm = Main.Drivetrain.StallRpm*1.5;
+                var highRpm = Main.Drivetrain.StallRpm*3;
+
+                if (data.Telemetry.EngineRpm < lowRpm && idealGear > 1)
+                    idealGear--;
+                if (data.Telemetry.EngineRpm > highRpm && idealGear < Main.Drivetrain.Gears)
+                    idealGear++;
+
+            }
+            else
+            {
+                var lookupResult = configuration.Lookup(data.Telemetry.Speed*3.6, transmissionThrottle);
+                idealGear = lookupResult.Gear;
+
+                if (data.Telemetry.Gear == 0 && ShiftCtrlNewGear != 0)
+                {
+                    Debug.WriteLine("Timeout");
+                    ShiftCtrlNewGear = 0;
+                    TransmissionFreezeUntill = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, 250));
+                    return;
+                }
             }
 
             if (InReverse)

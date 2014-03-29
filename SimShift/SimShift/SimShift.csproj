@@ -108,6 +108,7 @@
     <Compile Include="Services\ConfigurableShiftPattern.cs" />
     <Compile Include="Services\ControlChain.cs" />
     <Compile Include="Services\CruiseControl.cs" />
+    <Compile Include="Services\DrivetrainCalibrator.cs" />
     <Compile Include="Services\IConfigurable.cs" />
     <Compile Include="Services\IControlChainObj.cs" />
     <Compile Include="Services\JoyControls.cs" />

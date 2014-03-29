@@ -20,12 +20,19 @@ namespace SimShift.Services
         {
             UniqueID = string.Format("{0}.{1}", app, car);
             MasterFile = string.Format("Settings/Profiles/{0}.{1}.Master.ini", app, car);
+            PatternFile = string.Format("Settings/Profiles/{0}.{1}.{2}.ini", app, car, "{0}");
+
             if (File.Exists(MasterFile) == false)
             {
-                Debug.WriteLine("Cannot find " + MasterFile);
-                return;
+                Debug.WriteLine("Cannot find " + MasterFile + " - creating default Performance");
+
+                ResetParameters();
+                var performanceProfile = new Profile(this, "Performance");
+                Loaded.Add(performanceProfile);
+
+                Main.Store(ExportParameters(), MasterFile);
             }
-            PatternFile = string.Format("Settings/Profiles/{0}.{1}.{2}.ini", app, car, "{0}");
+
 
             Main.Load(this, MasterFile);
         }

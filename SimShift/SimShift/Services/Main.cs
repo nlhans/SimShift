@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using SimShift.Controllers;
@@ -39,6 +40,8 @@ namespace SimShift.Services
 
         public static bool Running { get; private set; }
 
+        public static DrivetrainCalibrator DrivetrainCalibrator;
+
         public static void Save()
         {
             if(Map!=null)
@@ -64,6 +67,14 @@ namespace SimShift.Services
 
                 Data.CarChanged += (s, e) =>
                                        {
+                                           // reset all modules
+                                           Antistall.ResetParameters();
+                                           CruiseControl.ResetParameters();
+                                           Drivetrain.ResetParameters();
+                                           Transmission.ResetParameters();
+                                           TractionControl.ResetParameters();
+                                           Speedlimiter.ResetParameters();
+
                                            CarProfile = new Profiles(Data.Active.Application, Data.Telemetry.Car);
                                            LoadNextProfile();
                                        };
@@ -79,6 +90,7 @@ namespace SimShift.Services
                 TractionControl = new TractionControl();
                 ProfileSwitcher = new ProfileSwitcher();
                 Speedlimiter = new Speedlimiter();
+                DrivetrainCalibrator = new DrivetrainCalibrator();
 
                 // Controls
                 Controls = new ControlChain();
@@ -87,7 +99,29 @@ namespace SimShift.Services
             }
         }
 
-        public static void Load(IConfigurable target, string iniFile)
+        public static void Store(IEnumerable<IniValueObject> settings, string f)
+        {
+            StringBuilder export = new StringBuilder();
+            // Groups
+            var groups = settings.Select(x=>x.Group).Distinct();
+
+            foreach (var group in groups)
+            {
+                export.AppendLine("[" + group + "]");
+
+                foreach (var setting in settings.Where(x => x.Group == group))
+                {
+                    export.AppendLine(setting.Key + "=" + setting.RawValue);
+                }
+
+                export.AppendLine(" ");
+            }
+
+            File.WriteAllText(f, export.ToString());
+            Debug.WriteLine("Exported settings to " + f);
+        }
+
+        public static bool Load(IConfigurable target, string iniFile)
         {
             // Reset to default
             target.ResetParameters();
@@ -106,10 +140,12 @@ namespace SimShift.Services
                                        });
                     ini.Parse();
                 }
+                return true;
             }catch
             {
                 Debug.WriteLine("Failed to load configuration from " + iniFile);
             }
+            return false;
             // DONE :)
         }
 

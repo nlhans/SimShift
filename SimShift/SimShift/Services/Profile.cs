@@ -28,7 +28,25 @@ namespace SimShift.Services
             var phFile = string.Format(car.PatternFile, file);
 
             if (!File.Exists(phFile))
-                Debug.WriteLine("Cannot find file " + phFile);
+            {
+                Debug.WriteLine("Cannot find file " + phFile + " - creating defaults");
+                Antistall = "easy";
+                CruiseControl = "easy";
+                ShiftCurve = "Performance.5kmh.slow";
+                SpeedLimiter = "nolimit";
+                TractionControl = "notc";
+
+                ShiftPattern = new List<ConfigurableShiftPattern>();
+                ShiftPattern.Add(new ConfigurableShiftPattern("up_1thr", "normal"));
+                ShiftPattern.Add(new ConfigurableShiftPattern("up_0thr", "normal"));
+                ShiftPattern.Add(new ConfigurableShiftPattern("down_1thr", "normal"));
+                ShiftPattern.Add(new ConfigurableShiftPattern("down_0thr", "normal"));
+
+                var iniExport = ExportParameters();
+                Main.Store(iniExport, phFile);
+
+                Loaded = true;
+            }
             else
             {
                 Loaded = true;
@@ -42,10 +60,14 @@ namespace SimShift.Services
             //
             Main.Load(Main.Antistall, "Settings/Antistall/" + Antistall + ".ini");
             Main.Load(Main.CruiseControl, "Settings/CruiseControl/" + CruiseControl + ".ini");
-            Main.Load(Main.Drivetrain, "Settings/Drivetrain/" + Car.UniqueID + ".ini");
+
+            Main.Drivetrain.File = "Settings/Drivetrain/" + Car.UniqueID + ".ini";
+            Main.Drivetrain.Calibrated = Main.Load(Main.Drivetrain, "Settings/Drivetrain/" + Car.UniqueID + ".ini");
+
             Main.Load(Main.Transmission, "Settings/ShiftCurve/" + ShiftCurve + ".ini");
             Main.Load(Main.Speedlimiter, "Settings/SpeedLimiter/" + SpeedLimiter + ".ini");
             Main.Load(Main.TractionControl, "Settings/TractionControl/" + TractionControl + ".ini");
+
         }
 
         #region Implementation of IConfigurable
@@ -90,6 +112,7 @@ namespace SimShift.Services
             obj.Add(new IniValueObject(AcceptsConfigs, "CruiseControl", CruiseControl));
             obj.Add(new IniValueObject(AcceptsConfigs, "ShiftCurve", ShiftCurve));
             obj.Add(new IniValueObject(AcceptsConfigs, "SpeedLimiter", SpeedLimiter));
+            obj.Add(new IniValueObject(AcceptsConfigs, "TractionControl", TractionControl));
             foreach (var s in ShiftPattern)
             {
                 if(s.Region.IndexOf("_")<0) continue;

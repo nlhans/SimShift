@@ -20,6 +20,7 @@ namespace SimShift.Services
             chain.Add(Main.Transmission);
             chain.Add(Main.Antistall);
             chain.Add(Main.ProfileSwitcher);
+            chain.Add(Main.DrivetrainCalibrator);
 
             Axis.Add(JoyControls.Throttle);
             Axis.Add(JoyControls.Brake);

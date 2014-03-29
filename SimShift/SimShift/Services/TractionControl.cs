@@ -35,7 +35,7 @@ namespace SimShift.Services
                     return val;
 
                 case JoyControls.Throttle:
-                    return 1- (WheelSpeed - AllowedSlip)/Slope;
+                    return val * (1- (WheelSpeed - AllowedSlip)/Slope);
                     break;
             }
         }
@@ -52,10 +52,15 @@ namespace SimShift.Services
 
         public void TickTelemetry(IDataMiner data)
         {
-            WheelSpeed = Main.Drivetrain.CalculateSpeedForRpm(data.Telemetry.Gear-1, data.Telemetry.EngineRpm);
-            if (Main.Antistall.Stalling) WheelSpeed = 0;
-            Slipping = (WheelSpeed - AllowedSlip > data.Telemetry.Speed);
-            Debug.WriteLine("Whl: "+(WheelSpeed*3.6)+" / Spd: " + (data.Telemetry.Speed*3.6));
+            try
+            {
+                WheelSpeed = Main.Drivetrain.CalculateSpeedForRpm(data.Telemetry.Gear - 1, data.Telemetry.EngineRpm);
+                if (double.IsInfinity(WheelSpeed)) WheelSpeed = 0;
+                if (Main.Antistall.Stalling) WheelSpeed = 0;
+                Slipping = (WheelSpeed - AllowedSlip > data.Telemetry.Speed);
+            }catch
+            {
+            }
         }
 
         #endregion
