@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SimShift.Utils;
 
 namespace SimShift.Models
 {
-    public class Ets2Drivetrain : IDrivetrain
+    public class Ets2Drivetrain : GenericDrivetrain
     {
         public double MaximumTorque { get; private set; }
         public double MaximumPower { get; private set; }
 
-        public double StallRpm { get; set; }
-        public double MaximumRpm { get; set; }
+        //public double StallRpm { get; set; }
+        //public double MaximumRpm { get; set; }
 
+        /*
         public Ets2Drivetrain(string truck)
         {
             double torques = 1000.0;
@@ -59,8 +61,8 @@ namespace SimShift.Models
             MaximumPower = torques / 3550 * 1260;
             MaximumTorque = torques * 4451 / 3550;
         }
-
-        public double CalculateTorqueN(double rpm)
+        */
+        public override  double CalculateTorqueN(double rpm)
         {
             double negativeTorque = -0.000638282 * rpm;
 
@@ -70,7 +72,7 @@ namespace SimShift.Models
             return negativeTorque;
         }
 
-        public double CalculateTorqueP(double rpm, double throttle)
+        public override double CalculateTorqueP(double rpm, double throttle)
         {
 
             double positiveTorque = -7.14608640654085 + 0.0267618520312 * rpm
@@ -88,7 +90,7 @@ namespace SimShift.Models
             return positiveTorque * throttle + negativeTorque;
         }
 
-        public double CalculateThrottleByTorque(double rpm, double torque)
+        public override double CalculateThrottleByTorque(double rpm, double torque)
         {
             double positiveTorque = -7.14608640654085 + 0.0267618520312 * rpm
                 - 0.0000222969198545134 * rpm * rpm
@@ -102,14 +104,7 @@ namespace SimShift.Models
             return (torque - negativeTorque) / positiveTorque;
         }
 
-        public double CalculatePower(double rpm, double throttle)
-        {
-            var torque = CalculateTorqueP(rpm, throttle);
-
-            return torque*(rpm/1000)/(1/0.1904);
-        }
-
-        public double CalculateFuelConsumption(double rpm, double throttle)
+        public override double CalculateFuelConsumption(double rpm, double throttle)
         {
             //
             double r = 95.7231762038 * Math.Exp(rpm * 0.000918876); // consumption @ 100%
@@ -117,41 +112,29 @@ namespace SimShift.Models
             return r * throttle;
         }
 
-        public double CalculateThrottleByPower(double rpm, double powerRequired)
-        {
-            // 1 Nm @ 1000rpm = 0.1904hp
-            // 1 Hp @ 1000rpm = 5.2521Nm
-            if (rpm == 0) return 1;
-            double torqueRequired = powerRequired / (rpm / 1000) * (1 / 0.1904);
-            return CalculateThrottleByTorque(rpm, torqueRequired);
-        }
-
-        public double[] GearRatios { get; set; }
-        public int Gears { get; set; }
-        public bool Calibrated { get; set; }
-        public string File { get; set; }
-
-        public double CalculateSpeedForRpm(int gear, float rpm)
-        {
-            return GearRatios[gear] * rpm;
-        }
-
         #region Implementation of IConfigurable
 
-        public IEnumerable<string> AcceptsConfigs { get; private set; }
-        public void ResetParameters()
+        public override void ResetParameters()
         {
-            throw new NotImplementedException();
+            MaximumTorque = 2500;
         }
 
-        public void ApplyParameter(IniValueObject obj)
+        public override void ApplyParameter(IniValueObject obj)
         {
-            throw new NotImplementedException();
+            base.ApplyParameter(obj);
+            switch(obj.Key)
+            {
+                case "Ets2Engine":
+                    MaximumTorque = obj.ReadAsFloat();
+                    break;
+            }
         }
 
-        public IEnumerable<IniValueObject> ExportParameters()
+        public override IEnumerable<IniValueObject> ExportParameters()
         {
-            throw new NotImplementedException();
+            List<IniValueObject> obj = base.ExportParameters().ToList();
+            obj.Add(new IniValueObject(base.AcceptsConfigs, "Ets2Engine", MaximumTorque.ToString("0.0")));
+            return obj;
         }
 
         #endregion

@@ -18,6 +18,7 @@ namespace SimShift.Services
         public static bool InReverse { get; set; }
 
         public bool GetHomeMode { get; set; }
+        public bool OverruleShifts { get; set; }
 
         public ShiftPattern ActiveShiftPattern {get { return ShiftPatterns[ActiveShiftPatternStr]; }}
 
@@ -96,6 +97,8 @@ namespace SimShift.Services
 
         public void Shift(int fromGear, int toGear, string style)
         {
+            if(IsShifting) return;
+
             if (ShiftPatterns.ContainsKey(style))
                 ActiveShiftPatternStr = style;
             else 
@@ -279,16 +282,16 @@ namespace SimShift.Services
         {
             int idealGear = data.Telemetry.Gear;
 
-
             if (data.TransmissionSupportsRanges)
                 RangeSize = 6;
             else
                 RangeSize = 8;
-
+            
             // TODO: Add generic telemetry object
             GameGear = data.Telemetry.Gear;
             if (IsShifting) return;
             if (TransmissionFrozen) return;
+            if (OverruleShifts) return;
             shiftRetry = 0;
 
             if (GetHomeMode)
@@ -396,15 +399,19 @@ namespace SimShift.Services
             {
                 case JoyControls.Throttle:
                     transmissionThrottle = val > 0 && val < 1 ? val : 0;
-
-                    if (ShiftFrame >= ActiveShiftPattern.Count)
-                        return val;
-                    return IsShifting ? ActiveShiftPattern.Frames[ShiftFrame].Throttle * val : val;
-
+                    lock (ActiveShiftPattern)
+                    {
+                        if (ShiftFrame >= ActiveShiftPattern.Count)
+                            return val;
+                        return IsShifting ? ActiveShiftPattern.Frames[ShiftFrame].Throttle*val : val;
+                    }
                 case JoyControls.Clutch:
-                    if (ShiftFrame >= ActiveShiftPattern.Count)
-                        return val;
-                    return ActiveShiftPattern.Frames[ShiftFrame].Clutch;
+                    lock (ActiveShiftPattern)
+                    {
+                        if (ShiftFrame >= ActiveShiftPattern.Count)
+                            return val;
+                        return ActiveShiftPattern.Frames[ShiftFrame].Clutch;
+                    }
 
                 default:
                     return val;
@@ -573,10 +580,13 @@ namespace SimShift.Services
         {
             if (IsShifting)
             {
-                if (ShiftFrame >= ActiveShiftPattern.Count) return false;
-                if (ActiveShiftPattern.Frames[ShiftFrame].UseOldGear) return (b == ShiftCtrlOldGear);
-                if (ActiveShiftPattern.Frames[ShiftFrame].UseNewGear) return (b == ShiftCtrlNewGear);
-                return false;
+                lock (ActiveShiftPattern)
+                {
+                    if (ShiftFrame >= ActiveShiftPattern.Count) return false;
+                    if (ActiveShiftPattern.Frames[ShiftFrame].UseOldGear) return (b == ShiftCtrlOldGear);
+                    if (ActiveShiftPattern.Frames[ShiftFrame].UseNewGear) return (b == ShiftCtrlNewGear);
+                    return false;
+                }
             }
 
             return (b == ShiftCtrlNewGear);
@@ -588,34 +598,37 @@ namespace SimShift.Services
         {
             if (IsShifting)
             {
-
-                ShiftFrame++;
-                if (ShiftFrame > ActiveShiftPattern.Count)
-                    ShiftFrame = 0;
-                if (shiftRetry < 10 && ShiftFrame > 4 && ActiveShiftPattern.Frames[ShiftFrame - 3].UseNewGear &&
-                    GameGear != ShifterNewGear)
+                lock (ActiveShiftPattern)
                 {
-                    // So we are shifting, check lagging by 1, and new gear doesn't work
-                    // We re-shfit
-                    var tmp = ShiftFrame;
-                    Shift(GameGear, ShifterNewGear, "up_1thr");
-                    ShiftFrame = tmp - 4;
-                    shiftRetry++;
-
-                    if (ShiftCtrlNewRange != ShiftCtrlOldRange)
-                    {
-
+                    ShiftFrame++;
+                    if (ShiftFrame > ActiveShiftPattern.Count)
                         ShiftFrame = 0;
+                    if (shiftRetry < 10 && ShiftFrame > 4
+                        && ActiveShiftPattern.Frames[ShiftFrame - 3].UseNewGear &&
+                        GameGear != ShifterNewGear)
+                    {
+                        // So we are shifting, check lagging by 1, and new gear doesn't work
+                        // We re-shfit
+                        var tmp = ShiftFrame;
+                        Shift(GameGear, ShifterNewGear, "up_1thr");
+                        ShiftFrame = tmp - 4;
+                        shiftRetry++;
 
-                        RangeButtonFreeze1Untill = DateTime.Now;
-                        RangeButtonFreeze2Untill = DateTime.Now;
+                        if (ShiftCtrlNewRange != ShiftCtrlOldRange)
+                        {
 
+                            ShiftFrame = 0;
+
+                            RangeButtonFreeze1Untill = DateTime.Now;
+                            RangeButtonFreeze2Untill = DateTime.Now;
+
+                        }
                     }
-                }
-                else if (ShiftFrame >= ActiveShiftPattern.Count)
-                {
-                    IsShifting = false;
-                    TransmissionFreezeUntill = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, ShiftDeadTime));
+                    else if (ShiftFrame >= ActiveShiftPattern.Count)
+                    {
+                        IsShifting = false;
+                        TransmissionFreezeUntill = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, ShiftDeadTime+50*ShiftCtrlNewGear));
+                    }
                 }
             }
         }

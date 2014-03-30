@@ -81,14 +81,14 @@ namespace SimShift.Dialogs
             return rgb;
         }
 
-        private ShifterTableConfiguration activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.PeakRpm, new Ets2Drivetrain("Volvo"), 9);
+        private ShifterTableConfiguration activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Efficiency, new Ets2Drivetrain(), 5);
 
         public dlGearboxShifterTable()
         {
-            var myEngine = new GenericDrivetrain();
-            Main.Load(myEngine, "Settings/Drivetrain/TestDrive2.F430_Scuderia_S.ini");
+            var myEngine = new Ets2Drivetrain();
+            Main.Load(myEngine, "Settings/Drivetrain/eurotrucks2.scania.r.ini");
             activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Performance, myEngine,
-                                                                10);
+                                                                5);
             // 
             // sim
             // 

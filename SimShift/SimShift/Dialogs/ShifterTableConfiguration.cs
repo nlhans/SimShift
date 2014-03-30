@@ -137,7 +137,7 @@ namespace SimShift.Dialogs
                         {
                             calculatedRpm = Drivetrain.StallRpm;
                         }
-                        if (calculatedRpm < 2500) continue;
+                        if (calculatedRpm < 1500) continue;
                         var pwr = Drivetrain.CalculatePower(calculatedRpm+200, load <0.2?0.2:load);
 
                         latestGearThatWasNotStalling = gear;

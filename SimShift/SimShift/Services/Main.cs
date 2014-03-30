@@ -67,6 +67,11 @@ namespace SimShift.Services
 
                 Data.CarChanged += (s, e) =>
                                        {
+                                           if (Data.Active.Application == "eurotrucks2")
+                                               Drivetrain = new Ets2Drivetrain();
+                                           else
+                                               Drivetrain = new GenericDrivetrain();
+
                                            // reset all modules
                                            Antistall.ResetParameters();
                                            CruiseControl.ResetParameters();
@@ -335,6 +340,7 @@ namespace SimShift.Services
         private static int profileIndexLoaded = 0;
         public static void LoadNextProfile()
         {
+            if (profileIndexLoaded >= CarProfile.Loaded.Count) profileIndexLoaded = 0;
             CarProfile.Load(CarProfile.Loaded.Skip(profileIndexLoaded).FirstOrDefault().Name);
             profileIndexLoaded++;
             if (profileIndexLoaded >= CarProfile.Loaded.Count)

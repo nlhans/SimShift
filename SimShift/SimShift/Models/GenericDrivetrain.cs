@@ -30,7 +30,7 @@ namespace SimShift.Models
 
         #region Implementation of IDrivetrain
 
-        public double CalculateTorqueN(double rpm)
+        public virtual double CalculateTorqueN(double rpm)
         {
             var lastKey = 0.0;
             foreach (var r in Engine.Keys)
@@ -49,7 +49,7 @@ namespace SimShift.Models
             return 0;
         }
 
-        public double CalculateTorqueP(double rpm, double throttle)
+        public virtual double CalculateTorqueP(double rpm, double throttle)
         {
             var lastKey = 0.0;
             foreach (var r in Engine.Keys)
@@ -68,7 +68,7 @@ namespace SimShift.Models
             return 0;
         }
 
-        public double CalculateThrottleByTorque(double rpm, double torque)
+        public virtual  double CalculateThrottleByTorque(double rpm, double torque)
         {
             var torqueP = CalculateTorqueP(rpm, 1);
             if (torque > torqueP) return 1;
@@ -87,7 +87,7 @@ namespace SimShift.Models
             return torque*(rpm/1000)/(1/0.1904);
         }
 
-        public double CalculateFuelConsumption(double rpm, double throttle)
+        public virtual  double CalculateFuelConsumption(double rpm, double throttle)
         {
             return rpm*throttle;
         }
@@ -123,14 +123,14 @@ namespace SimShift.Models
             get { return new[] {"Engine", "Gearbox"}; }
         }
 
-        public void ResetParameters()
+        public virtual  void ResetParameters()
         {
             Engine = new Dictionary<double, GenericEngineData>();
             StallRpm = 900;
             MaximumRpm = 2500;
         }
 
-        public void ApplyParameter(IniValueObject obj)
+        public virtual void ApplyParameter(IniValueObject obj)
         {
             if (obj.Group == "Engine")
             {
@@ -170,7 +170,7 @@ namespace SimShift.Models
         
         }
 
-        public IEnumerable<IniValueObject> ExportParameters()
+        public virtual IEnumerable<IniValueObject> ExportParameters()
         {
             List<IniValueObject> obj = new List<IniValueObject>();
 

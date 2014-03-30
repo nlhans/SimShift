@@ -53,10 +53,13 @@ namespace SimShift.Data
 
             if (activeCell == null) return;
 
-            if (activeCell.points.Any(d => Math.Abs(d.x - x) < 1 || Math.Abs(d.z - z) < 1)) return;
+            lock (activeCell.points)
+            {
+                if (activeCell.points.Any(d => Math.Abs(d.x - x) < 1 || Math.Abs(d.z - z) < 1)) return;
 
-            activeCell.points.Add(new WorldMapPoint(x,y,z));
+                activeCell.points.Add(new WorldMapPoint(x, y, z));
 
+            }
         }
 
         public void Import()
@@ -70,7 +73,7 @@ namespace SimShift.Data
                 {
                     string[] cellData = li.Split("_".ToCharArray());
                     active = new WorldMapCell(int.Parse(cellData[1]), int.Parse(cellData[2]));
-                    lock(cells)
+                    lock (cells)
                     {
                         cells.Add(active);
                     }
@@ -78,8 +81,11 @@ namespace SimShift.Data
                 else
                 {
                     string[] pointData = li.Split(",".ToCharArray());
-                    active.points.Add(new WorldMapPoint(float.Parse(pointData[0]), float.Parse(pointData[1]),
-                                                        float.Parse(pointData[2])));
+                    lock (active.points)
+                    {
+                        active.points.Add(new WorldMapPoint(float.Parse(pointData[0]), float.Parse(pointData[1]),
+                                                            float.Parse(pointData[2])));
+                    }
                 }
             }
         }
