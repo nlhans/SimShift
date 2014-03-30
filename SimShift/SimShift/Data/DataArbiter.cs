@@ -33,32 +33,34 @@ namespace SimShift.Data
             miners.Add(new Ets2DataMiner());
             miners.Add(new Tdu2DataMiner());
 
-            foreach(var app in miners)
-            {
-                app.DataReceived += (s, e) =>
-                                        {
-                                            if (app == Active)
-                                            {
-                                                if(verbose>0)
-                                                Debug.WriteLine(
-                                                    string.Format(
-                                                        "[Data] Spd: {0:000.0}kmh Gear: {1} RPM: {2:0000}rpm Throttle: {3:0.000}",
-                                                        app.Telemetry.Speed, app.Telemetry.Gear, app.Telemetry.EngineRpm,
-                                                        app.Telemetry.Throttle));
-                                                Telemetry = app.Telemetry;
-                                                if (DataReceived != null)
-                                                    DataReceived(s, e);
+            miners.ForEach(app =>
+                               {
 
-                                                if (lastCar != Telemetry.Car && CarChanged != null)
-                                                {
+                                   app.DataReceived += (s, e) =>
+                                                           {
+                                                               if (app == Active)
+                                                               {
+                                                                   if (verbose > 0)
+                                                                       Debug.WriteLine(
+                                                                           string.Format(
+                                                                               "[Data] Spd: {0:000.0}kmh Gear: {1} RPM: {2:0000}rpm Throttle: {3:0.000}",
+                                                                               app.Telemetry.Speed, app.Telemetry.Gear,
+                                                                               app.Telemetry.EngineRpm,
+                                                                               app.Telemetry.Throttle));
+                                                                   Telemetry = app.Telemetry;
+                                                                   if (DataReceived != null)
+                                                                       DataReceived(s, e);
 
-                                                    lastCar = Telemetry.Car;
-                                                    CarChanged(s, e);
-                                                }
-                                                lastCar = Telemetry.Car;
-                                            }
-                                        };
-            }
+                                                                   if (lastCar != Telemetry.Car && CarChanged != null)
+                                                                   {
+
+                                                                       lastCar = Telemetry.Car;
+                                                                       CarChanged(s, e);
+                                                                   }
+                                                                   lastCar = Telemetry.Car;
+                                                               }
+                                                           };
+                               });
 
             _checkApplications = new Timer();
             _checkApplications.Interval = 1000;

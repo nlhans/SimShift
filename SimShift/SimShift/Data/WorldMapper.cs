@@ -28,15 +28,18 @@ namespace SimShift.Data
 
         public WorldMapCell LookupCell(float x, float z)
         {
+            WorldMapCell c = default(WorldMapCell);
             var cellX = (int) (x / 512);
             var cellZ = (int)(z / 512);
+            lock (cells)
+            {
+                if (cells.Any(d => d.X == cellX && d.Z == cellZ))
+                    return cells.FirstOrDefault(d => d.X == cellX && d.Z == cellZ);
 
-            if (cells.Any(d => d.X == cellX && d.Z == cellZ))
-                return cells.FirstOrDefault(d => d.X == cellX && d.Z == cellZ);
-            
-            Debug.WriteLine("Created cell "+cellX+","+cellZ);
-            var c = new WorldMapCell(cellX,cellZ);
-            cells.Add(c);
+                Debug.WriteLine("Created cell " + cellX + "," + cellZ);
+                c = new WorldMapCell(cellX, cellZ);
+                cells.Add(c);
+            }
             return c;
         }
 
@@ -67,7 +70,10 @@ namespace SimShift.Data
                 {
                     string[] cellData = li.Split("_".ToCharArray());
                     active = new WorldMapCell(int.Parse(cellData[1]), int.Parse(cellData[2]));
-                    cells.Add(active);
+                    lock(cells)
+                    {
+                        cells.Add(active);
+                    }
                 }
                 else
                 {

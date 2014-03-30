@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Text;
 using System.Timers;
 using SimShift.Data.Common;
 
@@ -34,6 +35,9 @@ namespace SimShift.Data
         public IDataDefinition Telemetry { get; private set; }
         public Ets2DataDefinition MyTelemetry { get; private set; }
 
+        public string Truck { get; private set; }
+        public string Trailer { get; private set; }
+
         /*** MyTelemetry data source & update control ***/
         private readonly SharedMemory<Ets2DataDefinition> _sharedMem = new SharedMemory<Ets2DataDefinition>();
         private readonly Timer _telemetryUpdater = new Timer { Interval = 25 };
@@ -57,7 +61,28 @@ namespace SimShift.Data
         {
             _sharedMem.Update();
             MyTelemetry = _sharedMem.Data;
-            Telemetry = MyTelemetry.ToGeneric();
+
+            // read ID
+            if (MyTelemetry.modelLength > 0)
+            {
+                var id = ASCIIEncoding.ASCII.GetString(_sharedMem.RawData, MyTelemetry.modelOffset, MyTelemetry.modelLength);
+
+                var prevTruck = Truck;
+                Truck = id.Substring("vehicle.".Length);
+                if (prevTruck != Truck)
+                    Debug.WriteLine("New Truck: " + Truck);
+            }
+            if (MyTelemetry.trailerLength > 0)
+            {
+                var id = ASCIIEncoding.ASCII.GetString(_sharedMem.RawData, MyTelemetry.trailerOffset, MyTelemetry.trailerLength);
+
+                var prevTrrailer = Trailer;
+                Trailer = id.Substring("chassis.".Length);
+                if (prevTrrailer != Trailer)
+                    Debug.WriteLine("New Trailer: " + Trailer);
+
+            }
+            Telemetry = MyTelemetry.ToGeneric(Truck);
 
             // Compute new fuel flow, based on time stamp difference.
             // Unfortunately this implementation doesn't allow for 0.0L/h output; as there is no fuel burned

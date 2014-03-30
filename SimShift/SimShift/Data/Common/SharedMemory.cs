@@ -9,8 +9,12 @@ namespace SimShift.Data.Common
 {
     public class SharedMemory<T>
     {
+        public const uint mapSize = 16*1024;
+
         public bool Hooked { get; private set; }
         public T Data { get; private set; }
+
+        public byte[] RawData { get; private set; }
 
         private MemoryMappedFile _memoryMappedFile;
         private MemoryMappedViewAccessor _memoryMappedBuffer;
@@ -21,9 +25,11 @@ namespace SimShift.Data.Common
         {
             try
             {
+                RawData = new byte[mapSize]; //Marshal.SizeOf(typeof(T))];
+
                 //_mMMF = MemoryMappedFile.OpenExisting(map, MemoryMappedFileRights.TakeOwnership);
-                _memoryMappedFile = MemoryMappedFile.CreateOrOpen(map, 16 * 1024, MemoryMappedFileAccess.ReadWrite);
-                _memoryMappedBuffer = _memoryMappedFile.CreateViewAccessor(0, 16 * 1024);
+                _memoryMappedFile = MemoryMappedFile.CreateOrOpen(map, mapSize, MemoryMappedFileAccess.ReadWrite);
+                _memoryMappedBuffer = _memoryMappedFile.CreateViewAccessor(0, mapSize);
 
                 udpServer = new UdpClient();
 
@@ -69,12 +75,11 @@ namespace SimShift.Data.Common
         {
             if (_memoryMappedBuffer == null) return;
 
-            var tmpData = new byte[Marshal.SizeOf(typeof (T))];
-            _memoryMappedBuffer.ReadArray(0, tmpData, 0, tmpData.Length);
+            _memoryMappedBuffer.ReadArray(0, RawData, 0, RawData.Length);
 
-            Data = ToObject(tmpData);
+            Data = ToObject(RawData);
 
-            udpServer.Send(tmpData, tmpData.Length);
+            udpServer.Send(RawData, RawData.Length);
         }
 
         // Casts raw byte stream to object.
