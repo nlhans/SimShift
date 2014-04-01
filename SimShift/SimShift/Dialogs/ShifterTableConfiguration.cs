@@ -142,6 +142,7 @@ namespace SimShift.Dialogs
 
                         latestGearThatWasNotStalling = gear;
                         if (calculatedRpm > Drivetrain.MaximumRpm) continue;
+                        if (gear == 0 && calculatedRpm > Drivetrain.MaximumRpm - 200) continue;
                         if (pwr  >bestPower)
                         {
                             bestPower = pwr;

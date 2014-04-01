@@ -108,7 +108,7 @@ namespace SimShift.Services
         {
             StringBuilder export = new StringBuilder();
             // Groups
-            var groups = settings.Select(x=>x.Group).Distinct();
+            var groups = settings.Select(x => x.Group).Distinct();
 
             foreach (var group in groups)
             {
@@ -121,9 +121,13 @@ namespace SimShift.Services
 
                 export.AppendLine(" ");
             }
-
-            File.WriteAllText(f, export.ToString());
-            Debug.WriteLine("Exported settings to " + f);
+            try
+            {
+                File.WriteAllText(f, export.ToString());
+                Debug.WriteLine("Exported settings to " + f);
+            }catch
+            {
+            }
         }
 
         public static bool Load(IConfigurable target, string iniFile)
@@ -341,6 +345,7 @@ namespace SimShift.Services
         public static void LoadNextProfile()
         {
             if (profileIndexLoaded >= CarProfile.Loaded.Count) profileIndexLoaded = 0;
+            if (CarProfile.Loaded.Count == 0) return;
             CarProfile.Load(CarProfile.Loaded.Skip(profileIndexLoaded).FirstOrDefault().Name);
             profileIndexLoaded++;
             if (profileIndexLoaded >= CarProfile.Loaded.Count)

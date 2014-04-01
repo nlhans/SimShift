@@ -12,6 +12,7 @@ namespace SimShift.Services
     {
         public bool Slipping { get; private set; }
         public double WheelSpeed { get; private set; }
+        public double EngineSpeed { get; private set; }
 
         #region Implementation of IControlChainObj
 
@@ -35,7 +36,7 @@ namespace SimShift.Services
                     return val;
 
                 case JoyControls.Throttle:
-                    return val * (1- (WheelSpeed - AllowedSlip)/Slope);
+                    return val * (1- (WheelSpeed - AllowedSlip - EngineSpeed)/Slope);
                     break;
             }
         }
@@ -55,9 +56,10 @@ namespace SimShift.Services
             try
             {
                 WheelSpeed = Main.Drivetrain.CalculateSpeedForRpm(data.Telemetry.Gear - 1, data.Telemetry.EngineRpm);
+                EngineSpeed = data.Telemetry.Speed;//the actual speed we are going
                 if (double.IsInfinity(WheelSpeed)) WheelSpeed = 0;
                 if (Main.Antistall.Stalling) WheelSpeed = 0;
-                Slipping = (WheelSpeed - AllowedSlip > data.Telemetry.Speed);
+                Slipping = (WheelSpeed - AllowedSlip > EngineSpeed);
             }catch
             {
             }

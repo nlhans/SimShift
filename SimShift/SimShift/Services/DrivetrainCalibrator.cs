@@ -42,6 +42,7 @@ namespace SimShift.Services
         private int gear;
 
         private DrivetrainCalibrationStage stage;
+        private DrivetrainCalibrationStage nextStage;
 
         #region Implementation of IControlChainObj
 
@@ -207,19 +208,16 @@ namespace SimShift.Services
                     reqGears = true;
                     
                     clutch = 1;
-                        gear = 0;
-                    maxRpmTarget += 100;
+                    throttle = 1;
                     maxRpmMeasured = 0;
 
-                    MeasurementSettletime = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0,(int)(250+maxRpmTarget/50)));
+                    MeasurementSettletime = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0,1500));
                     stage = DrivetrainCalibrationStage.FinishMaxRpm;
 
                     break;
                 case DrivetrainCalibrationStage.FinishMaxRpm:
 
-                    throttle = 10 - 10*data.Telemetry.EngineRpm/maxRpmTarget;
-                    if (throttle < 0) throttle = 0;
-                    if (throttle > 1) throttle = 1;
+                    throttle = 1;
                     maxRpmMeasured = Math.Max(maxRpmMeasured, data.Telemetry.EngineRpm);
 
                     if (MeasurementSettled)
@@ -229,16 +227,15 @@ namespace SimShift.Services
                             Debug.WriteLine("Totally messed up MAX RPM.. resetting");
                             stage = DrivetrainCalibrationStage.StartIdleRpm;
                         }
-                        else                        if (maxRpmTarget-500 > maxRpmMeasured)
+                        else
                         {
                             Debug.WriteLine("Max RPM approx: " + maxRpmMeasured);
 
                             Main.Drivetrain.MaximumRpm = maxRpmMeasured-300;
 
-                            stage = DrivetrainCalibrationStage.StartGears;
-                        }else
-                        {
-                            stage = DrivetrainCalibrationStage.StartMaxRpm;
+
+                            stage = DrivetrainCalibrationStage.ShiftToFirst;
+                            nextStage = DrivetrainCalibrationStage.StartGears;
                         }
                     }
                     break;
@@ -253,13 +250,12 @@ namespace SimShift.Services
                     gear++;
                     Main.Transmission.Shift(data.Telemetry.Gear, gear, calibrateShiftStyle);
 
-                    MeasurementSettletime = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, 1250));
                     stage = DrivetrainCalibrationStage.FinishGears;
 
                     break;
                 case DrivetrainCalibrationStage.FinishGears:
 
-                    if(MeasurementSettled && !Transmission.IsShifting)
+                    if(!Transmission.IsShifting)
                     {
                         if(data.Telemetry.Gear != gear)
                         {
@@ -279,7 +275,8 @@ namespace SimShift.Services
                                 Main.Drivetrain.GearRatios = new double[gear];
 
                                 stage = DrivetrainCalibrationStage.ShiftToFirst;
-                                MeasurementSettletime = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, 1500));
+                                nextStage = DrivetrainCalibrationStage.StartGearRatios;
+                                MeasurementSettletime = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, 500));
                                 calibrationPreDone = false;
                             }
                             gear = 0;
@@ -292,25 +289,24 @@ namespace SimShift.Services
                     break;
 
                 case DrivetrainCalibrationStage.ShiftToFirst:
-                    if (MeasurementSettled)
+                    if (!Transmission.IsShifting && MeasurementSettled)
                     {
-                        if (!Transmission.IsShifting)
+                        if (data.Telemetry.Gear != 1)
                         {
-                            if (data.Telemetry.Gear != 1)
-                            {
-                                Main.Transmission.Shift(shiftToFirstRangeAttempt*Main.Transmission.RangeSize+1, 1, calibrateShiftStyle);
-                                MeasurementSettletime = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, 750));
-                                shiftToFirstRangeAttempt++;
+                            Main.Transmission.Shift(shiftToFirstRangeAttempt*Main.Transmission.RangeSize + 1, 1,
+                                                    calibrateShiftStyle);
+                            shiftToFirstRangeAttempt++;
 
-                                if (shiftToFirstRangeAttempt > 4) shiftToFirstRangeAttempt = 0;
-                            }
-                            else
-                            {
-                                stage = DrivetrainCalibrationStage.StartGearRatios;
-                                MeasurementSettletime = DateTime.MaxValue;
-                            }
+                            MeasurementSettletime = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, 100));
+                            if (shiftToFirstRangeAttempt > 3) shiftToFirstRangeAttempt = 0;
+                        }
+                        else
+                        {
+                            stage = nextStage;
+                            MeasurementSettletime = DateTime.MaxValue;
                         }
                     }
+
 
                     break;
 
@@ -333,10 +329,10 @@ namespace SimShift.Services
                                 break;
                             }
                             reqThrottle = true;
-                            throttle = 0;
+                            throttle = 0.15;
 
                             var ratio = data.Telemetry.EngineRpm / (3.6 * data.Telemetry.Speed);
-                            if (ratio > 200 || ratio < 1)
+                            if (ratio > 400 || ratio < 1)
                             {
                                 stage = DrivetrainCalibrationStage.StartGearRatios;
                                 break;
@@ -346,10 +342,10 @@ namespace SimShift.Services
 
                             // start sampling
                             if (sample == 0) sample = ratio;
-                            else sample = sample * 0.95 + ratio * 0.05;
+                            else sample = sample * 0.9 + ratio * 0.1;
                             samplesTaken ++;
 
-                            if(samplesTaken==20)
+                            if(samplesTaken==50)
                             {
                                 Main.Drivetrain.GearRatios[data.Telemetry.Gear - 1] = sample;
                             }
