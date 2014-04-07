@@ -84,12 +84,17 @@ namespace SimShift.Models
         {
             var torque = CalculateTorqueP(rpm, throttle);
 
+            return throttle*rpm;
             return torque*(rpm/1000)/(1/0.1904);
         }
 
         public virtual  double CalculateFuelConsumption(double rpm, double throttle)
         {
-            return rpm*throttle;
+            var f = throttle*rpm/(MaximumRpm/2);
+            if(rpm>MaximumRpm/2)
+                return f*f*throttle;
+            else
+                return f*f*throttle;
         }
 
 

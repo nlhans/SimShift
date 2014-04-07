@@ -55,6 +55,7 @@ namespace SimShift.Data
                                                                    {
 
                                                                        lastCar = Telemetry.Car;
+                                                                       Debug.WriteLine("New car:" + Telemetry.Car); 
                                                                        CarChanged(s, e);
                                                                    }
                                                                    lastCar = Telemetry.Car;

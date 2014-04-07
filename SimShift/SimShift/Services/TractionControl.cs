@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Media;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Timers;
 using SimShift.Data.Common;
 using SimShift.Utils;
 
@@ -10,9 +13,45 @@ namespace SimShift.Services
 {
     public class TractionControl : IControlChainObj, IConfigurable
     {
+        private SoundPlayer tcSound;
+
         public bool Slipping { get; private set; }
         public double WheelSpeed { get; private set; }
         public double EngineSpeed { get; private set; }
+        public double SlipAngle { get; private set; }
+
+        private double lastThrottle = 0;
+
+        [DllImport("winmm.dll")]
+        public static extern int waveOutGetVolume(IntPtr hwo, out uint dwVolume);
+
+        [DllImport("winmm.dll")]
+        public static extern int waveOutSetVolume(IntPtr hwo, uint dwVolume);
+
+        public TractionControl()
+        {
+            tcSound = new SoundPlayer(@"C:\Projects\Software\SimShift\Resources\tractioncontrol.wav");
+            setVolume(0);
+            tcSound.PlayLooping();
+            lastThrottle = 1;
+            var updateSound = new Timer {Enabled = true, Interval = 10};
+            updateSound.Elapsed += (sender, args) =>
+                                       {
+                                           if (Transmission.IsShifting || Antistall.Stalling || !Slipping)
+                                               setVolume(0);
+                                           else
+                                               setVolume(1 - lastThrottle);
+                                       };
+        updateSound.Start();
+        }
+
+        private void setVolume(double vol)
+        {
+            uint vol_hex = (uint) (vol * 0x7FFF);
+            uint vol_out = vol_hex | (vol_hex << 16);
+            //vol_out = 0xFFFFFFFF;
+            waveOutSetVolume(IntPtr.Zero, vol_out);
+        }
 
         #region Implementation of IControlChainObj
 
@@ -36,7 +75,11 @@ namespace SimShift.Services
                     return val;
 
                 case JoyControls.Throttle:
-                    return val * (1- (WheelSpeed - AllowedSlip - EngineSpeed)/Slope);
+                    var t = (1 - (SlipAngle - AllowedSlip)/Slope);
+                    if (t > 1) t = 1;
+                    if (t < 0) t = 0;
+                    lastThrottle =t * 0.05 + lastThrottle*0.95;
+                    return val*lastThrottle;
                     break;
             }
         }
@@ -58,8 +101,13 @@ namespace SimShift.Services
                 WheelSpeed = Main.Drivetrain.CalculateSpeedForRpm(data.Telemetry.Gear - 1, data.Telemetry.EngineRpm);
                 EngineSpeed = data.Telemetry.Speed;//the actual speed we are going
                 if (double.IsInfinity(WheelSpeed)) WheelSpeed = 0;
-                if (Main.Antistall.Stalling) WheelSpeed = 0;
-                Slipping = (WheelSpeed - AllowedSlip > EngineSpeed);
+                if (Antistall.Stalling) WheelSpeed = 0;
+                SlipAngle = WheelSpeed / EngineSpeed;
+                Slipping = (SlipAngle - AllowedSlip > 1.0);
+                if (Main.Drivetrain.CalculateSpeedForRpm(data.Telemetry.Gear - 1, (float)Main.Drivetrain.StallRpm * 1.5f) >= data.Telemetry.Speed)
+                {
+                    Slipping = false;
+                }
             }catch
             {
             }

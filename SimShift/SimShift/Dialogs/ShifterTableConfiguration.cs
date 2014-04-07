@@ -21,7 +21,7 @@ namespace SimShift.Dialogs
         {
             Air = new Ets2Aero();
             Drivetrain = drivetrain;
-            MaximumSpeed = 400;
+            MaximumSpeed = 600;
 
             switch (def)
             {
@@ -92,8 +92,10 @@ namespace SimShift.Dialogs
                 for (var load = 0.0; load <= 1.0; load += 0.1)
                 {
                     var gearSet = false;
+                    var latestGearThatWasNotStalling = 1;
 
                     var shiftRpm = Drivetrain.StallRpm + (Drivetrain.MaximumRpm - Drivetrain.StallRpm) * load;
+                    shiftRpm = 3000 + (Drivetrain.MaximumRpm - 3000-1000) * load;
                     for (int gear = 0; gear < Drivetrain.Gears; gear++)
                     {
                         var calculatedRpm = Drivetrain.GearRatios[gear] * speed;
@@ -101,7 +103,8 @@ namespace SimShift.Dialogs
                         {
                             continue;
                         }
-                        if (calculatedRpm < 900) continue;
+                        if (calculatedRpm < 2900) continue;
+                        latestGearThatWasNotStalling = gear;
                         if (calculatedRpm > shiftRpm) continue;
 
                         gearSet = true;
@@ -109,7 +112,7 @@ namespace SimShift.Dialogs
                         break;
                     }
                     if (!gearSet)
-                        table[speed].Add(load, speed <= 12 ? 1 : Drivetrain.Gears);
+                        table[speed].Add(load, latestGearThatWasNotStalling == 1 ? 1 : latestGearThatWasNotStalling + 1);
                 }
             }
 
@@ -150,8 +153,12 @@ namespace SimShift.Dialogs
                             gearSet = true;
                         }
                     }
-                    if (!gearSet)
-                        table[speed].Add(load, latestGearThatWasNotStalling);
+                    
+                    //if (speed < 30 )
+                    //    table[speed].Add(load, latestGearThatWasNotStalling);
+                    //else 
+                        if (!gearSet)
+                            table[speed].Add(load, (latestGearThatWasNotStalling == 1?1: latestGearThatWasNotStalling+1));
                     else
                     {
                         table[speed].Add(load, bestPowerGear + 1);

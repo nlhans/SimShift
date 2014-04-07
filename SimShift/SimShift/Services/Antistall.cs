@@ -9,7 +9,7 @@ namespace SimShift.Services
 {
     public class Antistall : IControlChainObj, IConfigurable
     {
-        public bool Stalling { get; private set; }
+        public static bool Stalling { get; private set; }
         public double Speed { get; private set; }
 
         public double Rpm { get; private set; }
@@ -62,7 +62,7 @@ namespace SimShift.Services
                     }
                     else
                     {
-                        var maxV = 1 - Rpm/1300.0;
+                        var maxV = 1 - Rpm/4300.0;
                         if (maxV > 1) maxV = 1;
                         if (maxV < 0) maxV = 0;
                         _throttle = val;

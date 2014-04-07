@@ -249,13 +249,14 @@ namespace SimShift.Services
                     clutch = 1;
                     gear++;
                     Main.Transmission.Shift(data.Telemetry.Gear, gear, calibrateShiftStyle);
+                    MeasurementSettletime = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0,500));
 
                     stage = DrivetrainCalibrationStage.FinishGears;
 
                     break;
                 case DrivetrainCalibrationStage.FinishGears:
 
-                    if(!Transmission.IsShifting)
+                    if (MeasurementSettled &&  !Transmission.IsShifting)
                     {
                         if(data.Telemetry.Gear != gear)
                         {

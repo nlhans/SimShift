@@ -78,7 +78,10 @@ namespace SimShift.Services
         {
             configuration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.PeakRpm, Main.Drivetrain, 20);
 
-            LoadShiftPattern("up_1thr", "normal");
+            LoadShiftPattern("up_1thr", "fast");
+            LoadShiftPattern("up_0thr", "normal");
+            LoadShiftPattern("down_1thr", "normal");
+            LoadShiftPattern("down_0thr", "normal");
 
             // Initialize all shfiting stuff.
             Shift(0, 1, "up_1thr");
