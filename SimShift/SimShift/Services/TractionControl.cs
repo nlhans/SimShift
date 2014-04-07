@@ -75,7 +75,7 @@ namespace SimShift.Services
                     return val;
 
                 case JoyControls.Throttle:
-                    var t = (1 - (SlipAngle - AllowedSlip)/Slope);
+                    var t = (1 - (SlipAngle - 1 - AllowedSlip)/Slope);
                     if (t > 1) t = 1;
                     if (t < 0) t = 0;
                     lastThrottle =t * 0.05 + lastThrottle*0.95;
@@ -104,7 +104,7 @@ namespace SimShift.Services
                 if (Antistall.Stalling) WheelSpeed = 0;
                 SlipAngle = WheelSpeed / EngineSpeed;
                 Slipping = (SlipAngle - AllowedSlip > 1.0);
-                if (Main.Drivetrain.CalculateSpeedForRpm(data.Telemetry.Gear - 1, (float)Main.Drivetrain.StallRpm * 1.5f) >= data.Telemetry.Speed)
+                if (Main.Drivetrain.CalculateSpeedForRpm(data.Telemetry.Gear - 1, (float)Main.Drivetrain.StallRpm * 1.2f) >= data.Telemetry.Speed)
                 {
                     Slipping = false;
                 }
@@ -117,10 +117,12 @@ namespace SimShift.Services
 
         #region Implementation of IConfigurable
 
+        public string File { get; set; }
         public double AllowedSlip { get; private set; }
         public double Slope { get; private set; }
 
         public IEnumerable<string> AcceptsConfigs { get { return new string[] {"TractionControl"}; } }
+
         public void ResetParameters()
         {
             AllowedSlip = 5;

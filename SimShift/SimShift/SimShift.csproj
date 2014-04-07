@@ -112,6 +112,7 @@
     <Compile Include="Services\IConfigurable.cs" />
     <Compile Include="Services\IControlChainObj.cs" />
     <Compile Include="Services\JoyControls.cs" />
+    <Compile Include="Services\LaunchControl.cs" />
     <Compile Include="Services\Main.cs" />
     <Compile Include="Services\Profile.cs" />
     <Compile Include="Services\Profiles.cs" />

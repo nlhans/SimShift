@@ -66,6 +66,8 @@ namespace SimShift.Services
 
             Main.Load(Main.Transmission, "Settings/ShiftCurve/" + ShiftCurve + ".ini");
             Main.Load(Main.Speedlimiter, "Settings/SpeedLimiter/" + SpeedLimiter + ".ini");
+
+            Main.TractionControl.File = TractionControl;
             Main.Load(Main.TractionControl, "Settings/TractionControl/" + TractionControl + ".ini");
 
         }

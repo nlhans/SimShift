@@ -34,7 +34,10 @@ namespace SimShift.Services
         public static Speedlimiter Speedlimiter;
         public static Transmission Transmission;
         public static TractionControl TractionControl;
+        public static LaunchControl LaunchControl;
+        
         public static ProfileSwitcher ProfileSwitcher;
+       
 
         public static ControlChain Controls;
 
@@ -95,6 +98,7 @@ namespace SimShift.Services
                 TractionControl = new TractionControl();
                 ProfileSwitcher = new ProfileSwitcher();
                 Speedlimiter = new Speedlimiter();
+                LaunchControl = new LaunchControl();
                 DrivetrainCalibrator = new DrivetrainCalibrator();
 
                 // Controls
@@ -132,6 +136,7 @@ namespace SimShift.Services
 
         public static bool Load(IConfigurable target, string iniFile)
         {
+            Debug.WriteLine("Loading configuration file " + iniFile);
             // Reset to default
             target.ResetParameters();
             try
@@ -208,6 +213,8 @@ namespace SimShift.Services
                     return RawJoysticksIn[0].GetButton(5);
                 case Services.JoyControls.CruiseControl:
                     return RawJoysticksIn[0].GetButton(0);
+                    case Services.JoyControls.LaunchControl:
+                    return RawJoysticksIn[0].GetButton(11);
 
                 default:
                     return false;

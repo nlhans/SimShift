@@ -19,9 +19,9 @@ namespace SimShift.Services
         Gear7,
         Gear8,
         CruiseControl,
+        LaunchControl,
 
 
-
-        NUM_OF_CONTROLS
+        NUM_OF_CONTROLS,
     }
 }

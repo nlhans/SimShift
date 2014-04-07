@@ -19,6 +19,7 @@ namespace SimShift.Services
             chain.Add(Main.Speedlimiter);
             chain.Add(Main.Transmission);
             chain.Add(Main.Antistall);
+            chain.Add(Main.LaunchControl);
             chain.Add(Main.ProfileSwitcher);
             chain.Add(Main.DrivetrainCalibrator);
 

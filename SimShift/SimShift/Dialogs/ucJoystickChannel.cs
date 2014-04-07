@@ -30,6 +30,7 @@ namespace SimShift.Dialogs
             var buttonValue =Input ? Main.GetButtonIn(ctrl) : Main.GetButtonOut(ctrl);
 
             var output = Math.Max(axisValue*100, buttonValue ? 100 : 0);
+            if (double.IsNaN(output)) output = 0;
             if (output > 99) output = 99;
             if (output < 0) output = 0;
 
