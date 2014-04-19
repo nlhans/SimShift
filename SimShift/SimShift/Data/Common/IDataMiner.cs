@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using SimShift.Services;
 
 namespace SimShift.Data.Common
 {
@@ -19,5 +20,6 @@ namespace SimShift.Data.Common
 
         void EvtStart();
         void EvtStop();
+        void Write<T>(TelemetryChannel cameraHorizon, T i);
     }
 }

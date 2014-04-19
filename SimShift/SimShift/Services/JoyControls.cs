@@ -20,6 +20,7 @@ namespace SimShift.Services
         Gear8,
         CruiseControl,
         LaunchControl,
+        CameraHorizon,
 
 
         NUM_OF_CONTROLS,

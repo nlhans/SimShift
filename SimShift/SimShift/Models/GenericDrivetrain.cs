@@ -80,12 +80,9 @@ namespace SimShift.Models
 
         }
 
-        public double CalculatePower(double rpm, double throttle)
+        public virtual double CalculatePower(double rpm, double throttle)
         {
-            var torque = CalculateTorqueP(rpm, throttle);
-
             return throttle*rpm;
-            return torque*(rpm/1000)/(1/0.1904);
         }
 
         public virtual  double CalculateFuelConsumption(double rpm, double throttle)

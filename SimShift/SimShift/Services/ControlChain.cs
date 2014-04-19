@@ -22,10 +22,12 @@ namespace SimShift.Services
             chain.Add(Main.LaunchControl);
             chain.Add(Main.ProfileSwitcher);
             chain.Add(Main.DrivetrainCalibrator);
+            chain.Add(Main.CameraHorizon);
 
             Axis.Add(JoyControls.Throttle);
             Axis.Add(JoyControls.Brake);
             Axis.Add(JoyControls.Clutch);
+            Axis.Add(JoyControls.CameraHorizon);
 
             Buttons.Add(JoyControls.Gear1);
             Buttons.Add(JoyControls.Gear2);

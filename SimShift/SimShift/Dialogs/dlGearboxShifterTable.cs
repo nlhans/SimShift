@@ -85,9 +85,9 @@ namespace SimShift.Dialogs
 
         public dlGearboxShifterTable()
         {
-            var myEngine = new GenericDrivetrain();
-            Main.Load(myEngine, "Settings/Drivetrain/TestDrive2.A10.ini");
-            activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Performance, myEngine,
+            var myEngine = new Ets2Drivetrain();
+            Main.Load(myEngine, "Settings/Drivetrain/eurotrucks2.iveco.hiway.ini");
+            activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Efficiency, myEngine,
                                                                 5);
             // 
             // sim

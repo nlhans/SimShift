@@ -26,6 +26,9 @@ namespace SimShift.Data
         public bool TransmissionSupportsRanges { get { return false; } }
         public bool EnableWeirdAntistall { get { return false; } }
 
+        // Enable write operations?
+        bool openedTduAsWriter;
+
         public Tdu2DataMiner()
         {
             _updateTel = new Timer();
@@ -42,6 +45,7 @@ namespace SimShift.Data
             _tdu2Reader = new MemoryReader();
             _tdu2Reader.ReadProcess = ActiveProcess;
             _tdu2Reader.Open();
+            openedTduAsWriter = false;
 
             _updateTel.Start();
         }
@@ -54,6 +58,44 @@ namespace SimShift.Data
             _updateTel.Stop();
 
             Telemetry = default(GenericDataDefinition);
+        }
+
+        public void Write<T>(TelemetryChannel channel, T i)
+        {
+            if (ActiveProcess == null)
+                return;
+
+            if (!openedTduAsWriter)
+            {
+                _tdu2Reader.Close();
+                _tdu2Reader = new MemoryWriter();
+                _tdu2Reader.ReadProcess = ActiveProcess;
+                _tdu2Reader.Open();
+
+                openedTduAsWriter = true;
+            }
+
+            var channelAddress = GetWriteAddress(channel);
+
+            var writer = _tdu2Reader as MemoryWriter;
+            if (i is float)
+                writer.WriteFloat(channelAddress, float.Parse(i.ToString()));
+           
+        }
+
+        private IntPtr GetWriteAddress(TelemetryChannel channel)
+        {
+            switch (channel)
+            {
+                case TelemetryChannel.CameraHorizon:
+                    return GetWriteAddress(TelemetryChannel.CameraViewBase) + 0x550;
+
+                case TelemetryChannel.CameraViewBase:
+                    return (IntPtr) _tdu2Reader.ReadInt32(ActiveProcess.MainModule.BaseAddress + 0xD95BF0);
+
+                default:
+                    return ActiveProcess.MainModule.BaseAddress;
+            }
         }
 
         void _updateTel_Elapsed(object sender, ElapsedEventArgs e)

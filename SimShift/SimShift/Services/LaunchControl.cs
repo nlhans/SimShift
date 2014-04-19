@@ -218,7 +218,7 @@ namespace SimShift.Services
                 if (!tcLoaded && data.Telemetry.Gear == 1 && LaunchControlActive && Main.TractionControl.File.Contains("notc"))
                 {
                     tcLoaded = true;
-                    Main.Load(Main.TractionControl, "Settings/TractionControl/easy.ini");
+                    Main.Load(Main.TractionControl, "Settings/TractionControl/launch.ini");
                 }
 
                 if(tcLoaded && data.Telemetry.Gear != 1)

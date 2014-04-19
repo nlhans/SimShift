@@ -37,6 +37,7 @@ namespace SimShift.Services
         public static LaunchControl LaunchControl;
         
         public static ProfileSwitcher ProfileSwitcher;
+        public static CameraHorizon CameraHorizon;
        
 
         public static ControlChain Controls;
@@ -90,6 +91,19 @@ namespace SimShift.Services
                 Data.AppActive += (s, e) => { Map = new WorldMapper(Data.Active); };
                 Data.AppInactive += (s, e) => { Map = null; };
 
+                // TODO: Temporary..
+                Data.AppActive += (s, e) =>
+                                      {
+                                          if (Data.Active.Application == "TestDrive2")
+                                          {
+                                              CameraHorizon.CameraHackEnabled = true;
+                                          }
+                                          else
+                                          {
+                                              CameraHorizon.CameraHackEnabled = false;
+                                          }
+                                      };
+
                 // Modules
                 Antistall = new Antistall();
                 CruiseControl = new CruiseControl();
@@ -100,6 +114,8 @@ namespace SimShift.Services
                 Speedlimiter = new Speedlimiter();
                 LaunchControl = new LaunchControl();
                 DrivetrainCalibrator = new DrivetrainCalibrator();
+
+                CameraHorizon = new CameraHorizon();
 
                 // Controls
                 Controls = new ControlChain();
@@ -238,6 +254,9 @@ namespace SimShift.Services
 
                 case Services.JoyControls.Clutch:
                     return 0.0;
+
+                case Services.JoyControls.CameraHorizon:
+                    return RawJoysticksIn[0].GetAxis(5)/Math.Pow(2, 15)-1;
                     
                 default:
                     return 0.0;

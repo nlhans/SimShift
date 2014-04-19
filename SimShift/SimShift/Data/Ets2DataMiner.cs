@@ -28,6 +28,11 @@ namespace SimShift.Data
             _telemetryUpdater.Stop();
         }
 
+        public void Write<T>(TelemetryChannel cameraHorizon, T i)
+        {
+            // Not supported
+        }
+
         public EventHandler DataReceived { get; set; }
 
         public bool NewFuelFlow { get; private set; }
