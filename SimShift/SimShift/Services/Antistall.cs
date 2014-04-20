@@ -62,7 +62,7 @@ namespace SimShift.Services
                     }
                     else
                     {
-                        var maxV = 1 - Rpm/4300.0;
+                        var maxV = 1 - Rpm/(Main.Drivetrain.MaximumRpm/2);
                         if (maxV > 1) maxV = 1;
                         if (maxV < 0) maxV = 0;
                         _throttle = val;

@@ -644,6 +644,11 @@ namespace SimShift.Services
         public void ResetParameters()
         {
             configuration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.PeakRpm, Main.Drivetrain, 10);
+
+            if (Main.Data.Active.Application == "TestDrive2")
+                LoadShiftPattern("up_1thr", "fast");
+            else
+                LoadShiftPattern("up_1thr", "normal");
         }
 
         public int speedHoldoff { get; private set; }

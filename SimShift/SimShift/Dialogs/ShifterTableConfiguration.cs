@@ -189,7 +189,7 @@ namespace SimShift.Dialogs
                     {
                         var calculatedRpm = Drivetrain.GearRatios[gear] * speed;
 
-                        if (calculatedRpm < Drivetrain.StallRpm) continue;
+                        if (calculatedRpm < Drivetrain.StallRpm * 1.33) continue;
                         if (calculatedRpm > Drivetrain.MaximumRpm) continue;
 
                         var thr = (load < 0.10)
@@ -236,7 +236,7 @@ namespace SimShift.Dialogs
                     {
                         var calculatedRpm = Drivetrain.GearRatios[gear] * speed;
 
-                        if (calculatedRpm < Drivetrain.StallRpm) continue;
+                        if (calculatedRpm < Drivetrain.StallRpm*1.33) continue;
                         if (calculatedRpm > Drivetrain.MaximumRpm) continue;
 
                         var thr = Drivetrain.CalculateThrottleByPower(calculatedRpm, req);

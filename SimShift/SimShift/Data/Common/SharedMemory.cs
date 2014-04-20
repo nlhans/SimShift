@@ -19,7 +19,7 @@ namespace SimShift.Data.Common
         private MemoryMappedFile _memoryMappedFile;
         private MemoryMappedViewAccessor _memoryMappedBuffer;
 
-        private UdpClient udpServer;
+        //private UdpClient udpServer;
 
         public void Connect(string map)
         {
@@ -31,7 +31,7 @@ namespace SimShift.Data.Common
                 _memoryMappedFile = MemoryMappedFile.CreateOrOpen(map, mapSize, MemoryMappedFileAccess.ReadWrite);
                 _memoryMappedBuffer = _memoryMappedFile.CreateViewAccessor(0, mapSize);
 
-                udpServer = new UdpClient();
+                /*udpServer = new UdpClient();
 
                 // Look up my wi-fi
                 var ifaceIndex = 0;
@@ -53,7 +53,7 @@ namespace SimShift.Data.Common
                 
                 var ip = IPAddress.Parse("224.5.6.8");
                 udpServer.Client.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.AddMembership, new MulticastOption(ip,ifaceIndex));
-                udpServer.Connect(new IPEndPoint(ip, 1235));
+                udpServer.Connect(new IPEndPoint(ip, 1235));*/
 
                 Hooked = true;
             }
@@ -79,7 +79,7 @@ namespace SimShift.Data.Common
 
             Data = ToObject(RawData);
 
-            udpServer.Send(RawData, RawData.Length);
+            //udpServer.Send(RawData, RawData.Length);
         }
 
         // Casts raw byte stream to object.
