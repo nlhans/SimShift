@@ -60,10 +60,20 @@ namespace SimShift.Services
 
                 // Joysticks
                 var ps3 = JoystickInputDevice.Search("Motion").FirstOrDefault();
-                var ps3Controller = new JoystickInput(ps3);
+                JoystickInput ps3Cont, g25Cont;
+                if (ps3 == null)
+                    ps3Cont = default(JoystickInput);
+                else
+                    ps3Cont = new JoystickInput(ps3);
+                var g25 = JoystickInputDevice.Search("G25").FirstOrDefault();
+                if (g25 == null)
+                    g25Cont = default(JoystickInput);
+                else
+                    g25Cont = new JoystickInput(g25);
                 var vJoy = new JoystickOutput();
 
-                RawJoysticksIn.Add(ps3Controller);
+                RawJoysticksIn.Add(ps3Cont);
+                RawJoysticksIn.Add(g25Cont);
                 RawJoysticksOut.Add(vJoy);
 
                 // Data source
@@ -206,9 +216,12 @@ namespace SimShift.Services
         }
 
         #region Control mapping
+
+        private static bool ps3Controller = false;
+
         public static bool GetButtonIn(JoyControls c)
         {
-            switch(c)
+            switch (c)
             {
                     // Unimplemented as of now.
                 case Services.JoyControls.Gear1:
@@ -224,13 +237,25 @@ namespace SimShift.Services
 
                     // PS3 (via DS3 tool) L1/R1
                 case Services.JoyControls.GearDown:
-                    return RawJoysticksIn[0].GetButton(4);
+                    if (ps3Controller)
+                        return RawJoysticksIn[0].GetButton(4);
+                    else
+                        return RawJoysticksIn[1].GetButton(8);
                 case Services.JoyControls.GearUp:
-                    return RawJoysticksIn[0].GetButton(5);
+                    if (ps3Controller)
+                        return RawJoysticksIn[0].GetButton(5);
+                    else
+                        return RawJoysticksIn[1].GetButton(9);
                 case Services.JoyControls.CruiseControl:
-                    return RawJoysticksIn[0].GetButton(0);
-                    case Services.JoyControls.LaunchControl:
-                    return RawJoysticksIn[0].GetButton(11);
+                    if (ps3Controller)
+                        return RawJoysticksIn[0].GetButton(0);
+                    else
+                        return RawJoysticksIn[1].GetButton(15);
+                case Services.JoyControls.LaunchControl:
+                    if (ps3Controller)
+                        return RawJoysticksIn[0].GetButton(11);
+                    else
+                        return RawJoysticksIn[1].GetButton(18);
 
                 default:
                     return false;
@@ -243,15 +268,27 @@ namespace SimShift.Services
             switch(c)
             {
                 case Services.JoyControls.Throttle:
-                    var t = ((RawJoysticksIn[0].GetAxis(3)/Math.Pow(2, 16) - 0.5)*2-0.25)/0.75;
+
+                    double t = 0;
+                    if (ps3Controller)
+                        t = ((RawJoysticksIn[0].GetAxis(3) / Math.Pow(2, 16) - 0.5) * 2 - 0.25) / 0.75;
+                    else
+                        t = 1 - RawJoysticksIn[1].GetAxis(2)/Math.Pow(2, 16);
                     if (t < 0) t = 0;
-                   //t = t*t;
+                   
+                if (Main.Data.Active.Application.Contains("ruck")) t = t*t;
                     //t *= 0.8;
                     return t;
 
                 case Services.JoyControls.Brake:
-                    return ((RawJoysticksIn[0].GetAxis(2) - Math.Pow(2, 15)) / Math.Pow(2, 15)- 0.25)/0.75;
-
+                    if (ps3Controller)
+                        return ((RawJoysticksIn[0].GetAxis(2) - Math.Pow(2, 15)) / Math.Pow(2, 15) - 0.25) / 0.75;
+                    else
+                    {
+                        var b = 1 - RawJoysticksIn[1].GetAxis(3)/Math.Pow(2, 16);
+                        if (b < 0) b = 0;
+                        return b * b;
+                    }
                 case Services.JoyControls.Clutch:
                     return 0.0;
 
