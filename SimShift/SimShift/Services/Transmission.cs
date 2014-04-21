@@ -318,11 +318,6 @@ namespace SimShift.Services
                 var lookupResult = configuration.Lookup(data.Telemetry.Speed*3.6, transmissionThrottle);
                 idealGear = lookupResult.Gear;
 
-                if(idealGear == 0)
-                {
-                    
-                }
-
                 if (data.Telemetry.Gear == 0 && ShiftCtrlNewGear != 0)
                 {
                     Debug.WriteLine("Timeout");
@@ -401,7 +396,9 @@ namespace SimShift.Services
             switch (c)
             {
                 case JoyControls.Throttle:
-                    transmissionThrottle = val > 0 && val < 1 ? val : 0;
+                    transmissionThrottle = val;
+                    if (transmissionThrottle > 1) transmissionThrottle = 1;
+                    if (transmissionThrottle < 0) transmissionThrottle = 0;
                     lock (ActiveShiftPattern)
                     {
                         if (ShiftFrame >= ActiveShiftPattern.Count)
