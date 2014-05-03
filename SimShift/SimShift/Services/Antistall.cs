@@ -19,6 +19,9 @@ namespace SimShift.Services
         public DateTime TimeStopped { get; private set; }
         public DateTime TimeStalled { get; set; }
 
+        public bool SlipLowGear { get; private set; }
+        private bool SlippingLowGear { get; set; }
+
         public bool Blip { get; private set; }
         protected bool EngineStalled { get; set; }
 
@@ -35,9 +38,11 @@ namespace SimShift.Services
             switch (c)
             {
                 case JoyControls.Throttle:
-                case JoyControls.Clutch:
                     return Stalling;
-
+                    
+                case JoyControls.Clutch:
+                    return Stalling || SlippingLowGear;
+                    
                 default:
                     return false;
             }
@@ -50,7 +55,10 @@ namespace SimShift.Services
             {
                 case JoyControls.Throttle:
                     if (!Stalling) return val;
-                    if (EngineStalled) return val;
+                    if (EngineStalled)
+                    {
+                        _throttle = 0;
+                        return val; }
                     if (BlipFull) return 1;
                     if (Override) return 0;
                     if (val < 0.025)
@@ -58,7 +66,7 @@ namespace SimShift.Services
                         _throttle = 0;
                         tick++;
 
-                        return 1 - Rpm / (850 + Math.Sin(tick * 2 * Math.PI / 40.0) * 45 + (Blip ? 1300 : 0));
+                        return 1 - Rpm / (700 + Math.Sin(tick * 2 * Math.PI / 80.0) * 50 + (Blip ? 1300 : 0));
                     }
                     else
                     {
@@ -71,13 +79,25 @@ namespace SimShift.Services
                     break;
 
                 case JoyControls.Clutch:
-                    if (!Stalling) return 0;
+                    if (!Stalling && !SlippingLowGear) return 0;
                     if (Blip || BlipFull) return 1;
                     if (Override) return 1;
 
-                    var cl = 1 - _throttle * ThrottleSensitivity; // 2
-                    if (cl < MinClutch) cl = MinClutch; // 0.1
-                    return cl;
+                    if (Stalling)
+                    {
+                        var cl = 1 - _throttle*ThrottleSensitivity; // 2
+                        if (cl < MinClutch) cl = MinClutch; // 0.1
+                        return cl;
+                    }
+                    else if(SlippingLowGear)
+                    {
+                         var t =1 - 1.3*(Rpm-1500)/500;
+                        t = Math.Max(val, Math.Min(1, Math.Max(0, t)));
+                        return t;
+                    }else
+                    {
+                        return 0;
+                    }
 
                 default:
                     return val;
@@ -103,8 +123,18 @@ namespace SimShift.Services
 
             Rpm = telemetry.Telemetry.EngineRpm;
             EngineStalled = (telemetry.Telemetry.EngineRpm < 300);
-            Stalling = (Math.Abs(telemetry.Telemetry.Speed) < SpeedCutoff); // 2
+            if(telemetry.Telemetry.Gear == -1)
+                Stalling = telemetry.Telemetry.Speed > -SpeedCutoff || telemetry.Telemetry.Speed>0;
+            else
+                Stalling = telemetry.Telemetry.Speed < SpeedCutoff || telemetry.Telemetry.Speed<0;
+            //Stalling = (Math.Abs(telemetry.Telemetry.Speed) < SpeedCutoff); // 2
             Speed = telemetry.Telemetry.Speed;
+
+            if (Main.CarProfile == null || true)
+                SlippingLowGear = false;
+            else
+            SlippingLowGear = Main.CarProfile.Active.ToLower().Contains("performance") &&
+                              Main.Transmission.ShiftCtrlNewGear <= 6;
 
             if(telemetry.EnableWeirdAntistall==false)
             {
@@ -140,8 +170,8 @@ namespace SimShift.Services
                 }else
                 {
                     Override = false;
-                    if (Stalling && DateTime.Now.Subtract(TimeStopped).TotalMilliseconds % 13000 > 2500 &&
-                        DateTime.Now.Subtract(TimeStopped).TotalMilliseconds % 13000 < 3500)
+                    if (Stalling && DateTime.Now.Subtract(TimeStopped).TotalMilliseconds % 43000 > 12500 &&
+                        DateTime.Now.Subtract(TimeStopped).TotalMilliseconds % 43000 < 13500)
                     {
                         Blip = true;
                     }
@@ -169,6 +199,7 @@ namespace SimShift.Services
             Speed = 2;
             MinClutch = 0.1;
             ThrottleSensitivity = 2;
+            SlipLowGear = true;
         }
 
         public void ApplyParameter(IniValueObject obj)
@@ -184,6 +215,10 @@ namespace SimShift.Services
                 case "ThrottleSensitivity":
                     ThrottleSensitivity = obj.ReadAsDouble();
                     break;
+
+                case "SlipLowGear":
+                    SlipLowGear = obj.ReadAsString() == "yes";
+                    break;
             }
         }
 
@@ -195,6 +230,7 @@ namespace SimShift.Services
             parameters.Add(new IniValueObject(group, "Speed", SpeedCutoff.ToString("0.00")));
             parameters.Add(new IniValueObject(group, "MinClutch", SpeedCutoff.ToString("0.00")));
             parameters.Add(new IniValueObject(group, "ThrottleSensitivity", SpeedCutoff.ToString("0.00")));
+            parameters.Add(new IniValueObject(group, "SlipLowGear", SlipLowGear ? "yes" : "no"));
 
             return parameters;
         }

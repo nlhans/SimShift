@@ -2,6 +2,7 @@ namespace SimShift.Services
 {
     public enum JoyControls
     {
+        Steering,
         Throttle,
         Brake,
         Clutch,
@@ -21,8 +22,8 @@ namespace SimShift.Services
         CruiseControl,
         LaunchControl,
         CameraHorizon,
+        LaneAssistance,
 
-
-        NUM_OF_CONTROLS,
+        NUM_OF_CONTROLS
     }
 }

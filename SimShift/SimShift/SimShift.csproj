@@ -34,6 +34,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AForge">
+      <HintPath>..\..\Resources\AForge\AForge.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Imaging">
+      <HintPath>..\..\Resources\AForge\AForge.Imaging.dll</HintPath>
+    </Reference>
+    <Reference Include="SlimDX, Version=4.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files (x86)\SlimDX SDK (January 2012)\Bin\net40\x86\SlimDX.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -58,6 +68,12 @@
     <Compile Include="Data\Common\MemoryWriter.cs" />
     <Compile Include="Data\Common\ProcessMemoryReaderApi.cs" />
     <Compile Include="Data\DataArbiter.cs" />
+    <Compile Include="Data\Ets2DataDebug.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Data\Ets2DataDebug.Designer.cs">
+      <DependentUpon>Ets2DataDebug.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data\Ets2DataDefinition.cs" />
     <Compile Include="Data\Ets2DataMiner.cs" />
     <Compile Include="Data\Common\GenericDataDefinition.cs" />
@@ -67,6 +83,12 @@
     <Compile Include="Data\Tdu2DataMiner.cs" />
     <Compile Include="Data\TelemetryChannel.cs" />
     <Compile Include="Data\WorldMapper.cs" />
+    <Compile Include="Dialogs\dlDashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\dlDashboard.Designer.cs">
+      <DependentUpon>dlDashboard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\dlGearboxShifterTable.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -79,9 +101,21 @@
     <Compile Include="Dialogs\dlJoysticks.Designer.cs">
       <DependentUpon>dlJoysticks.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\dlLaneAssistance.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\dlLaneAssistance.Designer.cs">
+      <DependentUpon>dlLaneAssistance.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\ShifterTableConfiguration.cs" />
     <Compile Include="Dialogs\ShifterTableConfigurationDefault.cs" />
     <Compile Include="Dialogs\ShifterTableLookupResult.cs" />
+    <Compile Include="Dialogs\ucDashboard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ucDashboard.Designer.cs">
+      <DependentUpon>ucDashboard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\ucGearboxShifterGraph.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -115,8 +149,10 @@
     <Compile Include="Services\IConfigurable.cs" />
     <Compile Include="Services\IControlChainObj.cs" />
     <Compile Include="Services\JoyControls.cs" />
+    <Compile Include="Services\LaneAssistance.cs" />
     <Compile Include="Services\LaunchControl.cs" />
     <Compile Include="Services\Main.cs" />
+    <Compile Include="Services\PowerLimiter.cs" />
     <Compile Include="Services\Profile.cs" />
     <Compile Include="Services\Profiles.cs" />
     <Compile Include="Services\ProfileSwitcher.cs" />
@@ -125,11 +161,26 @@
     <Compile Include="Services\Speedlimiter.cs" />
     <Compile Include="Services\TractionControl.cs" />
     <Compile Include="Services\Transmission.cs" />
+    <Compile Include="Utils\Direct3DCapture.cs" />
     <Compile Include="Utils\IniReader.cs" />
     <Compile Include="Utils\IniValueObject.cs" />
+    <Compile Include="Utils\NativeMethods.cs" />
+    <Compile Include="Utils\Rect.cs" />
+    <EmbeddedResource Include="Data\Ets2DataDebug.resx">
+      <DependentUpon>Ets2DataDebug.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\dlDashboard.resx">
+      <DependentUpon>dlDashboard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\dlGearboxShifterTable.resx">
       <DependentUpon>dlGearboxShifterTable.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\dlLaneAssistance.resx">
+      <DependentUpon>dlLaneAssistance.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ucDashboard.resx">
+      <DependentUpon>ucDashboard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\ucGearboxShifterGraph.resx">
       <DependentUpon>ucGearboxShifterGraph.cs</DependentUpon>

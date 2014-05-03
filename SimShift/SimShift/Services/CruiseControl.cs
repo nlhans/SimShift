@@ -38,7 +38,10 @@ namespace SimShift.Services
             switch (c)
             {
                 case JoyControls.Throttle:
-                    var t = Cruising ? Math.Max(val, (SpeedCruise - Speed)*3.6*Slope) : val;
+                    var cruiseVal = (SpeedCruise - Speed)*3.6*Slope;
+                    ManualOverride = val >= cruiseVal;
+                    if(Cruising && cruiseVal>val) val = cruiseVal;
+                    var t = val;
                     if (t > 1) t = 1;
                     if (t < 0) t = 0;
                     return t;
@@ -90,6 +93,7 @@ namespace SimShift.Services
         }
 
         public double Slope { get; private set; }
+        public bool ManualOverride { get; private set; }
 
         public void ApplyParameter(IniValueObject obj)
         {

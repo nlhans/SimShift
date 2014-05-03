@@ -85,6 +85,22 @@ namespace SimShift.Models
             return throttle*rpm;
         }
 
+        public double CalculateMaxPower()
+        {
+            var pwr = 0.0;
+            var pwrRpm = 0.0;
+            for(var rpm = 0; rpm < MaximumRpm; rpm += 100)
+            {
+                var p = CalculatePower(rpm, 1);
+                if(p>pwr)
+                {
+                    pwr = p;
+                    pwrRpm = rpm;
+                }
+            }
+            return pwr;
+        }
+
         public virtual  double CalculateFuelConsumption(double rpm, double throttle)
         {
             var f = throttle*rpm/(MaximumRpm/2);

@@ -22,9 +22,13 @@ namespace SimShift.Services
             chain.Add(Main.Antistall);
             chain.Add(Main.LaunchControl);
             chain.Add(Main.ProfileSwitcher);
+            chain.Add(Main.PowerLimiter); 
             chain.Add(Main.DrivetrainCalibrator);
             chain.Add(Main.CameraHorizon);
+            chain.Add(Main.LaneAssistance);
 
+
+            Axis.Add(JoyControls.Steering);
             Axis.Add(JoyControls.Throttle);
             Axis.Add(JoyControls.Brake);
             Axis.Add(JoyControls.Clutch);

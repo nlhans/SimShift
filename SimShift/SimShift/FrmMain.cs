@@ -20,9 +20,15 @@ namespace SimShift
         {
             InitializeComponent();
             FormClosing += new FormClosingEventHandler(FrmMain_FormClosing);
-                //FormClosed += new FormClosedEventHandler(FrmMain_FormClosed);
-               /*d = new Ets2DataMiner();
+            //FormClosed += new FormClosedEventHandler(FrmMain_FormClosed);
+            /*d = new Ets2DataMiner();
 d.Data += Data;*/
+
+            btServiceStartStop_Click(null, null);
+            dashboardToolStripMenuItem_Click(null, null);
+
+            this.StartPosition = FormStartPosition.Manual;
+            this.Location = new Point(0,0);
         }
 
         void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -191,6 +197,37 @@ d.Data += Data;*/
             if(Main.Running)
                 Main.Stop();else
             Main.Start();
+        }
+
+        private void laneAssistanceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            dlLaneAssistance la = new dlLaneAssistance();
+            la.Show();
+        }
+
+        private void btTransmission_Click(object sender, EventArgs e)
+        {
+            if (Transmission.Enabled)
+            {
+                Transmission.Enabled = false;
+                btTransmission.Text = "Manual mode";
+            }else
+            {
+                Transmission.Enabled = true;
+                btTransmission.Text = "Auto mode";
+            }
+        }
+
+        private void dashboardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            dlDashboard dsh = new dlDashboard();
+            dsh.Show();
+        }
+
+        private void euroTruckSimulator2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Ets2DataDebug ets2dbg = new Ets2DataDebug();
+            ets2dbg.Show();
         }
     }
 }

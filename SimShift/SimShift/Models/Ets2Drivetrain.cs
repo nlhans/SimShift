@@ -132,7 +132,7 @@ namespace SimShift.Models
             switch(obj.Key)
             {
                 case "Ets2Engine":
-                    MaximumTorque = obj.ReadAsFloat();
+                    MaximumTorque = obj.ReadAsFloat() / 4451 * 3550;
                     break;
             }
         }

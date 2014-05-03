@@ -28,12 +28,17 @@ namespace SimShift.Services
         [DllImport("winmm.dll")]
         public static extern int waveOutSetVolume(IntPtr hwo, uint dwVolume);
 
+        private DateTime lastPlay = DateTime.Now;
+        public bool CanPauseTrack {get { return DateTime.Now > lastPlay; }}
+        public bool SoundStopped { get; private set; }
+
         public TractionControl()
         {
             tcSound = new SoundPlayer(@"C:\Projects\Software\SimShift\Resources\tractioncontrol.wav");
             setVolume(0);
-            tcSound.PlayLooping();
+            SoundStopped = true;
             lastThrottle = 1;
+            setVolume(1);
             var updateSound = new Timer {Enabled = true, Interval = 10};
             updateSound.Elapsed += (sender, args) =>
                                        {
@@ -47,6 +52,26 @@ namespace SimShift.Services
 
         private void setVolume(double vol)
         {
+            if (vol == 0)
+            {
+                if (SoundStopped) return;
+                if (CanPauseTrack)
+                {
+                    vol = 1;
+                    tcSound.Stop();
+                    SoundStopped = true;
+                }
+            }
+            else
+            {
+                lastPlay = DateTime.Now.Add(new TimeSpan(0, 0, 0, 1));
+                if (SoundStopped)
+                {
+                    tcSound.PlayLooping();
+                    SoundStopped = false;
+                }
+            }
+
             uint vol_hex = (uint) (vol * 0x7FFF);
             uint vol_out = vol_hex | (vol_hex << 16);
             //vol_out = 0xFFFFFFFF;

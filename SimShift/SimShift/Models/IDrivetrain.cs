@@ -11,6 +11,7 @@ namespace SimShift.Models
         double CalculateTorqueP(double rpm, double throttle);
         double CalculateThrottleByTorque(double rpm, double torque);
         double CalculatePower(double rpm, double throttle);
+        double CalculateMaxPower();
         double CalculateFuelConsumption(double rpm, double throttle);
         double CalculateThrottleByPower(double rpm, double powerRequired);
 

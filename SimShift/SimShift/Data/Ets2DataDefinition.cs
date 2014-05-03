@@ -40,7 +40,7 @@ namespace SimShift.Data
         [FieldOffset(64)] public int gear;
         [FieldOffset(68)] public int gears;
         [FieldOffset(72)] public int gearRanges;
-        [FieldOffset(76)] public int gearActive;
+        [FieldOffset(76)] public int gearRangeActive;
 
         [FieldOffset(80)] public float engineRpm;
         [FieldOffset(84)] public float engineRpmMax;

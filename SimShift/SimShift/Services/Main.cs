@@ -34,7 +34,9 @@ namespace SimShift.Services
         public static Speedlimiter Speedlimiter;
         public static Transmission Transmission;
         public static TractionControl TractionControl;
+        public static PowerLimiter PowerLimiter;
         public static LaunchControl LaunchControl;
+        public static LaneAssistance LaneAssistance;
         
         public static ProfileSwitcher ProfileSwitcher;
         public static CameraHorizon CameraHorizon;
@@ -43,6 +45,8 @@ namespace SimShift.Services
         public static ControlChain Controls;
 
         public static bool Running { get; private set; }
+
+
 
         public static DrivetrainCalibrator DrivetrainCalibrator;
 
@@ -122,8 +126,10 @@ namespace SimShift.Services
                 TractionControl = new TractionControl();
                 ProfileSwitcher = new ProfileSwitcher();
                 Speedlimiter = new Speedlimiter();
+                PowerLimiter = new PowerLimiter();
                 LaunchControl = new LaunchControl();
                 DrivetrainCalibrator = new DrivetrainCalibrator();
+                LaneAssistance = new LaneAssistance();
 
                 CameraHorizon = new CameraHorizon();
 
@@ -225,27 +231,46 @@ namespace SimShift.Services
             {
                     // Unimplemented as of now.
                 case Services.JoyControls.Gear1:
+                    return RawJoysticksIn[1].GetButton(8);
                 case Services.JoyControls.Gear2:
+                    return RawJoysticksIn[1].GetButton(9);
                 case Services.JoyControls.Gear3:
+                    return RawJoysticksIn[1].GetButton(10);
                 case Services.JoyControls.Gear4:
+                    return RawJoysticksIn[1].GetButton(11);
                 case Services.JoyControls.Gear5:
+                    return RawJoysticksIn[1].GetButton(12);
                 case Services.JoyControls.Gear6:
+                    return RawJoysticksIn[1].GetButton(13);
                 case Services.JoyControls.Gear7:
-                case Services.JoyControls.Gear8:
-                case Services.JoyControls.GearR:
                     return false;
+                case Services.JoyControls.Gear8:
+                    return false;
+                case Services.JoyControls.GearR:
+                    return RawJoysticksIn[1].GetButton(14);
+
+                case JoyControls.GearRange1:
+                    return RawJoysticksIn[1].GetButton(6);
+
+                case Services.JoyControls.LaneAssistance:
+                    if (ps3Controller)
+                        throw new NotImplementedException();
+                    else
+                        return RawJoysticksIn[1].GetButton(7);
 
                     // PS3 (via DS3 tool) L1/R1
                 case Services.JoyControls.GearDown:
                     if (ps3Controller)
                         return RawJoysticksIn[0].GetButton(4);
-                    else
+                    else if (Transmission.Enabled)
                         return RawJoysticksIn[1].GetButton(8);
+                    else return false;
                 case Services.JoyControls.GearUp:
                     if (ps3Controller)
                         return RawJoysticksIn[0].GetButton(5);
-                    else
+                    else if (Transmission.Enabled)
                         return RawJoysticksIn[1].GetButton(9);
+                    else return false;
                 case Services.JoyControls.CruiseControl:
                     if (ps3Controller)
                         return RawJoysticksIn[0].GetButton(0);
@@ -267,6 +292,13 @@ namespace SimShift.Services
         {
             switch(c)
             {
+                case Services.JoyControls.Steering:
+
+                    if (ps3Controller)
+                        throw new NotImplementedException();
+                    else
+                        return RawJoysticksIn[1].GetAxis(0)/Math.Pow(2,16);
+                    
                 case Services.JoyControls.Throttle:
 
                     double t = 0;
@@ -276,7 +308,7 @@ namespace SimShift.Services
                         t = 1 - RawJoysticksIn[1].GetAxis(2)/Math.Pow(2, 16);
                     if (t < 0) t = 0;
                    
-                if (Main.Data.Active.Application.Contains("ruck")) t = t*t;
+                if (Main.Data.Active!=null && Main.Data.Active.Application.Contains("ruck")) t = t*t;
                     //t *= 0.8;
                     return t;
 
@@ -290,10 +322,12 @@ namespace SimShift.Services
                         return b * b;
                     }
                 case Services.JoyControls.Clutch:
-                    return 0.0;
+                    return 1 - RawJoysticksIn[1].GetAxis(4) / Math.Pow(2, 16);
 
                 case Services.JoyControls.CameraHorizon:
-                    return RawJoysticksIn[0].GetAxis(5)/Math.Pow(2, 15)-1;
+                    if (ps3Controller)
+                        return RawJoysticksIn[0].GetAxis(5) / Math.Pow(2, 15) - 1;
+                    else return 0;
                     
                 default:
                     return 0.0;
@@ -371,16 +405,20 @@ namespace SimShift.Services
                 default:
                     break;
 
+                case Services.JoyControls.Steering:
+                    RawJoysticksOut[0].SetAxis(HID_USAGES.HID_USAGE_RX, value/2);
+                    break;
+
                 case Services.JoyControls.Throttle:
-                    RawJoysticksOut[0].SetAxis(HID_USAGES.HID_USAGE_X, value);
+                    RawJoysticksOut[0].SetAxis(HID_USAGES.HID_USAGE_X, value/2);
                     break;
 
                 case Services.JoyControls.Brake:
-                    RawJoysticksOut[0].SetAxis(HID_USAGES.HID_USAGE_Y, value);
+                    RawJoysticksOut[0].SetAxis(HID_USAGES.HID_USAGE_Y, value/2);
                     break;
 
                 case Services.JoyControls.Clutch:
-                    RawJoysticksOut[0].SetAxis(HID_USAGES.HID_USAGE_Z, value);
+                    RawJoysticksOut[0].SetAxis(HID_USAGES.HID_USAGE_Z, value/2);
                     break;
             }
 

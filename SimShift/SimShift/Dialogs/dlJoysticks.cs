@@ -73,22 +73,30 @@ namespace SimShift.Dialogs
                     MessageBox.Show("This will stop main service");
                     Main.Stop();
                 }
-                bool buttonState = false;
+                int buttonState = 0;
                 _mCalibrateButton = new Timer();
                 _mCalibrateButton.Interval = 1500;
                 _mCalibrateButton.Tick += (o, args) =>
                                               {
-                                                  if (buttonState)
+                                                  if (buttonState == 0)
                                                   {
+                                                      buttonState = 1;
                                                       Main.SetAxisOut((JoyControls)buttonId, 1);
                                                       Main.SetButtonOut((JoyControls)buttonId, true);
                                                   }
-                                                  else
+                                                  else if (buttonState == 1)
                                                   {
+                                                      buttonState = 2;
+                                                      Main.SetAxisOut((JoyControls)buttonId, 0.5);
+                                                      Main.SetButtonOut((JoyControls)buttonId, true);
+                                                  }
+                                                  else
+
+                                                  {
+                                                      buttonState = 0;
                                                       Main.SetAxisOut((JoyControls)buttonId, 0);
                                                       Main.SetButtonOut((JoyControls)buttonId, false);
                                                   }
-                                                  buttonState = !buttonState;
                                               };
                 _mCalibrateButton.Start();
 

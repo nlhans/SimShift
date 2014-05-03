@@ -43,10 +43,15 @@
             this.cruiseControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dynamicCruiseControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.emergencyStopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.laneAssistanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.joystickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dashboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btServiceStartStop = new System.Windows.Forms.Button();
+            this.btTransmission = new System.Windows.Forms.Button();
+            this.gamesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.euroTruckSimulator2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,7 +60,9 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.modulesToolStripMenuItem,
-            this.settingsToolStripMenuItem});
+            this.settingsToolStripMenuItem,
+            this.dashboardToolStripMenuItem,
+            this.gamesToolStripMenuItem1});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(824, 24);
@@ -73,7 +80,7 @@
             // saveSetupToolStripMenuItem
             // 
             this.saveSetupToolStripMenuItem.Name = "saveSetupToolStripMenuItem";
-            this.saveSetupToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.saveSetupToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.saveSetupToolStripMenuItem.Text = "Save Setup";
             // 
             // modulesToolStripMenuItem
@@ -82,7 +89,8 @@
             this.shifterToolStripMenuItem,
             this.cruiseControlToolStripMenuItem,
             this.dynamicCruiseControlToolStripMenuItem,
-            this.emergencyStopToolStripMenuItem});
+            this.emergencyStopToolStripMenuItem,
+            this.laneAssistanceToolStripMenuItem});
             this.modulesToolStripMenuItem.Name = "modulesToolStripMenuItem";
             this.modulesToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.modulesToolStripMenuItem.Text = "Modules";
@@ -161,6 +169,13 @@
             this.emergencyStopToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.emergencyStopToolStripMenuItem.Text = "Emergency Stop";
             // 
+            // laneAssistanceToolStripMenuItem
+            // 
+            this.laneAssistanceToolStripMenuItem.Name = "laneAssistanceToolStripMenuItem";
+            this.laneAssistanceToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.laneAssistanceToolStripMenuItem.Text = "Lane Assistance";
+            this.laneAssistanceToolStripMenuItem.Click += new System.EventHandler(this.laneAssistanceToolStripMenuItem_Click);
+            // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -173,16 +188,23 @@
             // gamesToolStripMenuItem
             // 
             this.gamesToolStripMenuItem.Name = "gamesToolStripMenuItem";
-            this.gamesToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
+            this.gamesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.gamesToolStripMenuItem.Text = "Games";
             this.gamesToolStripMenuItem.Click += new System.EventHandler(this.gamesToolStripMenuItem_Click);
             // 
             // joystickToolStripMenuItem
             // 
             this.joystickToolStripMenuItem.Name = "joystickToolStripMenuItem";
-            this.joystickToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
+            this.joystickToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.joystickToolStripMenuItem.Text = "Joystick";
             this.joystickToolStripMenuItem.Click += new System.EventHandler(this.joystickToolStripMenuItem_Click);
+            // 
+            // dashboardToolStripMenuItem
+            // 
+            this.dashboardToolStripMenuItem.Name = "dashboardToolStripMenuItem";
+            this.dashboardToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
+            this.dashboardToolStripMenuItem.Text = "Dashboard";
+            this.dashboardToolStripMenuItem.Click += new System.EventHandler(this.dashboardToolStripMenuItem_Click);
             // 
             // btServiceStartStop
             // 
@@ -194,13 +216,40 @@
             this.btServiceStartStop.UseVisualStyleBackColor = true;
             this.btServiceStartStop.Click += new System.EventHandler(this.btServiceStartStop_Click);
             // 
+            // btTransmission
+            // 
+            this.btTransmission.Location = new System.Drawing.Point(12, 56);
+            this.btTransmission.Name = "btTransmission";
+            this.btTransmission.Size = new System.Drawing.Size(101, 23);
+            this.btTransmission.TabIndex = 2;
+            this.btTransmission.Text = "Auto Mode";
+            this.btTransmission.UseVisualStyleBackColor = true;
+            this.btTransmission.Click += new System.EventHandler(this.btTransmission_Click);
+            // 
+            // gamesToolStripMenuItem1
+            // 
+            this.gamesToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.euroTruckSimulator2ToolStripMenuItem});
+            this.gamesToolStripMenuItem1.Name = "gamesToolStripMenuItem1";
+            this.gamesToolStripMenuItem1.Size = new System.Drawing.Size(55, 20);
+            this.gamesToolStripMenuItem1.Text = "Games";
+            // 
+            // euroTruckSimulator2ToolStripMenuItem
+            // 
+            this.euroTruckSimulator2ToolStripMenuItem.Name = "euroTruckSimulator2ToolStripMenuItem";
+            this.euroTruckSimulator2ToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.euroTruckSimulator2ToolStripMenuItem.Text = "Euro Truck Simulator 2";
+            this.euroTruckSimulator2ToolStripMenuItem.Click += new System.EventHandler(this.euroTruckSimulator2ToolStripMenuItem_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(824, 469);
+            this.Controls.Add(this.btTransmission);
             this.Controls.Add(this.btServiceStartStop);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FrmMain";
             this.Text = "SimShift";
@@ -232,6 +281,11 @@
         private System.Windows.Forms.ToolStripMenuItem kickdownToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem joystickToolStripMenuItem;
         private System.Windows.Forms.Button btServiceStartStop;
+        private System.Windows.Forms.ToolStripMenuItem laneAssistanceToolStripMenuItem;
+        private System.Windows.Forms.Button btTransmission;
+        private System.Windows.Forms.ToolStripMenuItem dashboardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem gamesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem euroTruckSimulator2ToolStripMenuItem;
     }
 }
 

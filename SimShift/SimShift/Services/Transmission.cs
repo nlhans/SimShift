@@ -15,6 +15,8 @@ namespace SimShift.Services
         public int RangeSize = 6;
         public int Gears = 6;
 
+        public static bool Enabled { get; set; }
+
         public static bool InReverse { get; set; }
 
         public bool GetHomeMode { get; set; }
@@ -85,6 +87,7 @@ namespace SimShift.Services
 
             // Initialize all shfiting stuff.
             Shift(0, 1, "up_1thr");
+            Enabled = true;
             IsShifting = false;
         }
 
@@ -359,10 +362,10 @@ namespace SimShift.Services
             {
                     // Only required when changing
                 case JoyControls.Throttle:
-                    return true;
+                    return Enabled;
 
                 case JoyControls.Clutch:
-                    return IsShifting;
+                    return Enabled && IsShifting;
 
                     // All gears.
                 case JoyControls.GearR:
@@ -372,19 +375,19 @@ namespace SimShift.Services
                 case JoyControls.Gear4:
                 case JoyControls.Gear5:
                 case JoyControls.Gear6:
-                    return true;
+                    return Enabled;
 
                 case JoyControls.GearRange2:
                 case JoyControls.GearRange1:
-                    return Main.Data.Active.TransmissionSupportsRanges;
+                    return Enabled && Main.Data.Active.TransmissionSupportsRanges;
 
                 case JoyControls.Gear7:
                 case JoyControls.Gear8:
-                    return !Main.Data.Active.TransmissionSupportsRanges;
+                    return Enabled && !Main.Data.Active.TransmissionSupportsRanges;
 
                 case JoyControls.GearUp:
                 case JoyControls.GearDown:
-                    return true;
+                    return Enabled ;
 
                 default:
                     return false;

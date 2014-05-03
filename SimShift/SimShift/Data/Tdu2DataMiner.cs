@@ -25,6 +25,7 @@ namespace SimShift.Data
 
         public bool TransmissionSupportsRanges { get { return false; } }
         public bool EnableWeirdAntistall { get { return false; } }
+        public double Weight { get { return 1500; } }
 
         // Enable write operations?
         bool openedTduAsWriter;

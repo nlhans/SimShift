@@ -44,6 +44,8 @@ namespace SimShift.Services
             get { return new string[] {"Profiles"}; }
         }
 
+        public string Active { get; private set; }
+
         public void ResetParameters()
         {
             Loaded.Clear();
@@ -55,6 +57,7 @@ namespace SimShift.Services
             if(Loaded.Any(x=>x.Name == profile))
             {
                 Debug.WriteLine("Loading profile "+profile);
+                Active = profile;
                 Loaded.FirstOrDefault(x => x.Name == profile).Load();
             }
         }
