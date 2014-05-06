@@ -212,7 +212,7 @@ namespace SimShift.Services
                 var steerErrorGain = 0.5 - 0.5*(data.Telemetry.Speed*3.6/40);
                 if (steerErrorGain < 0.17) steerErrorGain = 0.17;
                 SteerAngle = SteerAngle*0.2 + 0.8*(0.5 + totalSteerError*steerErrorGain);
-                Debug.WriteLine(lineDistanceError + "px error / " + angleDistancError + " angle error / " + SteerAngle);
+                //Debug.WriteLine(lineDistanceError + "px error / " + angleDistancError + " angle error / " + SteerAngle);
             }
         }
 

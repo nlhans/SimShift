@@ -9,6 +9,7 @@ namespace SimShift.Services
 {
     public class Antistall : IControlChainObj, IConfigurable
     {
+        public bool Enabled { get; set; }
         public static bool Stalling { get; private set; }
         public double Speed { get; private set; }
 
@@ -38,10 +39,10 @@ namespace SimShift.Services
             switch (c)
             {
                 case JoyControls.Throttle:
-                    return Stalling;
+                    return Enabled&& Stalling;
                     
                 case JoyControls.Clutch:
-                    return Stalling || SlippingLowGear;
+                    return Enabled && (Stalling || SlippingLowGear);
                     
                 default:
                     return false;
@@ -192,6 +193,7 @@ namespace SimShift.Services
         #region Configurable parameters management
 
         public IEnumerable<string> AcceptsConfigs { get { return new[] {"Antistall"}; } }
+
 
         public void ResetParameters()
         {

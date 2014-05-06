@@ -229,5 +229,20 @@ d.Data += Data;*/
             Ets2DataDebug ets2dbg = new Ets2DataDebug();
             ets2dbg.Show();
         }
+
+        private void btClutch_Click(object sender, EventArgs e)
+        {
+            //Main.Antistall.Enabled = !Main.Antistall.Enabled;
+            if (Main.Antistall.Enabled)
+            {
+                Main.Antistall.Enabled = false;
+                btClutch.Text = "Manual clutch";
+            }
+            else
+            {
+                Main.Antistall.Enabled = true;
+                btClutch.Text = "Auto clutch";
+            }
+        }
     }
 }

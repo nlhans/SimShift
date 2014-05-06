@@ -94,16 +94,16 @@ namespace SimShift.Dialogs
                     var gearSet = false;
                     var latestGearThatWasNotStalling = 1;
 
-                    var shiftRpm = Drivetrain.StallRpm + (Drivetrain.MaximumRpm - Drivetrain.StallRpm) * load;
-                    shiftRpm = 3000 + (Drivetrain.MaximumRpm - 3000-1000) * load;
+                    var shiftRpm = Drivetrain.StallRpm + (Drivetrain.MaximumRpm - 300 - Drivetrain.StallRpm) * load;
+                    //shiftRpm = 3000 + (Drivetrain.MaximumRpm - 3000-1000) * load;
                     for (int gear = 0; gear < Drivetrain.Gears; gear++)
                     {
                         var calculatedRpm = Drivetrain.GearRatios[gear] * speed;
-                        if (calculatedRpm < Drivetrain.StallRpm)
+                        if (calculatedRpm < Drivetrain.StallRpm*1.75)
                         {
                             continue;
                         }
-                        if (calculatedRpm < 2900) continue;
+
                         latestGearThatWasNotStalling = gear;
                         if (calculatedRpm > shiftRpm) continue;
 

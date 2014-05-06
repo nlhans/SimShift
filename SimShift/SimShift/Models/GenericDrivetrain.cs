@@ -128,6 +128,12 @@ namespace SimShift.Models
             return rpm / GearRatios[gear]/3.6;
         }
 
+        public double CalculateRpmForSpeed(int gear, float speed)
+        {
+            if (GearRatios == null || gear < 0 || gear >= GearRatios.Length) return 0;
+            return speed*3.6* (GearRatios[gear]);
+        }
+
         public double[] GearRatios { get; set; }
         public int Gears { get; set; }
         public bool Calibrated { get; set; }

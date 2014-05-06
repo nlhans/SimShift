@@ -280,7 +280,7 @@ namespace SimShift.Services
                     if (ps3Controller)
                         return RawJoysticksIn[0].GetButton(11);
                     else
-                        return RawJoysticksIn[1].GetButton(18);
+                        return false && RawJoysticksIn[1].GetButton(18);
 
                 default:
                     return false;

@@ -48,10 +48,11 @@
             this.gamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.joystickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dashboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btServiceStartStop = new System.Windows.Forms.Button();
-            this.btTransmission = new System.Windows.Forms.Button();
             this.gamesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.euroTruckSimulator2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btServiceStartStop = new System.Windows.Forms.Button();
+            this.btTransmission = new System.Windows.Forms.Button();
+            this.btClutch = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -80,7 +81,7 @@
             // saveSetupToolStripMenuItem
             // 
             this.saveSetupToolStripMenuItem.Name = "saveSetupToolStripMenuItem";
-            this.saveSetupToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveSetupToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.saveSetupToolStripMenuItem.Text = "Save Setup";
             // 
             // modulesToolStripMenuItem
@@ -188,14 +189,14 @@
             // gamesToolStripMenuItem
             // 
             this.gamesToolStripMenuItem.Name = "gamesToolStripMenuItem";
-            this.gamesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.gamesToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
             this.gamesToolStripMenuItem.Text = "Games";
             this.gamesToolStripMenuItem.Click += new System.EventHandler(this.gamesToolStripMenuItem_Click);
             // 
             // joystickToolStripMenuItem
             // 
             this.joystickToolStripMenuItem.Name = "joystickToolStripMenuItem";
-            this.joystickToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.joystickToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
             this.joystickToolStripMenuItem.Text = "Joystick";
             this.joystickToolStripMenuItem.Click += new System.EventHandler(this.joystickToolStripMenuItem_Click);
             // 
@@ -205,6 +206,21 @@
             this.dashboardToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
             this.dashboardToolStripMenuItem.Text = "Dashboard";
             this.dashboardToolStripMenuItem.Click += new System.EventHandler(this.dashboardToolStripMenuItem_Click);
+            // 
+            // gamesToolStripMenuItem1
+            // 
+            this.gamesToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.euroTruckSimulator2ToolStripMenuItem});
+            this.gamesToolStripMenuItem1.Name = "gamesToolStripMenuItem1";
+            this.gamesToolStripMenuItem1.Size = new System.Drawing.Size(55, 20);
+            this.gamesToolStripMenuItem1.Text = "Games";
+            // 
+            // euroTruckSimulator2ToolStripMenuItem
+            // 
+            this.euroTruckSimulator2ToolStripMenuItem.Name = "euroTruckSimulator2ToolStripMenuItem";
+            this.euroTruckSimulator2ToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.euroTruckSimulator2ToolStripMenuItem.Text = "Euro Truck Simulator 2";
+            this.euroTruckSimulator2ToolStripMenuItem.Click += new System.EventHandler(this.euroTruckSimulator2ToolStripMenuItem_Click);
             // 
             // btServiceStartStop
             // 
@@ -226,26 +242,22 @@
             this.btTransmission.UseVisualStyleBackColor = true;
             this.btTransmission.Click += new System.EventHandler(this.btTransmission_Click);
             // 
-            // gamesToolStripMenuItem1
+            // btClutch
             // 
-            this.gamesToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.euroTruckSimulator2ToolStripMenuItem});
-            this.gamesToolStripMenuItem1.Name = "gamesToolStripMenuItem1";
-            this.gamesToolStripMenuItem1.Size = new System.Drawing.Size(55, 20);
-            this.gamesToolStripMenuItem1.Text = "Games";
-            // 
-            // euroTruckSimulator2ToolStripMenuItem
-            // 
-            this.euroTruckSimulator2ToolStripMenuItem.Name = "euroTruckSimulator2ToolStripMenuItem";
-            this.euroTruckSimulator2ToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.euroTruckSimulator2ToolStripMenuItem.Text = "Euro Truck Simulator 2";
-            this.euroTruckSimulator2ToolStripMenuItem.Click += new System.EventHandler(this.euroTruckSimulator2ToolStripMenuItem_Click);
+            this.btClutch.Location = new System.Drawing.Point(119, 56);
+            this.btClutch.Name = "btClutch";
+            this.btClutch.Size = new System.Drawing.Size(96, 23);
+            this.btClutch.TabIndex = 3;
+            this.btClutch.Text = "Auto Clutch";
+            this.btClutch.UseVisualStyleBackColor = true;
+            this.btClutch.Click += new System.EventHandler(this.btClutch_Click);
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(824, 469);
+            this.Controls.Add(this.btClutch);
             this.Controls.Add(this.btTransmission);
             this.Controls.Add(this.btServiceStartStop);
             this.Controls.Add(this.menuStrip1);
@@ -286,6 +298,7 @@
         private System.Windows.Forms.ToolStripMenuItem dashboardToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gamesToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem euroTruckSimulator2ToolStripMenuItem;
+        private System.Windows.Forms.Button btClutch;
     }
 }
 

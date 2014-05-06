@@ -22,10 +22,30 @@ namespace SimShift.Services
         public bool GetHomeMode { get; set; }
         public bool OverruleShifts { get; set; }
 
-        public ShiftPattern ActiveShiftPattern {get { return ShiftPatterns[ActiveShiftPatternStr]; }}
+        #region Kickdown
+
+        public bool KickdownEnable { get; private set; }
+        public double KickdownTimeout { get; private set; }
+        public double KickdownSpeedReset { get; private set; }
+        public double KickdownPowerReset { get; private set; }
+        public double KickdownRpmReset { get; private set; }
+
+        public double KickdownLockedSpeed { get; private set; }
+
+        public DateTime KickdownTime { get; private set; }
+        public bool KickdownCooldown
+        {
+            get { return KickdownTime > DateTime.Now; }
+            set { KickdownTime = DateTime.MinValue; }
+        }
+
+        #endregion
+        #region Active Transmission Variables
+
+        public ShiftPattern ActiveShiftPattern { get { return ShiftPatterns[ActiveShiftPatternStr]; } }
 
         public string ActiveShiftPatternStr;
-        public Dictionary<string, ShiftPattern> ShiftPatterns = new Dictionary<string, ShiftPattern>(); 
+        public Dictionary<string, ShiftPattern> ShiftPatterns = new Dictionary<string, ShiftPattern>();
 
         public int ShiftFrame = 0;
         public ShifterTableConfiguration configuration;
@@ -75,6 +95,7 @@ namespace SimShift.Services
         }
 
         private double transmissionThrottle;
+        #endregion
 
         public Transmission()
         {
@@ -104,6 +125,8 @@ namespace SimShift.Services
         public void Shift(int fromGear, int toGear, string style)
         {
             if(IsShifting) return;
+
+            KickdownTime = DateTime.Now.Add(new TimeSpan(0,0,0,0,(int)KickdownTimeout));
 
             if (ShiftPatterns.ContainsKey(style))
                 ActiveShiftPatternStr = style;
@@ -340,8 +363,59 @@ namespace SimShift.Services
                 return;
             }
 
+            // Kickdown?
+            // What is basically does, is making this very-anxious gearbox tone down a bit in it's aggressive shift pattern.
+            // With kickdown we specify 2 rules to make the gear "stick" longer with varying throttle positions.
+            if (KickdownEnable)
+            {
+                if (KickdownCooldown)
+                {
+                    // We're on cooldown. Check if power/speed/rpm is able to reset this
+// The scheme is as follow:
+                    // if (delta of [current speed] and [speed of last shift] ) > speedReset: then reset cooldown
+                    // if ([generated power this gear] / [generated power new gear]) > 1+powerReset: then reset cooldown
+                    // if (currentRpm < [rpm * stationaryValue]) : then reset cooldown
+
+                    // This makes sure the gearbox shifts down if on very low revs and almost about to stall.
+
+                    // Note: only for speeding up
+                    if ((data.Telemetry.Speed - KickdownLockedSpeed) > KickdownSpeedReset)
+                    {
+                        Debug.WriteLine("[Kickdown] Reset on overspeed");
+                        KickdownCooldown = false;
+                    }
+                    var pwrCurrentGear = Main.Drivetrain.CalculatePower(data.Telemetry.EngineRpm,
+                                                                        data.Telemetry.Throttle);
+                    var maxPwr = Main.Drivetrain.CalculateMaxPower();
+                    var pwrNewGear =
+                        Main.Drivetrain.CalculatePower(
+                            Main.Drivetrain.CalculateRpmForSpeed(idealGear-1, data.Telemetry.Speed),
+                            data.Telemetry.Throttle);
+                    Debug.WriteLine("N"+pwrCurrentGear.ToString("000") + " I:" + pwrNewGear.ToString("000"));
+                    // This makes sure the gearbox shifts down if on low revs and the user is requesting power from the engine
+                    if (pwrNewGear/pwrCurrentGear > 1+KickdownPowerReset && 
+                        pwrNewGear/maxPwr > KickdownPowerReset)
+                    {
+                        Debug.WriteLine("[Kickdown] Reset on power / " + pwrCurrentGear + " / " + pwrNewGear);
+                        KickdownCooldown = false;
+                    }
+
+                    // This makes sure the gearbox shifts up in decent time when reaching end of gears
+                    if (Main.Drivetrain.StallRpm*KickdownRpmReset > data.Telemetry.EngineRpm)
+                    {
+                        Debug.WriteLine("[Kickdown] Reset on stalling RPM");
+                        KickdownCooldown = true;
+                    }
+                }
+                else
+                {
+                }
+            }
+
             if (idealGear != data.Telemetry.Gear)
             {
+                if (KickdownEnable && KickdownCooldown) return;
+                KickdownLockedSpeed = Main.Data.Telemetry.Speed;
                 var upShift = idealGear > data.Telemetry.Gear;
                 var fullThrottle = data.Telemetry.Throttle > 0.6;
 
@@ -669,6 +743,22 @@ namespace SimShift.Services
 
                 case "GenerateSpeedHoldoff":
                     speedHoldoff = obj.ReadAsInteger();
+                    break;
+
+                case "KickdownEnable":
+                    KickdownEnable = obj.ReadAsString() == "1";
+                    break;
+                case "KickdownTimeout":
+                    KickdownTimeout = obj.ReadAsDouble();
+                    break;
+                case "KickdownSpeedReset":
+                    KickdownSpeedReset = obj.ReadAsDouble();
+                    break;
+                case "KickdownPowerReset":
+                    KickdownPowerReset = obj.ReadAsDouble();
+                    break;
+                case "KickdownRpmReset":
+                    KickdownRpmReset = obj.ReadAsDouble();
                     break;
 
                 case "Generate":

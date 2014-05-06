@@ -20,5 +20,6 @@ namespace SimShift.Models
         bool Calibrated { get; set; }
         string File { get; set; }
         double CalculateSpeedForRpm(int gear, float rpm);
+        double CalculateRpmForSpeed(int idealGear, float speed);
     }
 }
