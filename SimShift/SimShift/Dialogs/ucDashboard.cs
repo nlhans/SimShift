@@ -132,9 +132,9 @@ namespace SimShift.Dialogs
             var speedoCircleRange = speedoCircleStart - speedoCircleEnd;
 
             var speedoMin = 0;
-            var speedoMax = 120;
+            var speedoMax = Main.Data.Active.Application == "TestDrive2" ? 400 : 120;
             var speedoRange = speedoMax - speedoMin;
-            var speedoTick = 5;
+            var speedoTick = Main.Data.Active.Application == "TestDrive2" ? 50 : 5;
             var speedoTicks = speedoRange / speedoTick;
 
             var anglePerSpeedTick = speedoCircleRange / speedoTicks;
@@ -193,7 +193,7 @@ namespace SimShift.Dialogs
                
                 
                 // Choose not to draw 10s speed
-                if (speedo % 20 != 0) continue;
+                if (speedo % 20 != 0 && speedoTick == 5) continue;
                 g.DrawString(speed, new Font("Verdana", fontSize, FontStyle.Bold), Brushes.WhiteSmoke, (float)x3, (float)y3);
             }
 
@@ -217,10 +217,10 @@ namespace SimShift.Dialogs
             // Draw RPM
 
 
-            var engineRpmMax = 3000;
+            var engineRpmMax = Main.Data.Active.Application == "TestDrive2" ? (float)Main.Drivetrain.MaximumRpm+1000 : 3000; ;
             var engineRpmMin = 0;
             var engineRpmRange = engineRpmMax - engineRpmMin;
-            var engineRpmTick = 250;
+            int engineRpmTick = Main.Data.Active.Application == "TestDrive2" ? 1000 : 250;
             var engineRpmTicks = engineRpmRange / engineRpmTick;
 
             var rpmCircleStart = -210.0f;
@@ -243,32 +243,45 @@ namespace SimShift.Dialogs
             {
                 var rpm = engineRpmMin + engineRpmTick * i;
                 i++;
-                switch (rpm)
+                if (Main.Data.Active.Application == "TestDrive2")
                 {
-                    case 0:
+                    if (rpm < Main.Drivetrain.StallRpm+1000)
                         arcColor = Color.Blue;
-                        break;
-
-                    case 750:
-                        arcColor = Color.White;
-                        break;
-
-                    case 1250:
-                        arcColor = Color.Green;
-                        break;
-
-                    case 1750:
-                        arcColor = Color.WhiteSmoke;
-                        break;
-
-                    case 2250:
+                    else if (rpm + 1000 > Main.Drivetrain.MaximumRpm)
                         arcColor = Color.Red;
-                        break;
-                    case 3000:
+                    else if (rpm > Main.Drivetrain.MaximumRpm)
                         arcColor = Color.DarkRed;
-                        break;
+                    else
+                    arcColor = Color.White;
                 }
+                else
+                {
+                    switch (rpm)
+                    {
+                        case 0:
+                            arcColor = Color.Blue;
+                            break;
 
+                        case 750:
+                            arcColor = Color.White;
+                            break;
+
+                        case 1250:
+                            arcColor = Color.Green;
+                            break;
+
+                        case 1750:
+                            arcColor = Color.WhiteSmoke;
+                            break;
+
+                        case 2250:
+                            arcColor = Color.Red;
+                            break;
+                        case 3000:
+                            arcColor = Color.DarkRed;
+                            break;
+                    }
+                }
                 g.DrawArc(new Pen(arcColor, 4.0f), rtRpm, lastAngle, -anglePerRpmTick);
 
 
