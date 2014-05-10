@@ -59,6 +59,7 @@ namespace SimShift.Services
                 else
                 {
                     var pwrLimit = 300 + data.Weight/1000.0*20;
+                    //pwrLimit += 2500;
                     //if (data.Telemetry.Gear >= 7)
                         pwrLimit += data.Weight/1000.0*data.Telemetry.Gear;
                     var thrFactor = Main.Drivetrain.CalculateThrottleByPower(data.Telemetry.EngineRpm,pwrLimit);

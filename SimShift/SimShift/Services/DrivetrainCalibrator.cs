@@ -131,6 +131,8 @@ namespace SimShift.Services
 
         private int shiftToFirstRangeAttempt = 0;
 
+        private float gearRatioSpeedCruise = 0.0f;
+
         public void TickTelemetry(IDataMiner data)
         {
             bool wasCalibrating = Calibrating;
@@ -330,7 +332,7 @@ namespace SimShift.Services
                                 break;
                             }
                             reqThrottle = true;
-                            throttle = 0.15;
+                            throttle = gearRatioSpeedCruise - data.Telemetry.Speed;
 
                             var ratio = data.Telemetry.EngineRpm / (3.6 * data.Telemetry.Speed);
                             if (ratio > 400 || ratio < 1)
@@ -387,6 +389,7 @@ namespace SimShift.Services
                                 if (gr == 0)
                                 {
                                     samplesTaken = 0;
+                                    gearRatioSpeedCruise = data.Telemetry.Speed;
                                     stage = DrivetrainCalibrationStage.EndGearRatios;
                                 }
                             }

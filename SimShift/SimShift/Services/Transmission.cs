@@ -319,7 +319,7 @@ namespace SimShift.Services
             // TODO: Add generic telemetry object
             GameGear = data.Telemetry.Gear;
             if (IsShifting) return;
-            if (TransmissionFrozen) return;
+            if (TransmissionFrozen && !GetHomeMode) return;
             if (OverruleShifts) return;
             shiftRetry = 0;
 
@@ -414,7 +414,7 @@ namespace SimShift.Services
 
             if (idealGear != data.Telemetry.Gear)
             {
-                if (KickdownEnable && KickdownCooldown) return;
+                if (KickdownEnable && KickdownCooldown && !GetHomeMode) return;
                 KickdownLockedSpeed = Main.Data.Telemetry.Speed;
                 var upShift = idealGear > data.Telemetry.Gear;
                 var fullThrottle = data.Telemetry.Throttle > 0.6;

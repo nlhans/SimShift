@@ -319,6 +319,7 @@ namespace SimShift.Services
                     {
                         var b = 1 - RawJoysticksIn[1].GetAxis(3)/Math.Pow(2, 16);
                         if (b < 0) b = 0;
+                        if (Main.Data.Active.Application == "TestDrive2") return b;
                         return b * b;
                     }
                 case Services.JoyControls.Clutch:
