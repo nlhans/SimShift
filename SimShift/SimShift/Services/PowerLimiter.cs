@@ -49,7 +49,9 @@ namespace SimShift.Services
 
         public void TickTelemetry(IDataMiner data)
         {
-            if(data.Telemetry.Car == "scania.r")
+            throttleFactor = 1;
+            return;
+            if(data.Telemetry.Car == "scania.r" && !Main.Data.Active.SelectManually)
             {
                 Active = true;
 
@@ -69,6 +71,7 @@ namespace SimShift.Services
                 }
             }else
             {
+                throttleFactor = 1;
                 Active = false;                
             }
         }

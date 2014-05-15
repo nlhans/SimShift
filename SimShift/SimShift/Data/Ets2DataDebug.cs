@@ -29,7 +29,7 @@ namespace SimShift.Data
         void updateTimer_Tick(object sender, EventArgs e)
         {
             //
-            if (Main.Data.Active != null && Main.Data.Active.Application == "eurotrucks2")
+            if (Main.Data.Active != null && Main.Data.Active.Application == "eurotrucks2" && !Main.Data.Active.SelectManually)
             {
                 var ets2Miner = Main.Data.Active as Ets2DataMiner;
                 var ets2Tel = ets2Miner.MyTelemetry;

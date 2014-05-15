@@ -53,7 +53,21 @@
             this.btServiceStartStop = new System.Windows.Forms.Button();
             this.btTransmission = new System.Windows.Forms.Button();
             this.btClutch = new System.Windows.Forms.Button();
+            this.gpSim = new System.Windows.Forms.GroupBox();
+            this.btSimSelect = new System.Windows.Forms.Button();
+            this.btSimMode = new System.Windows.Forms.Button();
+            this.cbSimList = new System.Windows.Forms.ComboBox();
+            this.lbSimStatus = new System.Windows.Forms.Label();
+            this.gbCarSelect = new System.Windows.Forms.GroupBox();
+            this.lblCars = new System.Windows.Forms.Label();
+            this.btCarApply = new System.Windows.Forms.Button();
+            this.cbCars = new System.Windows.Forms.ComboBox();
+            this.gbProfiles = new System.Windows.Forms.GroupBox();
+            this.lbProfiles = new System.Windows.Forms.ListBox();
             this.menuStrip1.SuspendLayout();
+            this.gpSim.SuspendLayout();
+            this.gbCarSelect.SuspendLayout();
+            this.gbProfiles.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -252,11 +266,123 @@
             this.btClutch.UseVisualStyleBackColor = true;
             this.btClutch.Click += new System.EventHandler(this.btClutch_Click);
             // 
+            // gpSim
+            // 
+            this.gpSim.Controls.Add(this.btSimSelect);
+            this.gpSim.Controls.Add(this.btSimMode);
+            this.gpSim.Controls.Add(this.cbSimList);
+            this.gpSim.Controls.Add(this.lbSimStatus);
+            this.gpSim.Location = new System.Drawing.Point(12, 85);
+            this.gpSim.Name = "gpSim";
+            this.gpSim.Size = new System.Drawing.Size(273, 100);
+            this.gpSim.TabIndex = 4;
+            this.gpSim.TabStop = false;
+            this.gpSim.Text = "Simulator Select";
+            // 
+            // btSimSelect
+            // 
+            this.btSimSelect.Location = new System.Drawing.Point(107, 46);
+            this.btSimSelect.Name = "btSimSelect";
+            this.btSimSelect.Size = new System.Drawing.Size(78, 23);
+            this.btSimSelect.TabIndex = 3;
+            this.btSimSelect.Text = "Select";
+            this.btSimSelect.UseVisualStyleBackColor = true;
+            this.btSimSelect.Click += new System.EventHandler(this.btSimSelect_Click);
+            // 
+            // btSimMode
+            // 
+            this.btSimMode.Location = new System.Drawing.Point(191, 46);
+            this.btSimMode.Name = "btSimMode";
+            this.btSimMode.Size = new System.Drawing.Size(76, 23);
+            this.btSimMode.TabIndex = 2;
+            this.btSimMode.Text = "Auto";
+            this.btSimMode.UseVisualStyleBackColor = true;
+            this.btSimMode.Click += new System.EventHandler(this.btSimMode_Click);
+            // 
+            // cbSimList
+            // 
+            this.cbSimList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbSimList.FormattingEnabled = true;
+            this.cbSimList.Location = new System.Drawing.Point(9, 19);
+            this.cbSimList.Name = "cbSimList";
+            this.cbSimList.Size = new System.Drawing.Size(258, 21);
+            this.cbSimList.TabIndex = 1;
+            // 
+            // lbSimStatus
+            // 
+            this.lbSimStatus.AutoSize = true;
+            this.lbSimStatus.Location = new System.Drawing.Point(6, 66);
+            this.lbSimStatus.Name = "lbSimStatus";
+            this.lbSimStatus.Size = new System.Drawing.Size(25, 13);
+            this.lbSimStatus.TabIndex = 0;
+            this.lbSimStatus.Text = "app";
+            // 
+            // gbCarSelect
+            // 
+            this.gbCarSelect.Controls.Add(this.lblCars);
+            this.gbCarSelect.Controls.Add(this.btCarApply);
+            this.gbCarSelect.Controls.Add(this.cbCars);
+            this.gbCarSelect.Location = new System.Drawing.Point(12, 191);
+            this.gbCarSelect.Name = "gbCarSelect";
+            this.gbCarSelect.Size = new System.Drawing.Size(273, 89);
+            this.gbCarSelect.TabIndex = 5;
+            this.gbCarSelect.TabStop = false;
+            this.gbCarSelect.Text = "Car Select";
+            // 
+            // lblCars
+            // 
+            this.lblCars.AutoSize = true;
+            this.lblCars.Location = new System.Drawing.Point(6, 73);
+            this.lblCars.Name = "lblCars";
+            this.lblCars.Size = new System.Drawing.Size(22, 13);
+            this.lblCars.TabIndex = 2;
+            this.lblCars.Text = "car";
+            // 
+            // btCarApply
+            // 
+            this.btCarApply.Location = new System.Drawing.Point(191, 46);
+            this.btCarApply.Name = "btCarApply";
+            this.btCarApply.Size = new System.Drawing.Size(76, 23);
+            this.btCarApply.TabIndex = 1;
+            this.btCarApply.Text = "Apply";
+            this.btCarApply.UseVisualStyleBackColor = true;
+            this.btCarApply.Click += new System.EventHandler(this.btCarApply_Click);
+            // 
+            // cbCars
+            // 
+            this.cbCars.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbCars.FormattingEnabled = true;
+            this.cbCars.Location = new System.Drawing.Point(6, 19);
+            this.cbCars.Name = "cbCars";
+            this.cbCars.Size = new System.Drawing.Size(261, 21);
+            this.cbCars.TabIndex = 0;
+            // 
+            // gbProfiles
+            // 
+            this.gbProfiles.Controls.Add(this.lbProfiles);
+            this.gbProfiles.Location = new System.Drawing.Point(12, 286);
+            this.gbProfiles.Name = "gbProfiles";
+            this.gbProfiles.Size = new System.Drawing.Size(273, 117);
+            this.gbProfiles.TabIndex = 6;
+            this.gbProfiles.TabStop = false;
+            this.gbProfiles.Text = "Profile Active";
+            // 
+            // lbProfiles
+            // 
+            this.lbProfiles.FormattingEnabled = true;
+            this.lbProfiles.Location = new System.Drawing.Point(6, 19);
+            this.lbProfiles.Name = "lbProfiles";
+            this.lbProfiles.Size = new System.Drawing.Size(261, 82);
+            this.lbProfiles.TabIndex = 7;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(824, 469);
+            this.Controls.Add(this.gbProfiles);
+            this.Controls.Add(this.gbCarSelect);
+            this.Controls.Add(this.gpSim);
             this.Controls.Add(this.btClutch);
             this.Controls.Add(this.btTransmission);
             this.Controls.Add(this.btServiceStartStop);
@@ -267,6 +393,11 @@
             this.Text = "SimShift";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.gpSim.ResumeLayout(false);
+            this.gpSim.PerformLayout();
+            this.gbCarSelect.ResumeLayout(false);
+            this.gbCarSelect.PerformLayout();
+            this.gbProfiles.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -299,6 +430,17 @@
         private System.Windows.Forms.ToolStripMenuItem gamesToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem euroTruckSimulator2ToolStripMenuItem;
         private System.Windows.Forms.Button btClutch;
+        private System.Windows.Forms.GroupBox gpSim;
+        private System.Windows.Forms.Button btSimMode;
+        private System.Windows.Forms.ComboBox cbSimList;
+        private System.Windows.Forms.Label lbSimStatus;
+        private System.Windows.Forms.Button btSimSelect;
+        private System.Windows.Forms.GroupBox gbCarSelect;
+        private System.Windows.Forms.ComboBox cbCars;
+        private System.Windows.Forms.Button btCarApply;
+        private System.Windows.Forms.Label lblCars;
+        private System.Windows.Forms.GroupBox gbProfiles;
+        private System.Windows.Forms.ListBox lbProfiles;
     }
 }
 

@@ -34,6 +34,11 @@ namespace SimShift.Services
         public double ThrottleSensitivity { get; private set; }
 #endregion
 
+        public Antistall()
+        {
+            Enabled = true;
+        }
+
         public bool Requires(JoyControls c)
         {
             switch (c)
@@ -71,7 +76,9 @@ namespace SimShift.Services
                     }
                     else
                     {
-                        var maxV = 1 - Rpm/(Main.Drivetrain.MaximumRpm/2);
+                        var maxRpm = Main.Drivetrain.MaximumRpm/2;
+                        if (maxRpm < 2000) maxRpm = 2000;
+                        var maxV = 2 - 2*Rpm/(maxRpm);
                         if (maxV > 1) maxV = 1;
                         if (maxV < 0) maxV = 0;
                         _throttle = val;

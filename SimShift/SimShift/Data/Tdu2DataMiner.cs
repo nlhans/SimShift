@@ -12,9 +12,15 @@ namespace SimShift.Data
             get { return "TestDrive2"; }
         }
 
+        public string Name
+        {
+            get { return "Test Drive Unlimited 2"; }
+        }
+
         public bool Running { get; set; }
         public bool IsActive { get; set; }
         public bool RunEvent { get; set; }
+        public bool SelectManually { get { return false; } }
         public Process ActiveProcess { get; set; }
 
         public EventHandler DataReceived { get; set; }
@@ -23,6 +29,7 @@ namespace SimShift.Data
         private Timer _updateTel;
         private MemoryReader _tdu2Reader;
 
+        public bool SupportsCar { get { return true; } }
         public bool TransmissionSupportsRanges { get { return false; } }
         public bool EnableWeirdAntistall { get { return false; } }
         public double Weight { get { return 1500; } }
@@ -81,7 +88,7 @@ namespace SimShift.Data
             var writer = _tdu2Reader as MemoryWriter;
             if (i is float)
                 writer.WriteFloat(channelAddress, float.Parse(i.ToString()));
-           
+
         }
 
         private IntPtr GetWriteAddress(TelemetryChannel channel)
@@ -92,7 +99,7 @@ namespace SimShift.Data
                     return GetWriteAddress(TelemetryChannel.CameraViewBase) + 0x550;
 
                 case TelemetryChannel.CameraViewBase:
-                    return (IntPtr) _tdu2Reader.ReadInt32(ActiveProcess.MainModule.BaseAddress + 0xD95BF0);
+                    return (IntPtr)_tdu2Reader.ReadInt32(ActiveProcess.MainModule.BaseAddress + 0xD95BF0);
 
                 default:
                     return ActiveProcess.MainModule.BaseAddress;
@@ -111,13 +118,13 @@ namespace SimShift.Data
                 var car = _tdu2Reader.ReadString(b + 0xC2DC30, 32);
                 var gear = _tdu2Reader.ReadInt32(b + 0xC2DAD0) - 1;
                 var gears = 7;
-                var speed = _tdu2Reader.ReadFloat(b + 0xC2DB24)/3.6f;
+                var speed = _tdu2Reader.ReadFloat(b + 0xC2DB24) / 3.6f;
                 var throttle = _tdu2Reader.ReadFloat(b + 0xC2DB00);
                 var brake = _tdu2Reader.ReadFloat(b + 0xC2DB04);
                 var time =
                     (float)
                     (DateTime.Now.Subtract(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0))
-                         .TotalMilliseconds/1000.0);
+                         .TotalMilliseconds / 1000.0);
                 var paused = false;
                 var engineRpm = _tdu2Reader.ReadFloat(b + 0xC2DB18);
                 var fuel = 0;
@@ -127,7 +134,8 @@ namespace SimShift.Data
 
                 if (DataReceived != null)
                     DataReceived(this, new EventArgs());
-            }catch
+            }
+            catch
             {
                 Debug.WriteLine("Data abort error");
             }

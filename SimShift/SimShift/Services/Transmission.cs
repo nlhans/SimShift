@@ -391,7 +391,7 @@ namespace SimShift.Services
                         Main.Drivetrain.CalculatePower(
                             Main.Drivetrain.CalculateRpmForSpeed(idealGear-1, data.Telemetry.Speed),
                             data.Telemetry.Throttle);
-                    Debug.WriteLine("N"+pwrCurrentGear.ToString("000") + " I:" + pwrNewGear.ToString("000"));
+                    //Debug.WriteLine("N"+pwrCurrentGear.ToString("000") + " I:" + pwrNewGear.ToString("000"));
                     // This makes sure the gearbox shifts down if on low revs and the user is requesting power from the engine
                     if (pwrNewGear/pwrCurrentGear > 1+KickdownPowerReset && 
                         pwrNewGear/maxPwr > KickdownPowerReset)

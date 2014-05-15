@@ -11,15 +11,42 @@ namespace SimShift.Data
 {
     public class Ets2DataMiner : IDataMiner
     {
-        public string Application { get { return "eurotrucks2"; } }
+        public string Application
+        {
+            get { return "eurotrucks2"; }
+        }
+
+        public string Name
+        {
+            get { return "Euro Truck Simulator 2"; }
+        }
 
         public bool Running { get; set; }
         public bool IsActive { get; set; }
         public bool RunEvent { get; set; }
+
+        public bool SelectManually
+        {
+            get { return false; }
+        }
+
         public Process ActiveProcess { get; set; }
 
-        public bool TransmissionSupportsRanges { get { return true; } }
-        public bool EnableWeirdAntistall { get { return true; } }
+        public bool SupportsCar
+        {
+            get { return true; }
+        }
+
+        public bool TransmissionSupportsRanges
+        {
+            get { return true; }
+        }
+
+        public bool EnableWeirdAntistall
+        {
+            get { return true; }
+        }
+
         public double Weight { get; private set; }
 
         public void EvtStart()
@@ -51,12 +78,12 @@ namespace SimShift.Data
 
         /*** MyTelemetry data source & update control ***/
         private readonly SharedMemory<Ets2DataDefinition> _sharedMem = new SharedMemory<Ets2DataDefinition>();
-        private readonly Timer _telemetryUpdater = new Timer { Interval = 25 };
+        private readonly Timer _telemetryUpdater = new Timer {Interval = 25};
 
         /*** Required for computing fuel flow ***/
         private float _previousFuel;
         private uint _previousTimestamp;
-        
+
         public Ets2DataMiner()
         {
             _sharedMem.Connect(@"Local\SimTelemetryETS2");
@@ -77,7 +104,8 @@ namespace SimShift.Data
             // read ID
             if (MyTelemetry.modelLength > 0)
             {
-                var id = ASCIIEncoding.ASCII.GetString(_sharedMem.RawData, MyTelemetry.modelOffset, MyTelemetry.modelLength);
+                var id = ASCIIEncoding.ASCII.GetString(_sharedMem.RawData, MyTelemetry.modelOffset,
+                                                       MyTelemetry.modelLength);
 
                 var prevTruck = Truck;
                 Truck = id.Substring("vehicle.".Length);
@@ -86,7 +114,8 @@ namespace SimShift.Data
             }
             if (MyTelemetry.trailerLength > 0)
             {
-                var id = ASCIIEncoding.ASCII.GetString(_sharedMem.RawData, MyTelemetry.trailerOffset, MyTelemetry.trailerLength);
+                var id = ASCIIEncoding.ASCII.GetString(_sharedMem.RawData, MyTelemetry.trailerOffset,
+                                                       MyTelemetry.trailerLength);
 
                 var prevTrrailer = Trailer;
                 Trailer = id.Substring("cargo.".Length);
@@ -122,21 +151,22 @@ namespace SimShift.Data
                 DataReceived(this, new EventArgs());
         }
 
-        private Dictionary<string, KeyValuePair<string, double>> trailerWeights = new Dictionary<string, KeyValuePair<string, double>>(); 
+        private Dictionary<string, KeyValuePair<string, double>> trailerWeights =
+            new Dictionary<string, KeyValuePair<string, double>>();
 
         private void ParseTrailerFiles()
         {
             string[] trailers = Directory.GetFiles("./Cargo/");
 
-            foreach(var t in trailers)
+            foreach (var t in trailers)
             {
                 var r = ParseTrailerFile(t);
-                if(!trailerWeights.ContainsKey(r.Key))
+                if (!trailerWeights.ContainsKey(r.Key))
                     trailerWeights.Add(r.Key, r.Value);
             }
         }
 
-        private KeyValuePair<string, KeyValuePair<string,double>> ParseTrailerFile(string trailer)
+        private KeyValuePair<string, KeyValuePair<string, double>> ParseTrailerFile(string trailer)
         {
             string[] l = File.ReadAllLines(trailer);
             var trailerWeight = 20000.0;
@@ -166,7 +196,9 @@ namespace SimShift.Data
                 }
             }
             vehicle = vehicle.Replace("trailer.", "");
-            return new KeyValuePair<string, KeyValuePair<string, double>>(vehicle, new KeyValuePair<string, double>(name, trailerWeight));
+            return new KeyValuePair<string, KeyValuePair<string, double>>(vehicle,
+                                                                          new KeyValuePair<string, double>(name,
+                                                                                                           trailerWeight));
         }
 
         private double LookupTrailerWeight(string trailer)
@@ -176,9 +208,10 @@ namespace SimShift.Data
             if (trailerWeights.ContainsKey(trailer))
             {
                 TrailerName = trailerWeights[trailer].Key;
-                TrailerTonnage = string.Format("{0:0.0}t", trailerWeights[trailer].Value / 1000.0);
+                TrailerTonnage = string.Format("{0:0.0}t", trailerWeights[trailer].Value/1000.0);
                 return trailerWeights[trailer].Value;
-            }else if (trailerWeights.Any(x=>x.Key.StartsWith(trailer)))
+            }
+            else if (trailerWeights.Any(x => x.Key.StartsWith(trailer)))
             {
                 var t = trailerWeights.Where(x => x.Key.StartsWith(trailer));
                 if (t.Any())
@@ -190,12 +223,12 @@ namespace SimShift.Data
                 }
             }
 
-                Debug.WriteLine("Not found, assuming 20t");
-                TrailerName = "?";
-                TrailerTonnage = "20t?";
-                return 20000;
-                
-            
+            Debug.WriteLine("Not found, assuming 20t");
+            TrailerName = "?";
+            TrailerTonnage = "20t?";
+            return 20000;
+
+
         }
     }
 }

@@ -86,8 +86,8 @@ namespace SimShift.Dialogs
         public dlGearboxShifterTable()
         {
             var myEngine = new Ets2Drivetrain();
-            Main.Load(myEngine, "Settings/Drivetrain/eurotrucks2.mercedes.axor.ini");
-            activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Efficiency, myEngine,
+            Main.Load(myEngine, "Settings/Drivetrain/eurotrucks2.volvo.fh16_2012.ini");
+            activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Economy, myEngine,
                                                                 5);
             // 
             // sim

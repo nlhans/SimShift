@@ -13,6 +13,8 @@ namespace SimShift.Services
         public List<string> Unloaded = new List<string>();
         public string UniqueID { get; private set; }
 
+        public event EventHandler LoadedProfile;
+
         public string MasterFile { get; private set; }
         public string PatternFile { get; private set; }
 
@@ -59,6 +61,9 @@ namespace SimShift.Services
                 Debug.WriteLine("Loading profile "+profile);
                 Active = profile;
                 Loaded.FirstOrDefault(x => x.Name == profile).Load();
+
+                if(LoadedProfile != null)
+                    LoadedProfile(this, new EventArgs());
             }
         }
 

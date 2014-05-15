@@ -135,6 +135,7 @@ namespace SimShift.Services
 
         public void TickTelemetry(IDataMiner data)
         {
+            if (!Main.Data.Active.SupportsCar) return;
             bool wasCalibrating = Calibrating;
             Calibrating = !Main.Drivetrain.Calibrated;
             if(!wasCalibrating && Calibrating)

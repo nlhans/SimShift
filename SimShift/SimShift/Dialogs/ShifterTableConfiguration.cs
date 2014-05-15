@@ -227,7 +227,7 @@ namespace SimShift.Dialogs
                 for (var load = 0.0; load <= 1.0; load += 0.1)
                 {
                     var gearSet = false;
-                    double req = load*600;
+                    double req = load*400;
 
                     var bestFuelEfficiency = double.MaxValue;
                     var bestFuelGear = 0;

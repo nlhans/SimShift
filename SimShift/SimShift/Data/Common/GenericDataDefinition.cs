@@ -16,7 +16,7 @@ namespace SimShift.Data.Common
             Speed = speed;
         }
 
-        public string Car { get; private set; }
+        public string Car { get; set; }
 
         public float Time { get; private set; }
         public bool Paused { get; private set; }

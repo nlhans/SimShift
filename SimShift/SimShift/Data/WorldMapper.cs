@@ -15,7 +15,7 @@ namespace SimShift.Data
 
         public WorldMapper(IDataMiner dataSource)
         {
-            if (dataSource.Application == "eurotrucks2")
+            if (dataSource.Application == "eurotrucks2" && !dataSource.SelectManually)
             {
                 source = dataSource as Ets2DataMiner;
                 source.DataReceived += OnDataReceived;

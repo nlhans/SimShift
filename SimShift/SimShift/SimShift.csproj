@@ -80,6 +80,7 @@
     <Compile Include="Data\Common\IDataDefinition.cs" />
     <Compile Include="Data\Common\IDataMiner.cs" />
     <Compile Include="Data\Common\SharedMemory.cs" />
+    <Compile Include="Data\Ets2MpDataMiner.cs" />
     <Compile Include="Data\Tdu2DataMiner.cs" />
     <Compile Include="Data\TelemetryChannel.cs" />
     <Compile Include="Data\WorldMapper.cs" />
