@@ -10,5 +10,7 @@ namespace SimShift.Services
         bool GetButton(JoyControls c, bool val);
         void TickControls();
         void TickTelemetry(IDataMiner data);
+        bool Enabled { get; }
+        bool Active { get; }
     }
 }

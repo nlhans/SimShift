@@ -11,6 +11,8 @@ namespace SimShift.Services
 {
     public class CruiseControl : IControlChainObj, IConfigurable
     {
+        public bool Enabled { get { return true; } }
+        public bool Active { get { return Cruising && !ManualOverride; } }
         public bool Cruising { get; private set; }
         public double Speed { get; private set; }
         public double SpeedCruise { get; private set; }
@@ -79,6 +81,7 @@ namespace SimShift.Services
         {
             Speed = data.Telemetry.Speed;
         }
+
 
         public void TickControls()
         {

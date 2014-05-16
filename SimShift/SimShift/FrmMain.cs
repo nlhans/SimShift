@@ -17,6 +17,8 @@ namespace SimShift
 {
     public partial class FrmMain : Form
     {
+        private Timer updateModules;
+
         public FrmMain()
         {
             InitializeComponent();
@@ -29,6 +31,159 @@ namespace SimShift
             
             gbCarSelect.Enabled = false;
 
+            updateModules = new Timer();
+            updateModules.Interval = 25;
+            updateModules.Tick += new EventHandler(updateModules_Tick);
+            updateModules.Start();
+        }
+
+        private Dictionary<string, string> loadedIcon = new Dictionary<string, string>(); 
+
+        void updateModules_Tick(object sender, EventArgs e)
+        {
+            var pane = gbModulesPane;
+
+            var controlsChanged = false;
+            var mods = Main.Controls.Chain;
+
+            var throttleIn = Main.GetAxisIn(JoyControls.Throttle);
+            var clutchIn = Main.GetAxisIn(JoyControls.Clutch);
+
+            var throttleOut = 0.0;
+            var clutchOut = 0.0;
+
+            foreach(var mod in mods)
+            {
+                var name = mod.GetType().Name;
+                if (mod.Enabled == false)
+                {
+                    if (pane.Controls.ContainsKey("name" + name))
+                    {
+                        pane.Controls.RemoveByKey("name" + name);
+                        pane.Controls.RemoveByKey("pb" + name);
+                        pane.Controls.RemoveByKey("thrAbs" + name);
+                        pane.Controls.RemoveByKey("thrRel0" + name);
+                        pane.Controls.RemoveByKey("thrRel1" + name);
+                        pane.Controls.RemoveByKey("cltAbs" + name);
+                        loadedIcon.Remove(name);
+                        controlsChanged = true;
+                    }
+                    continue;
+                }
+                if (!pane.Controls.ContainsKey("name"+name))
+                {
+                    controlsChanged = true;
+
+                    var lbl = new Label();
+                    lbl.Text = name;
+                    lbl.Size = new Size(120, 20);
+                    lbl.Location = new Point(0, 0);
+                    lbl.ForeColor = Color.White;
+                    lbl.Font =new Font("Tahoma", 11.0f);
+                    lbl.Name = "name" + name;
+
+                    var pb = new PictureBox();
+                    pb.Name = "pb" + name;
+                    pb.Size = new Size(24, 24);
+                    pb.Location = new Point(0, 0);
+                    pb.BackColor = Color.Black;
+
+                    var thrAbs = new PictureBox();
+                    thrAbs.Name = "thrAbs" + name;
+                    thrAbs.BackColor = Color.GreenYellow;
+
+                    var thrRel0 = new PictureBox();
+                    thrRel0.Name = "thrRel0" + name;
+                    thrRel0.BackColor = Color.DarkRed;
+
+                    var thrRel1 = new PictureBox();
+                    thrRel1.Name = "thrRel1" + name;
+                    thrRel1.BackColor = Color.DarkGreen;
+
+                    var cltAbs = new PictureBox();
+                    cltAbs.Name = "cltAbs" + name;
+                    cltAbs.BackColor = Color.DeepSkyBlue;
+
+                    pane.Controls.Add(pb);
+                    pane.Controls.Add(lbl);
+
+                    pane.Controls.Add(thrAbs);
+                    pane.Controls.Add(thrRel0);
+                    pane.Controls.Add(thrRel1);
+
+                    pane.Controls.Add(cltAbs);
+
+                    loadedIcon.Add(name, "");
+
+                }else
+                {
+                    var pb = pane.Controls["pb" + name];
+
+                    var iconFile = "Icons/" + name + ((mod.Active) ? "_active" : "") + ".png";
+                    if (File.Exists(iconFile) && loadedIcon[name] != iconFile)
+                    {
+                        loadedIcon[name] = iconFile;
+                        pb.BackgroundImage = Image.FromFile(iconFile);
+                    }
+
+                    throttleOut = Main.Controls.AxisProgression[JoyControls.Throttle][name];
+                    clutchOut = Main.Controls.AxisProgression[JoyControls.Clutch][name];
+
+                    // Display throttle
+                    var thrAbs = pane.Controls["thrAbs" + name];
+                    var thrRel0 = pane.Controls["thrRel0" + name];
+                    var thrRel1 = pane.Controls["thrRel1" + name];
+
+                    thrAbs.Size = new Size((int)(throttleOut * 100), 10);
+
+                    var thrRelDbl = throttleOut-throttleIn;
+
+                    if (double.IsNaN(thrRelDbl) || double.IsInfinity(thrRelDbl)) thrRelDbl = 0;
+                    if (thrRelDbl < -1) thrRelDbl = -1;
+                    if (thrRelDbl > 1) thrRelDbl = 1;
+
+                    var thrRel0W = thrRelDbl > 0 ? 1 : (int)((0 - thrRelDbl)*50);
+                    var thrRel1W = thrRelDbl < 0 ? 1 : (int)(thrRelDbl*50);
+
+                    thrRel0.Location = new Point(250-thrRel0W, thrRel0.Location.Y);
+
+                    thrRel0.Size = new Size(thrRel0W,10);
+                    thrRel1.Size = new Size(thrRel1W, 10);
+
+                    // Clutch
+                    var cltAbs = pane.Controls["cltAbs" + name];
+
+                    cltAbs.Size = new Size((int) (clutchOut*100), 10);
+
+                    throttleIn = throttleOut;
+                    clutchIn = clutchOut;
+                }
+            }
+
+            if(controlsChanged)
+            {
+                var y = 5;
+                foreach(var mod in mods)
+                {
+                    var name = mod.GetType().Name;
+                    if (pane.Controls.ContainsKey("name" + name))
+                    {
+                        var lbl = pane.Controls["name" + name];
+                        var pb = pane.Controls["pb" + name];
+                        var thrAbs = pane.Controls["thrAbs" + name];
+                        var thrRel0 = pane.Controls["thrRel0" + name];
+                        var thrRel1 = pane.Controls["thrRel1" + name];
+                        var cltAbs = pane.Controls["cltAbs" + name];
+                        pb.Location = new Point(5, y);
+                        lbl.Location = new Point(35, y + 4);
+                        thrAbs.Location = new Point(200, y);
+                        thrRel0.Location = new Point(200, y + 10);
+                        thrRel1.Location = new Point(250, y + 10);
+                        cltAbs.Location = new Point(310, y);
+                        y += 26;
+                    }
+                }
+            }
         }
 
         void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -197,13 +352,13 @@ namespace SimShift
 
         private void btTransmission_Click(object sender, EventArgs e)
         {
-            if (Transmission.Enabled)
+            if (Main.Transmission.Enabled)
             {
-                Transmission.Enabled = false;
+                Main.Transmission.Enabled = false;
                 btTransmission.Text = "Manual Mode";
             }else
             {
-                Transmission.Enabled = true;
+                Main.Transmission.Enabled = true;
                 btTransmission.Text = "Auto Mode";
             }
         }

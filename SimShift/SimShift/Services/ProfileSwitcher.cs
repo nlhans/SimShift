@@ -5,6 +5,9 @@ namespace SimShift.Services
 {
     public class ProfileSwitcher : IControlChainObj
     {
+        public bool Active { get { return ProfileSwitchFrozen; } }
+        public bool Enabled { get { return true; } }
+
         public DateTime ProfileSwitchTimeout { get; private set; }
         public bool ProfileSwitchFrozen { get { return ProfileSwitchTimeout > DateTime.Now; } }
 

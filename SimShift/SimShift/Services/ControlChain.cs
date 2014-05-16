@@ -12,7 +12,14 @@ namespace SimShift.Services
 
         private List<JoyControls> Axis = new List<JoyControls>();
         private List<JoyControls> Buttons = new List<JoyControls>();
- 
+
+        public IEnumerable<IControlChainObj> Chain { get { return chain; } }
+
+        public Dictionary<JoyControls, Dictionary<string, double>> AxisProgression { get { return axisProgression; } } 
+
+        private Dictionary<JoyControls, Dictionary<string, double>> axisProgression =
+            new Dictionary<JoyControls, Dictionary<string, double>>();
+
         public ControlChain()
         {
             chain.Add(Main.CruiseControl);
@@ -48,6 +55,14 @@ namespace SimShift.Services
             Buttons.Add(JoyControls.GearUp);
             Buttons.Add(JoyControls.GearDown);
             Buttons.Add(JoyControls.CruiseControl);
+
+            foreach (var a in Axis)
+            {
+                axisProgression.Add(a, new Dictionary<string, double>());
+                foreach (var m in chain)
+                    axisProgression[a].Add(m.GetType().Name, 0);
+            }
+
         }
 
         public void Tick(IDataMiner data)
@@ -67,6 +82,10 @@ namespace SimShift.Services
             {
                 buttonValues = buttonValues.ToDictionary(c => c.Key, k => obj.Requires(k.Key) ? obj.GetButton(k.Key, k.Value) : k.Value);
                 axisValues = axisValues.ToDictionary(c => c.Key, k => obj.Requires(k.Key) ? obj.GetAxis(k.Key, k.Value) : k.Value);
+
+                foreach(var kvp in axisValues)
+                    axisProgression[kvp.Key][obj.GetType().Name] = kvp.Value;
+
                 obj.TickControls();
             }
 

@@ -15,7 +15,8 @@ namespace SimShift.Services
         public int RangeSize = 6;
         public int Gears = 6;
 
-        public static bool Enabled { get; set; }
+        public bool Enabled { get; set; }
+        public bool Active { get { return IsShifting; } }
 
         public static bool InReverse { get; set; }
 
@@ -355,7 +356,7 @@ namespace SimShift.Services
 
             if (InReverse)
             {
-                if (GameGear != -1)
+                if (GameGear != -1 && Math.Abs(data.Telemetry.Speed) < 1)
                 {
                     Debug.WriteLine("Shift from " + data.Telemetry.Gear + " to  " + idealGear);
                     Shift(data.Telemetry.Gear, -1, "up_1thr");

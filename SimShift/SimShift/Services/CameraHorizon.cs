@@ -1,3 +1,4 @@
+using System;
 using SimShift.Data;
 using SimShift.Data.Common;
 
@@ -7,6 +8,9 @@ namespace SimShift.Services
     {
         public double CameraAngle = 0;
         public bool CameraHackEnabled { get; set; }
+
+        public bool Active { get { return Math.Abs(CameraAngle) > 0.05; } }
+        public bool Enabled { get; private set; }
 
         #region Implementation of IControlChainObj
 
@@ -41,7 +45,13 @@ namespace SimShift.Services
         {
             // TODO: Only supports TDU2.
             if (Main.Data.Active.Application != "TestDrive2")
-                return; 
+            {
+                Enabled = false;
+                return;
+            }else
+            {
+                Enabled = true;
+            }
             if (CameraHackEnabled)
             {
                 data.Write(TelemetryChannel.CameraHorizon, (float)(CameraAngle * CameraAngle * CameraAngle * -25));

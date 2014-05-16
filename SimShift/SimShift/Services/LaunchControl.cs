@@ -18,6 +18,8 @@ namespace SimShift.Services
 
     public class LaunchControl : IControlChainObj
     {
+        public bool Enabled { get { return state != LaunchControlState.Waiting; } }
+        public bool Active { get { return state == LaunchControlState.Pulling; } }
         protected bool LaunchControlActive { get; set; }
 
         private LaunchControlState state;

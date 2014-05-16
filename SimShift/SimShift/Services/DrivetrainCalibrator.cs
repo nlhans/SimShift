@@ -24,6 +24,9 @@ namespace SimShift.Services
 
     public class DrivetrainCalibrator : IControlChainObj
     {
+        public bool Enabled { get { return Calibrating; } }
+        public bool Active { get { return Calibrating; } }
+
         public bool Calibrating { get; private set; }
 
         public DateTime MeasurementSettletime { get; private set; }

@@ -33,16 +33,7 @@
             this.saveSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modulesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shifterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.simpleSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.shiftTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.generalSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.shifterTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.kickdownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cruiseControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dynamicCruiseControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.emergencyStopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.laneAssistanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,10 +55,13 @@
             this.cbCars = new System.Windows.Forms.ComboBox();
             this.gbProfiles = new System.Windows.Forms.GroupBox();
             this.lbProfiles = new System.Windows.Forms.ListBox();
+            this.gbModules = new System.Windows.Forms.GroupBox();
+            this.gbModulesPane = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.gpSim.SuspendLayout();
             this.gbCarSelect.SuspendLayout();
             this.gbProfiles.SuspendLayout();
+            this.gbModules.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -102,9 +96,6 @@
             // 
             this.modulesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.shifterToolStripMenuItem,
-            this.cruiseControlToolStripMenuItem,
-            this.dynamicCruiseControlToolStripMenuItem,
-            this.emergencyStopToolStripMenuItem,
             this.laneAssistanceToolStripMenuItem});
             this.modulesToolStripMenuItem.Name = "modulesToolStripMenuItem";
             this.modulesToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
@@ -113,81 +104,22 @@
             // shifterToolStripMenuItem
             // 
             this.shifterToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.simpleSetupToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.shiftTableToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.generalSetupToolStripMenuItem,
-            this.shifterTableToolStripMenuItem,
-            this.kickdownToolStripMenuItem});
+            this.generalSetupToolStripMenuItem});
             this.shifterToolStripMenuItem.Name = "shifterToolStripMenuItem";
-            this.shifterToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.shifterToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.shifterToolStripMenuItem.Text = "Shifter";
-            // 
-            // simpleSetupToolStripMenuItem
-            // 
-            this.simpleSetupToolStripMenuItem.Name = "simpleSetupToolStripMenuItem";
-            this.simpleSetupToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.simpleSetupToolStripMenuItem.Text = "Simple Setup";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(144, 6);
-            // 
-            // shiftTableToolStripMenuItem
-            // 
-            this.shiftTableToolStripMenuItem.Enabled = false;
-            this.shiftTableToolStripMenuItem.Name = "shiftTableToolStripMenuItem";
-            this.shiftTableToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.shiftTableToolStripMenuItem.Text = "Advanced";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(144, 6);
             // 
             // generalSetupToolStripMenuItem
             // 
             this.generalSetupToolStripMenuItem.Name = "generalSetupToolStripMenuItem";
-            this.generalSetupToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.generalSetupToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.generalSetupToolStripMenuItem.Text = "General Setup";
             this.generalSetupToolStripMenuItem.Click += new System.EventHandler(this.generalSetupToolStripMenuItem_Click);
-            // 
-            // shifterTableToolStripMenuItem
-            // 
-            this.shifterTableToolStripMenuItem.Name = "shifterTableToolStripMenuItem";
-            this.shifterTableToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.shifterTableToolStripMenuItem.Text = "Shifter Table";
-            // 
-            // kickdownToolStripMenuItem
-            // 
-            this.kickdownToolStripMenuItem.Name = "kickdownToolStripMenuItem";
-            this.kickdownToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.kickdownToolStripMenuItem.Text = "Kickdown";
-            // 
-            // cruiseControlToolStripMenuItem
-            // 
-            this.cruiseControlToolStripMenuItem.Name = "cruiseControlToolStripMenuItem";
-            this.cruiseControlToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.cruiseControlToolStripMenuItem.Text = "Static Cruise Control";
-            // 
-            // dynamicCruiseControlToolStripMenuItem
-            // 
-            this.dynamicCruiseControlToolStripMenuItem.Name = "dynamicCruiseControlToolStripMenuItem";
-            this.dynamicCruiseControlToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.dynamicCruiseControlToolStripMenuItem.Text = "Dynamic Cruise Control";
-            // 
-            // emergencyStopToolStripMenuItem
-            // 
-            this.emergencyStopToolStripMenuItem.Name = "emergencyStopToolStripMenuItem";
-            this.emergencyStopToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.emergencyStopToolStripMenuItem.Text = "Emergency Stop";
             // 
             // laneAssistanceToolStripMenuItem
             // 
             this.laneAssistanceToolStripMenuItem.Name = "laneAssistanceToolStripMenuItem";
-            this.laneAssistanceToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.laneAssistanceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.laneAssistanceToolStripMenuItem.Text = "Lane Assistance";
             this.laneAssistanceToolStripMenuItem.Click += new System.EventHandler(this.laneAssistanceToolStripMenuItem_Click);
             // 
@@ -375,11 +307,31 @@
             this.lbProfiles.Size = new System.Drawing.Size(261, 82);
             this.lbProfiles.TabIndex = 7;
             // 
+            // gbModules
+            // 
+            this.gbModules.Controls.Add(this.gbModulesPane);
+            this.gbModules.Location = new System.Drawing.Point(291, 85);
+            this.gbModules.Name = "gbModules";
+            this.gbModules.Size = new System.Drawing.Size(473, 318);
+            this.gbModules.TabIndex = 7;
+            this.gbModules.TabStop = false;
+            this.gbModules.Text = "Module Controls";
+            // 
+            // gbModulesPane
+            // 
+            this.gbModulesPane.BackColor = System.Drawing.Color.Black;
+            this.gbModulesPane.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gbModulesPane.Location = new System.Drawing.Point(3, 16);
+            this.gbModulesPane.Name = "gbModulesPane";
+            this.gbModulesPane.Size = new System.Drawing.Size(467, 299);
+            this.gbModulesPane.TabIndex = 0;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(824, 469);
+            this.Controls.Add(this.gbModules);
             this.Controls.Add(this.gbProfiles);
             this.Controls.Add(this.gbCarSelect);
             this.Controls.Add(this.gpSim);
@@ -398,6 +350,7 @@
             this.gbCarSelect.ResumeLayout(false);
             this.gbCarSelect.PerformLayout();
             this.gbProfiles.ResumeLayout(false);
+            this.gbModules.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -410,18 +363,9 @@
         private System.Windows.Forms.ToolStripMenuItem saveSetupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem modulesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem shifterToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem cruiseControlToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem dynamicCruiseControlToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem emergencyStopToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gamesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem simpleSetupToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem shiftTableToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem generalSetupToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem shifterTableToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem kickdownToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem joystickToolStripMenuItem;
         private System.Windows.Forms.Button btServiceStartStop;
         private System.Windows.Forms.ToolStripMenuItem laneAssistanceToolStripMenuItem;
@@ -441,6 +385,8 @@
         private System.Windows.Forms.Label lblCars;
         private System.Windows.Forms.GroupBox gbProfiles;
         private System.Windows.Forms.ListBox lbProfiles;
+        private System.Windows.Forms.GroupBox gbModules;
+        private System.Windows.Forms.Panel gbModulesPane;
     }
 }
 

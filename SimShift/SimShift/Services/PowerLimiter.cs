@@ -8,7 +8,10 @@ namespace SimShift.Services
 {
     public class PowerLimiter : IControlChainObj
     {
-        private bool Active;
+        public bool Enabled { get; private set; }
+
+        public bool Active { get; private set; }
+        
         private double throttleFactor = 1;
 
         #region Implementation of IControlChainObj
@@ -50,21 +53,26 @@ namespace SimShift.Services
         public void TickTelemetry(IDataMiner data)
         {
             throttleFactor = 1;
+            Enabled = false;
             return;
             if(data.Telemetry.Car == "scania.r" && !Main.Data.Active.SelectManually)
             {
-                Active = true;
+                Enabled = true;
 
                 // V8 truck with lots of powerr
                 if (Main.CruiseControl.Cruising && !Main.CruiseControl.ManualOverride)
+                {
+                    Active = false;
                     throttleFactor = 1;
+                }
                 else
                 {
-                    var pwrLimit = 300 + data.Weight/1000.0*20;
+                    Active = true;
+                    var pwrLimit = 300 + data.Weight / 1000.0 * 20;
                     //pwrLimit += 2500;
                     //if (data.Telemetry.Gear >= 7)
-                        pwrLimit += data.Weight/1000.0*data.Telemetry.Gear;
-                    var thrFactor = Main.Drivetrain.CalculateThrottleByPower(data.Telemetry.EngineRpm,pwrLimit);
+                    pwrLimit += data.Weight / 1000.0 * data.Telemetry.Gear;
+                    var thrFactor = Main.Drivetrain.CalculateThrottleByPower(data.Telemetry.EngineRpm, pwrLimit);
                     if (thrFactor > 1) thrFactor = 1;
                     if (thrFactor < 0.2) thrFactor = 0.2;
                     throttleFactor = thrFactor;

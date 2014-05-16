@@ -10,6 +10,12 @@ namespace SimShift.Services
 {
     public class Speedlimiter : IControlChainObj, IConfigurable
     {
+        public bool Active { get { return limiterFactor < 0.99; } }
+
+        public int SpeedLimit { get; private set; }
+        public float SpeedSlope { get; private set; }
+        public bool Enabled { get; private set; } 
+
         private double limiterFactor;
 
         public bool Requires(JoyControls c)
@@ -71,10 +77,6 @@ namespace SimShift.Services
             SpeedSlope = 10;
             Enabled = true;
         }
-
-        public int SpeedLimit { get; private set; }
-        public float SpeedSlope { get; private set; }
-        public bool Enabled { get; private set; } 
 
         public void ApplyParameter(IniValueObject obj)
         {

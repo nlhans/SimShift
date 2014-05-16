@@ -10,6 +10,7 @@ namespace SimShift.Services
     public class Antistall : IControlChainObj, IConfigurable
     {
         public bool Enabled { get; set; }
+        public bool Active { get { return Stalling; }}
         public static bool Stalling { get; private set; }
         public double Speed { get; private set; }
 
@@ -27,6 +28,8 @@ namespace SimShift.Services
         protected bool EngineStalled { get; set; }
 
         public bool Override { get; private set; }
+
+        public bool ReverseAndAccelerate { get; private set; }
 
 #region Configurable parametrs
         public double MinClutch { get; private set; }
@@ -60,6 +63,7 @@ namespace SimShift.Services
             switch (c)
             {
                 case JoyControls.Throttle:
+                    if (ReverseAndAccelerate) return 0;
                     if (!Stalling) return val;
                     if (EngineStalled)
                     {
@@ -77,8 +81,7 @@ namespace SimShift.Services
                     else
                     {
                         var maxRpm = Main.Drivetrain.MaximumRpm/2;
-                        if (maxRpm < 2000) maxRpm = 2000;
-                        var maxV = 2 - 2*Rpm/(maxRpm);
+                        var maxV =1.5 - 1.5*Rpm/(maxRpm);
                         if (maxV > 1) maxV = 1;
                         if (maxV < 0) maxV = 0;
                         _throttle = val;
@@ -87,6 +90,7 @@ namespace SimShift.Services
                     break;
 
                 case JoyControls.Clutch:
+                    if (ReverseAndAccelerate) return 1;
                     if (!Stalling && !SlippingLowGear) return 0;
                     if (Blip || BlipFull) return 1;
                     if (Override) return 1;
@@ -131,18 +135,15 @@ namespace SimShift.Services
 
             Rpm = telemetry.Telemetry.EngineRpm;
             EngineStalled = (telemetry.Telemetry.EngineRpm < 300);
+
+            SpeedCutoff = Main.Drivetrain.CalculateSpeedForRpm(telemetry.Telemetry.Gear, (float)Main.Drivetrain.StallRpm);
+
             if(telemetry.Telemetry.Gear == -1)
                 Stalling = telemetry.Telemetry.Speed > -SpeedCutoff || telemetry.Telemetry.Speed>0;
             else
                 Stalling = telemetry.Telemetry.Speed < SpeedCutoff || telemetry.Telemetry.Speed<0;
-            //Stalling = (Math.Abs(telemetry.Telemetry.Speed) < SpeedCutoff); // 2
-            Speed = telemetry.Telemetry.Speed;
 
-            if (Main.CarProfile == null || true)
-                SlippingLowGear = false;
-            else
-            SlippingLowGear = Main.CarProfile.Active.ToLower().Contains("performance") &&
-                              Main.Transmission.ShiftCtrlNewGear <= 6;
+            Speed = telemetry.Telemetry.Speed;
 
             if(telemetry.EnableWeirdAntistall==false)
             {

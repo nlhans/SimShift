@@ -16,6 +16,7 @@ namespace SimShift.Services
 {
     public class LaneAssistance : IControlChainObj
     {
+        public bool Enabled { get { return Active; } }
         public const bool UseDirectXCapture = false;
 
         public static Bitmap CameraInput;

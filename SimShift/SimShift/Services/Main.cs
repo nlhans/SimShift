@@ -254,9 +254,9 @@ namespace SimShift.Services
 
                 case Services.JoyControls.LaneAssistance:
                     if (ps3Controller)
-                        throw new NotImplementedException();
+                        return false;
                     else
-                        return RawJoysticksIn[1].GetButton(7);
+                        return false; //return RawJoysticksIn[1].GetButton(7);
 
                     // PS3 (via DS3 tool) L1/R1
                 case Services.JoyControls.GearDown:
@@ -295,7 +295,7 @@ namespace SimShift.Services
                 case Services.JoyControls.Steering:
 
                     if (ps3Controller)
-                        throw new NotImplementedException();
+                        return 0.5;
                     else
                         return RawJoysticksIn[1].GetAxis(0)/Math.Pow(2,16);
                     
@@ -319,7 +319,8 @@ namespace SimShift.Services
                     {
                         var b = 1 - RawJoysticksIn[1].GetAxis(3)/Math.Pow(2, 16);
                         if (b < 0) b = 0;
-                        if (Main.Data.Active.Application == "TestDrive2") return b;
+                        
+                        if (Main.Data.Active == null || Main.Data.Active.Application == "TestDrive2") return b;
                         return b * b;
                     }
                 case Services.JoyControls.Clutch:

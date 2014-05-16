@@ -13,6 +13,12 @@ namespace SimShift.Services
 {
     public class TractionControl : IControlChainObj, IConfigurable
     {
+        public bool Enabled { get
+        {
+            return AllowedSlip < 30;
+        } }
+        public bool Active { get { return Slipping; } }
+
         private SoundPlayer tcSound;
 
         public bool Slipping { get; private set; }
