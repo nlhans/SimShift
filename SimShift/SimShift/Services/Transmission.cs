@@ -58,7 +58,7 @@ namespace SimShift.Services
             get { return ShifterNewGear; }
         }
 
-        public static bool IsShifting { get; private set; }
+        public bool IsShifting { get; private set; }
 
         public int ShiftCtrlOldGear { get; private set; }
         public int ShiftCtrlNewGear { get; private set; }

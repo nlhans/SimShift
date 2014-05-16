@@ -48,7 +48,7 @@ namespace SimShift.Services
             var updateSound = new Timer {Enabled = true, Interval = 10};
             updateSound.Elapsed += (sender, args) =>
                                        {
-                                           if (Transmission.IsShifting || Antistall.Stalling || !Slipping)
+                                           if (Main.Transmission.IsShifting || Antistall.Stalling || !Slipping)
                                                setVolume(0);
                                            else
                                                setVolume(1 - lastThrottle);

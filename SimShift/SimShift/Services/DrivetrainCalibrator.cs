@@ -262,7 +262,7 @@ namespace SimShift.Services
                     break;
                 case DrivetrainCalibrationStage.FinishGears:
 
-                    if (MeasurementSettled &&  !Transmission.IsShifting)
+                    if (MeasurementSettled && !Main.Transmission.IsShifting)
                     {
                         if(data.Telemetry.Gear != gear)
                         {
@@ -296,7 +296,7 @@ namespace SimShift.Services
                     break;
 
                 case DrivetrainCalibrationStage.ShiftToFirst:
-                    if (!Transmission.IsShifting && MeasurementSettled)
+                    if (!Main.Transmission.IsShifting && MeasurementSettled)
                     {
                         if (data.Telemetry.Gear != 1)
                         {

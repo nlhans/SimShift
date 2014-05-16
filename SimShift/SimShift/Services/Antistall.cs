@@ -136,13 +136,16 @@ namespace SimShift.Services
             Rpm = telemetry.Telemetry.EngineRpm;
             EngineStalled = (telemetry.Telemetry.EngineRpm < 300);
 
-            SpeedCutoff = Main.Drivetrain.CalculateSpeedForRpm(telemetry.Telemetry.Gear, (float)Main.Drivetrain.StallRpm);
+            var gear = telemetry.Telemetry.Gear - 1;
+            if (gear == -2) gear = 0;
+            SpeedCutoff = Main.Drivetrain.CalculateSpeedForRpm(gear, (float)Main.Drivetrain.StallRpm);
 
             if(telemetry.Telemetry.Gear == -1)
                 Stalling = telemetry.Telemetry.Speed > -SpeedCutoff || telemetry.Telemetry.Speed>0;
             else
                 Stalling = telemetry.Telemetry.Speed < SpeedCutoff || telemetry.Telemetry.Speed<0;
-
+            if (Main.Transmission.IsShifting)
+                BlipFull = true;
             Speed = telemetry.Telemetry.Speed;
 
             if(telemetry.EnableWeirdAntistall==false)
