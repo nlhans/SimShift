@@ -33,7 +33,7 @@ namespace SimShift
 
             updateModules = new Timer();
             updateModules.Interval = 25;
-            updateModules.Tick += new EventHandler(updateModules_Tick);
+            updateModules.Tick += updateModules_Tick;
             updateModules.Start();
         }
 
@@ -76,7 +76,7 @@ namespace SimShift
 
                     var lbl = new Label();
                     lbl.Text = name;
-                    lbl.Size = new Size(120, 20);
+                    lbl.Size = new Size(160, 20);
                     lbl.Location = new Point(0, 0);
                     lbl.ForeColor = Color.White;
                     lbl.Font =new Font("Tahoma", 11.0f);
@@ -117,6 +117,7 @@ namespace SimShift
 
                 }else
                 {
+
                     var pb = pane.Controls["pb" + name];
 
                     var iconFile = "Icons/" + name + ((mod.Active) ? "_active" : "") + ".png";
@@ -158,6 +159,11 @@ namespace SimShift
                     throttleIn = throttleOut;
                     clutchIn = clutchOut;
                 }
+
+                var l = pane.Controls["name" + name];
+
+                if (typeof(CruiseControl) == mod.GetType())
+                    l.Text = "CruiseControl " + Math.Round(3.6 * Main.CruiseControl.SpeedCruise);
             }
 
             if(controlsChanged)
@@ -220,6 +226,8 @@ namespace SimShift
                 Main.Start();
 
                 this.btSimMode.Text = "Auto";
+
+                this.cbSimList.DataSource = null;
                 this.cbSimList.Items.Clear();
                 this.cbSimList.DisplayMember = "Name";
                 this.cbSimList.ValueMember = "Name";

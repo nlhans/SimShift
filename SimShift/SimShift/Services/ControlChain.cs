@@ -54,7 +54,10 @@ namespace SimShift.Services
             Buttons.Add(JoyControls.GearRange2);
             Buttons.Add(JoyControls.GearUp);
             Buttons.Add(JoyControls.GearDown);
-            Buttons.Add(JoyControls.CruiseControl);
+            Buttons.Add(JoyControls.CruiseControlMaintain);
+            Buttons.Add(JoyControls.CruiseControlUp);
+            Buttons.Add(JoyControls.CruiseControlDown);
+            Buttons.Add(JoyControls.CruiseControlOnOff);
 
             foreach (var a in Axis)
             {

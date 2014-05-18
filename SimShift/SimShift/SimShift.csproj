@@ -177,6 +177,9 @@
       <DependentUpon>dlGearboxShifterTable.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\dlJoysticks.resx">
+      <DependentUpon>dlJoysticks.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\dlLaneAssistance.resx">
       <DependentUpon>dlLaneAssistance.cs</DependentUpon>
     </EmbeddedResource>

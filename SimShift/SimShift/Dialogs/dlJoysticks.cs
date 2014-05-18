@@ -14,6 +14,7 @@ namespace SimShift.Dialogs
     {
         public List<ucJoystickChannel> controlsIn = new List<ucJoystickChannel>();
         public List<ucJoystickChannel> controlsOut = new List<ucJoystickChannel>();
+        public List<ucJoystickChannel> joysticks = new List<ucJoystickChannel>();
         private Timer _mUpdateJoysticks;
 
         private Timer _mCalibrateButton;
@@ -23,8 +24,8 @@ namespace SimShift.Dialogs
             InitializeComponent();
 
             _mUpdateJoysticks = new Timer();
-            _mUpdateJoysticks.Interval = 50;
-            _mUpdateJoysticks.Tick += new EventHandler(_mUpdateJoysticks_Tick);
+            _mUpdateJoysticks.Interval = 25;
+            _mUpdateJoysticks.Tick += _mUpdateJoysticks_Tick;
             _mUpdateJoysticks.Start();
 
             Main.Setup();
@@ -36,17 +37,36 @@ namespace SimShift.Dialogs
                 var ucIn = new ucJoystickChannel(c, true);
                 var ucOut = new ucJoystickChannel(c, false);
 
-                ucIn.Location = new Point(10, 50 + ucIn.Height*c_);
-                ucOut.Location = new Point(210, 50 + ucOut.Height*c_);
+                ucIn.Location = new Point(3, 23 + ucIn.Height*c_);
+                ucOut.Location = new Point(3, 23 + ucOut.Height*c_);
 
                 controlsIn.Add(ucIn);
                 controlsOut.Add(ucOut);
 
-                Controls.Add(ucIn);
-                Controls.Add(ucOut);
+                gbIn.Controls.Add(ucIn);
+                gbOut.Controls.Add(ucOut);
 
                 // add to combobox
                 cbControl.Items.Add(((int) c).ToString() + ", " + c.ToString());
+            }
+
+            var a = 0;
+            for (a = 0; a < 8;a++)
+            {
+                var uc = new ucJoystickChannel(true, a);
+                uc.Location = new Point(3, 23 + uc.Height * a);
+
+                joysticks.Add(uc);
+                gbController.Controls.Add(uc);
+            }
+
+            for (int b = 0; b < 32; b++)
+            {
+                var uc = new ucJoystickChannel(false, b);
+                uc.Location = new Point(3, 23 + uc.Height*(a + b));
+
+                joysticks.Add(uc);
+                gbController.Controls.Add(uc);
             }
         }
 
@@ -54,6 +74,7 @@ namespace SimShift.Dialogs
         {
             foreach (var c in controlsIn) c.Tick();
             foreach (var c in controlsOut) c.Tick();
+            foreach (var c in joysticks) c.Tick();
         }
         int buttonId = 0;
         private void btDoCal_Click(object sender, EventArgs e)

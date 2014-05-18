@@ -35,7 +35,7 @@
             // lblControl
             // 
             this.lblControl.AutoSize = true;
-            this.lblControl.Location = new System.Drawing.Point(3, 3);
+            this.lblControl.Location = new System.Drawing.Point(3, 0);
             this.lblControl.Name = "lblControl";
             this.lblControl.Size = new System.Drawing.Size(35, 13);
             this.lblControl.TabIndex = 0;
@@ -43,9 +43,9 @@
             // 
             // pbVal
             // 
-            this.pbVal.Location = new System.Drawing.Point(75, 0);
+            this.pbVal.Location = new System.Drawing.Point(100, 0);
             this.pbVal.Name = "pbVal";
-            this.pbVal.Size = new System.Drawing.Size(80, 20);
+            this.pbVal.Size = new System.Drawing.Size(75, 13);
             this.pbVal.TabIndex = 1;
             // 
             // ucJoystickChannel
@@ -55,7 +55,7 @@
             this.Controls.Add(this.pbVal);
             this.Controls.Add(this.lblControl);
             this.Name = "ucJoystickChannel";
-            this.Size = new System.Drawing.Size(155, 20);
+            this.Size = new System.Drawing.Size(175, 13);
             this.ResumeLayout(false);
             this.PerformLayout();
 

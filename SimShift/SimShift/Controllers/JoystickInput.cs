@@ -25,6 +25,7 @@ namespace SimShift.Controllers
 
         private readonly List<bool> _buttonState = new List<bool>();
         private readonly List<double> _axisState = new List<double>();
+        private int pov;
 
         public JoystickInput(JoystickInputDevice dev)
         {
@@ -56,6 +57,8 @@ namespace SimShift.Controllers
             _axisState[3] = _joyInfo.dwRpos;
             _axisState[4] = _joyInfo.dwUpos;
             _axisState[5] = _joyInfo.dwVpos;
+
+            pov = _joyInfo.dwPOV;
 
             // Take all button inputs.
             for (int i = 0; i < 32; i++)
@@ -95,6 +98,56 @@ namespace SimShift.Controllers
                     }
                 }
             }
+        }
+
+        public bool GetPov(int i)
+        {
+            // 0 = left, 1 = top, 2 = right, 3 = bottom
+            int thruthtable = 0;
+
+            // bit 1 = left
+            // bit 2 = top
+            // bit 3 = right
+            // bit 4 = bottom
+            switch(pov)
+            {
+                case 0xFFFF:
+                    thruthtable = 0x00;
+                    break;
+
+                case 27000:
+                    thruthtable = 0x01;
+                    break;
+
+                case 31500:
+                    thruthtable = 0x03;
+                    break;
+
+                case 0:
+                    thruthtable = 0x02;
+                    break;
+
+                case 4500:
+                    thruthtable = 0x06;
+                    break;
+
+                case 9000:
+                    thruthtable = 0x04;
+                    break;
+
+                case 13500:
+                    thruthtable = 0x0C;
+                    break;
+
+                case 18000:
+                    thruthtable = 0x08;
+                    break;
+
+                case 22500:
+                    thruthtable = 0x09;
+                    break;
+            }
+            return ((thruthtable & (1 << i)) != 0);
         }
 
         public double GetAxis(int id)

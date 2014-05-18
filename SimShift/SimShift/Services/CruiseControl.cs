@@ -19,6 +19,9 @@ namespace SimShift.Services
 
         private DateTime CruiseTimeout { get; set; }
 
+        private double IntegralTime;
+        private double PreviousError = 0;
+
         public bool Requires(JoyControls c)
         {
             switch(c)
@@ -27,7 +30,10 @@ namespace SimShift.Services
                     case JoyControls.Brake:
                     return Cruising;
 
-                case JoyControls.CruiseControl:
+                    case JoyControls.CruiseControlMaintain:
+                    case JoyControls.CruiseControlUp:
+                    case JoyControls.CruiseControlDown:
+                    case JoyControls.CruiseControlOnOff:
                     return true;
 
                 default:
@@ -40,7 +46,13 @@ namespace SimShift.Services
             switch (c)
             {
                 case JoyControls.Throttle:
-                    var cruiseVal = (SpeedCruise - Speed)*3.6*Slope;
+                    var error = SpeedCruise - Speed;
+                    IntegralTime += error * ISlope;
+                    var Differential = (error - PreviousError) * DSlope;
+                    PreviousError = error;
+                    if (IntegralTime > Imax) IntegralTime = Imax;
+                    if (IntegralTime < -Imax) IntegralTime = -Imax;
+                    var cruiseVal = error * 3.6*PSlope + IntegralTime+Differential;
                     ManualOverride = val >= cruiseVal;
                     if(Cruising && cruiseVal>val) val = cruiseVal;
                     var t = val;
@@ -61,17 +73,42 @@ namespace SimShift.Services
         {
             switch(c)
             {
-                case JoyControls.CruiseControl:
+                case JoyControls.CruiseControlMaintain:
                     if (val && DateTime.Now.Subtract(CruiseTimeout).TotalMilliseconds > 500)
                     {
                         Cruising = !Cruising;
                         SpeedCruise = Speed;
-                        Debug.WriteLine("Cruising set to " + Cruising);
+                        Debug.WriteLine("Cruising set to " + Cruising + " and " + SpeedCruise + " m/s");
                         CruiseTimeout = DateTime.Now;
                     }
                     return false;
                     break;
 
+                    case JoyControls.CruiseControlUp:
+                    if (val && DateTime.Now.Subtract(CruiseTimeout).TotalMilliseconds > 400)
+                    {
+                        SpeedCruise += 1/3.6f;
+                        CruiseTimeout = DateTime.Now;
+                    }
+                    return false;
+                    break;
+                    case JoyControls.CruiseControlDown:
+                    if (val && DateTime.Now.Subtract(CruiseTimeout).TotalMilliseconds > 400)
+                    {
+                        SpeedCruise -= 1/3.6f;
+                        CruiseTimeout = DateTime.Now;
+                    }
+                    return false;
+                    break;
+                    case JoyControls.CruiseControlOnOff:
+                    if (val && DateTime.Now.Subtract(CruiseTimeout).TotalMilliseconds > 500)
+                    {
+                        Cruising = !Cruising;
+                        Debug.WriteLine("Cruising set to " + Cruising);
+                        CruiseTimeout = DateTime.Now;
+                    }
+                    return false;
+                    break;
                 default:
                     return val;
             }
@@ -92,19 +129,33 @@ namespace SimShift.Services
         public IEnumerable<string> AcceptsConfigs { get { return new[] {"Cruise"}; } }
         public void ResetParameters()
         {
-            Slope = 0.25;
+            PSlope = 0.25;
+            ISlope = 0;
+            Imax = 0;
+            DSlope = 0;
         }
 
-        public double Slope { get; private set; }
+        public double PSlope { get; private set; }
+        public double ISlope { get; private set; }
+        public double Imax { get; private set; }
+        public double DSlope { get; private set; }
         public bool ManualOverride { get; private set; }
 
         public void ApplyParameter(IniValueObject obj)
         {
             switch (obj.Key)
             {
-                case "Slope":
                 case "P":
-                    Slope = obj.ReadAsFloat();
+                    PSlope = obj.ReadAsFloat();
+                    break;
+                case "Imax":
+                    Imax = obj.ReadAsFloat();
+                    break;
+                case "I":
+                    ISlope = obj.ReadAsFloat();
+                    break;
+                case "D":
+                    DSlope = obj.ReadAsFloat();
                     break;
 
                     // TODO: implement PID
@@ -114,7 +165,10 @@ namespace SimShift.Services
         public IEnumerable<IniValueObject> ExportParameters()
         {
             List<IniValueObject> o = new List<IniValueObject>();
-            o.Add(new IniValueObject(AcceptsConfigs, "Slope", Slope.ToString("0.0000")));
+            o.Add(new IniValueObject(AcceptsConfigs, "P", PSlope.ToString("0.0000")));
+            o.Add(new IniValueObject(AcceptsConfigs, "I", ISlope.ToString("0.0000")));
+            o.Add(new IniValueObject(AcceptsConfigs, "Imax", Imax.ToString("0.0000")));
+            o.Add(new IniValueObject(AcceptsConfigs, "D", DSlope.ToString("0.0000")));
             return o;
         }
 

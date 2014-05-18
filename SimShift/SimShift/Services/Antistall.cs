@@ -75,8 +75,10 @@ namespace SimShift.Services
                     {
                         _throttle = 0;
                         tick++;
-
-                        return 1 - Rpm / (700 + Math.Sin(tick * 2 * Math.PI / 80.0) * 50 + (Blip ? 1300 : 0));
+                        var targetRpm = 700 + Math.Sin(tick*2*Math.PI/80.0)*50;
+                        if (Blip)
+                            targetRpm = 2000;
+                        return 1 - Rpm / targetRpm;
                     }
                     else
                     {
@@ -144,8 +146,7 @@ namespace SimShift.Services
                 Stalling = telemetry.Telemetry.Speed > -SpeedCutoff || telemetry.Telemetry.Speed>0;
             else
                 Stalling = telemetry.Telemetry.Speed < SpeedCutoff || telemetry.Telemetry.Speed<0;
-            if (Main.Transmission.IsShifting)
-                BlipFull = true;
+
             Speed = telemetry.Telemetry.Speed;
 
             if(telemetry.EnableWeirdAntistall==false)

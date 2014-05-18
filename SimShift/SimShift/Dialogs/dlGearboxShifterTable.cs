@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using SimShift.Models;
@@ -86,13 +87,38 @@ namespace SimShift.Dialogs
         public dlGearboxShifterTable()
         {
             var myEngine = new Ets2Drivetrain();
-            Main.Load(myEngine, "Settings/Drivetrain/eurotrucks2.volvo.fh16_2012.ini");
+            Main.Load(myEngine, "Settings/Drivetrain/eurotrucks2.scania.r.ini");
             activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Economy, myEngine,
                                                                 5);
+
+            string headline = "RPM";
+            for (int k = 0; k <= 10; k++)
+                headline = headline +  ",Ratio " + k;
+            //",Fuel " + k + ",Power " + k +
+            headline = headline + "\r\n";
+
+            List<string> fuelStats = new List<string>();
+                for(float rpm = 0; rpm < 2500; rpm+=100)
+                {
+                    string l = rpm + "";
+                    for (int load = 0; load <= 10; load++)
+                    {
+                        float throttle = load/20.0f;
+                        var fuelConsumption = activeConfiguration.Drivetrain.CalculateFuelConsumption(rpm, throttle);
+                        var power = activeConfiguration.Drivetrain.CalculatePower(rpm, throttle);
+                        //"," + fuelConsumption + "," + power + 
+                        l = l + "," + (power/fuelConsumption);
+                    }
+
+                    fuelStats.Add(l);
+                }
+
+            File.WriteAllText("./fuelstats.csv", headline+ string.Join("\r\n", fuelStats));
+
             // 
-            // sim
-            // 
-            this.sim = new ucGearboxShifterGraph(this.activeConfiguration);
+                // sim
+                // 
+                this.sim = new ucGearboxShifterGraph(this.activeConfiguration);
             this.sim.Location = new System.Drawing.Point(12, 283);
             this.sim.Name = "sim";
             this.sim.Size = new System.Drawing.Size(854, 224);

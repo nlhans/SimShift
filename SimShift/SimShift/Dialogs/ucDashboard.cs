@@ -382,7 +382,7 @@ namespace SimShift.Dialogs
             }
 
             var myPwr = Main.Drivetrain.CalculatePower(data.EngineRpm, Main.GetAxisOut(JoyControls.Throttle));
-            if (myPwr < 0) myPwr = 0;
+            //if (myPwr < 0) myPwr = 0;
             double pwrNeedleAngle = pwrCircleStart - pwrCircleRange * (myPwr - enginePwrMin) / enginePwrRange;
             pwrNeedleAngle -= 60;
             pwrNeedleAngle = pwrNeedleAngle / -180 * Math.PI;

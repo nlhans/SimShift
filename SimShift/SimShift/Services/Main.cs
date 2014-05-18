@@ -46,6 +46,10 @@ namespace SimShift.Services
 
         public static bool Running { get; private set; }
 
+        public static JoystickInput Controller
+        {
+            get { return ps3Controller ? RawJoysticksIn[0] : RawJoysticksIn[1]; }
+        }
 
 
         public static DrivetrainCalibrator DrivetrainCalibrator;
@@ -271,11 +275,20 @@ namespace SimShift.Services
                     else if (Transmission.Enabled)
                         return RawJoysticksIn[1].GetButton(9);
                     else return false;
-                case Services.JoyControls.CruiseControl:
+                case Services.JoyControls.CruiseControlMaintain:
                     if (ps3Controller)
                         return RawJoysticksIn[0].GetButton(0);
                     else
                         return RawJoysticksIn[1].GetButton(15);
+
+                case JoyControls.CruiseControlUp:
+                    return !ps3Controller && RawJoysticksIn[1].GetPov(2);
+                case JoyControls.CruiseControlDown:
+                    return !ps3Controller && RawJoysticksIn[1].GetPov(0);
+                case JoyControls.CruiseControlOnOff:
+                    return !ps3Controller && RawJoysticksIn[1].GetPov(1);
+                
+                
                 case Services.JoyControls.LaunchControl:
                     if (ps3Controller)
                         return RawJoysticksIn[0].GetButton(11);
@@ -387,7 +400,7 @@ namespace SimShift.Services
                     RawJoysticksOut[0].SetButton(9, value);
                     break;
 
-                case Services.JoyControls.CruiseControl:
+                case Services.JoyControls.CruiseControlMaintain:
                     RawJoysticksOut[0].SetButton(10, value);
                     break;
             }
