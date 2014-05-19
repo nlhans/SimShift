@@ -11,7 +11,7 @@ namespace SimShift.Services
         public bool Enabled { get; private set; }
 
         public bool Active { get; private set; }
-        
+
         private double throttleFactor = 1;
 
         #region Implementation of IControlChainObj
@@ -52,10 +52,7 @@ namespace SimShift.Services
 
         public void TickTelemetry(IDataMiner data)
         {
-            throttleFactor = 1;
-            Enabled = false;
-            return;
-            if(data.Telemetry.Car == "scania.r" && !Main.Data.Active.SelectManually)
+            if(false && data.Telemetry.Car == "scania.r" && Main.CarProfile.Active == "Economy")// && !Main.Data.Active.SelectManually)
             {
                 Enabled = true;
 
@@ -72,6 +69,7 @@ namespace SimShift.Services
                     //pwrLimit += 2500;
                     //if (data.Telemetry.Gear >= 7)
                     pwrLimit += data.Weight / 1000.0 * data.Telemetry.Gear;
+                    pwrLimit = 400;
                     var thrFactor = Main.Drivetrain.CalculateThrottleByPower(data.Telemetry.EngineRpm, pwrLimit);
                     if (thrFactor > 1) thrFactor = 1;
                     if (thrFactor < 0.2) thrFactor = 0.2;

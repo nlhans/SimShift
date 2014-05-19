@@ -113,10 +113,16 @@ namespace SimShift.Models
 
         public override double CalculateFuelConsumption(double rpm, double throttle)
         {
-            //
-            double r = 95.7231762038 * Math.Exp(rpm * 0.000918876); // consumption @ 100%
-
-            return r * throttle;
+            // This curve is not compensated for absolute values
+            // The relative meaning is , however, correct, but comparisions between trucks is not possible!
+            double amplitude = 95.7231762038 * Math.Exp(rpm * 0.000918876); // consumption @ 100%
+            double linearity = Math.Pow(10, -7)*-4*Math.Pow(throttle, 4)
+                               + 0.0001*Math.Pow(throttle, 3)
+                               - 0.0144*Math.Pow(throttle, 2)
+                               + 0.8333333*throttle
+                               + 0.521;
+            linearity /= 38.4;
+            return amplitude* linearity;
         }
 
         #region Implementation of IConfigurable

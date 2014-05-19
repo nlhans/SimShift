@@ -35,6 +35,7 @@ namespace SimShift
             updateModules.Interval = 25;
             updateModules.Tick += updateModules_Tick;
             updateModules.Start();
+            
         }
 
         private Dictionary<string, string> loadedIcon = new Dictionary<string, string>(); 
@@ -236,7 +237,56 @@ namespace SimShift
                     UpdateSimulatorStatusLabel();
                 Main.Data.AppActive += new EventHandler(Data_AppActive);
                 Main.Data.CarChanged += new EventHandler(Data_CarChanged);
-                
+
+                Dictionary<double, double> coastDat = new Dictionary<double, double>();
+                Dictionary<double, double> powerDat = new Dictionary<double, double>();
+
+                Application.ApplicationExit += (a,b) =>
+                                                   {
+                                                       var rpms =
+                                                           coastDat.Keys.Concat(powerDat.Keys).Distinct().ToList();
+                                                       rpms.Sort();
+                                                       string o = "";
+                                                       foreach(var r in rpms)
+                                                       {
+                                                           o = o + r+",";
+                                                           if (coastDat.ContainsKey(r))
+                                                               o = o + Math.Round(coastDat[r], 6) + ",";
+                                                           else
+                                                               o = o + ",";
+                                                           if (powerDat.ContainsKey(r))
+                                                               o = o + Math.Round(powerDat[r], 6) + ",";
+                                                           else
+                                                               o = o + ",";
+                                                           o = o + "\n";
+                                                       }
+                                                       File.WriteAllText("PowerCoastScaniaR.csv", o);
+                                                   };
+
+                Main.Data.DataReceived += (o, args) =>
+                                              {
+                                                  var tel = (Ets2DataMiner)(Main.Data.Active);
+                                                  var ets2Tel = tel.MyTelemetry;
+                                                  var r = Math.Round(ets2Tel.engineRpm/10, 0)*10;
+
+                                                  if(ets2Tel.gameThrottle==1)
+                                                  {
+                                                      if (powerDat.ContainsKey(r))
+                                                          powerDat[r] = powerDat[r] * 0.5 + ets2Tel.accelerationZ;
+                                                      else
+                                                          powerDat.Add(r, ets2Tel.accelerationZ);
+                                                  }else
+                                                  {
+                                                      if(coastDat.ContainsKey(r))
+                                                      {
+                                                          coastDat[r] = coastDat[r]*0.5 + ets2Tel.accelerationZ;
+                                                      }else
+                                                      {
+                                                          coastDat.Add(r, ets2Tel.accelerationZ);
+                                                      }
+                                                  }
+                                              };
+
             }
         }
 

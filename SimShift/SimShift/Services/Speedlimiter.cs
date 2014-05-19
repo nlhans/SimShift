@@ -14,7 +14,9 @@ namespace SimShift.Services
 
         public int SpeedLimit { get; private set; }
         public float SpeedSlope { get; private set; }
-        public bool Enabled { get; private set; } 
+        public bool Enabled { get; private set; }
+
+        private bool fuelTest = false;
 
         private double limiterFactor;
 
@@ -24,6 +26,9 @@ namespace SimShift.Services
             {
                 case JoyControls.Throttle:
                     return true;
+
+                case JoyControls.Brake:
+                    return fuelTest;
 
                 default:
                     return false;
@@ -35,13 +40,18 @@ namespace SimShift.Services
             switch(c)
             {
                 case JoyControls.Throttle:
-                    return val*limiterFactor;
+                    return fuelTest ? 0.95 : val*this.limiterFactor;
                     break;
+
+                    case JoyControls.Brake:
+                    return fuelTest? 0.5*brakeFactor:val;
 
                 default:
                     return val;
             }
         }
+
+        private double brakeFactor;
 
         public bool GetButton(JoyControls c, bool val)
         {
@@ -52,8 +62,23 @@ namespace SimShift.Services
         {
         }
 
+        private double integralBrake = 0;
         public void TickTelemetry(IDataMiner data)
         {
+            if (fuelTest)
+            {
+                Enabled = true;
+                SpeedLimit = 10;
+                SpeedSlope = 2.5f;
+                var rpmLimit = 1000;
+
+                var e = (data.Telemetry.EngineRpm - rpmLimit);
+                integralBrake += e / 250 * 0.0025;
+                if (integralBrake > 2.5) integralBrake = 2.5;
+                if (integralBrake < 0) integralBrake = 0;
+                //brakeFactor = (data.Telemetry.Speed * 3.6 - SpeedLimit) / SpeedSlope;
+                brakeFactor = e / 750 + integralBrake;
+            }
             if (!Enabled)
             {
                 limiterFactor = 1;

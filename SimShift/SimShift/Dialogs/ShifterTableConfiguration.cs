@@ -177,11 +177,6 @@ namespace SimShift.Dialogs
                 for (var load = 0.0; load <= 1.0; load += 0.1)
                 {
                     var gearSet = false;
-                    double req = load * 500;
-                    if (Math.Abs(load - 1.0) < 0.01 && speed < 6)
-                    {
-
-                    }
                     var bestFuelEfficiency = double.MinValue;
                     var bestFuelGear = 0;
 
@@ -189,11 +184,11 @@ namespace SimShift.Dialogs
                     {
                         var calculatedRpm = Drivetrain.GearRatios[gear] * speed;
 
-                        if (calculatedRpm < Drivetrain.StallRpm * 1.33) continue;
+                        if (calculatedRpm < Drivetrain.StallRpm * 1.25) continue;
                         if (calculatedRpm > Drivetrain.MaximumRpm) continue;
 
-                        var thr = (load < 0.10)
-                                      ? 0.10
+                        var thr = (load < 0.05)
+                                      ? 0.05
                                       : load;
 
                         var pwr = Drivetrain.CalculatePower(calculatedRpm, thr);
@@ -219,6 +214,8 @@ namespace SimShift.Dialogs
         }
         public void DefaultByPowerEconomy()
         {
+            var maxPwr =  Drivetrain.CalculateMaxPower() * 0.75;
+            maxPwr = 350;
             table = new Dictionary<int, Dictionary<double, int>>();
             // Make sure there are 20 rpm steps, and 10 load steps
             for (int speed = 0; speed <= MaximumSpeed; speed += 1)
@@ -227,17 +224,22 @@ namespace SimShift.Dialogs
                 for (var load = 0.0; load <= 1.0; load += 0.1)
                 {
                     var gearSet = false;
-                    double req = load*400;
+                    double req = load*maxPwr;
 
                     var bestFuelEfficiency = double.MaxValue;
                     var bestFuelGear = 0;
+                    var highestValidGear =11;
 
                     for (int gear = 0; gear < Drivetrain.Gears; gear++)
                     {
                         var calculatedRpm = Drivetrain.GearRatios[gear] * speed;
 
-                        if (calculatedRpm < Drivetrain.StallRpm*1.33) continue;
-                        if (calculatedRpm > Drivetrain.MaximumRpm) continue;
+                        if (calculatedRpm <= Drivetrain.StallRpm*1.33333)
+                        {
+                            highestValidGear = 0;
+                            continue;
+                        }
+                        if (calculatedRpm >= Drivetrain.MaximumRpm) continue;
 
                         var thr = Drivetrain.CalculateThrottleByPower(calculatedRpm, req);
 
@@ -247,8 +249,8 @@ namespace SimShift.Dialogs
                         if (double.IsNaN(thr) || double.IsInfinity(thr)) continue;
 
                         var fuel = Drivetrain.CalculateFuelConsumption(calculatedRpm, thr);
-
-                        if(bestFuelEfficiency > fuel)
+                        
+                        if(bestFuelEfficiency >= fuel)
                         {
                             bestFuelEfficiency = fuel;
                             bestFuelGear = gear;
@@ -256,7 +258,7 @@ namespace SimShift.Dialogs
                         }
                     }
                     if (!gearSet)
-                        table[speed].Add(load, 1);
+                        table[speed].Add(load, 1+highestValidGear);
                     else
                     {
                         table[speed].Add(load, bestFuelGear + 1);

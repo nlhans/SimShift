@@ -78,6 +78,7 @@ namespace SimShift.Services
                         var targetRpm = 700 + Math.Sin(tick*2*Math.PI/80.0)*50;
                         if (Blip)
                             targetRpm = 2000;
+                        targetRpm = 700;
                         return 1 - Rpm / targetRpm;
                     }
                     else
