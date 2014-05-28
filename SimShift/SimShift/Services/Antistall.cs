@@ -148,10 +148,17 @@ namespace SimShift.Services
             if (gear == -2) gear = 0;
             SpeedCutoff = Main.Drivetrain.CalculateSpeedForRpm(gear, (float)Main.Drivetrain.StallRpm);
 
-            if(telemetry.Telemetry.Gear == -1)
-                Stalling = telemetry.Telemetry.Speed > -SpeedCutoff || telemetry.Telemetry.Speed>0;
+            if (telemetry.Telemetry.Gear == -1)
+            {
+                ReverseAndAccelerate = telemetry.Telemetry.Speed > 0.1;
+                Stalling = telemetry.Telemetry.Speed > -SpeedCutoff;
+            }
             else
-                Stalling = telemetry.Telemetry.Speed < SpeedCutoff || telemetry.Telemetry.Speed<0;
+            {
+                ReverseAndAccelerate = telemetry.Telemetry.Speed < -0.1;
+                Stalling = telemetry.Telemetry.Speed < SpeedCutoff;
+            }
+            Stalling |= ReverseAndAccelerate;
 
             Speed = telemetry.Telemetry.Speed;
 
