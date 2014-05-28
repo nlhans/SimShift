@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -42,6 +43,7 @@ namespace SimShift
 
         void updateModules_Tick(object sender, EventArgs e)
         {
+            if (!Main.Running) return;
             var pane = gbModulesPane;
 
             var controlsChanged = false;
@@ -238,7 +240,7 @@ namespace SimShift
                 Main.Data.AppActive += new EventHandler(Data_AppActive);
                 Main.Data.CarChanged += new EventHandler(Data_CarChanged);
 
-                Dictionary<double, double> coastDat = new Dictionary<double, double>();
+                /*Dictionary<double, double> coastDat = new Dictionary<double, double>();
                 Dictionary<double, double> powerDat = new Dictionary<double, double>();
 
                 Application.ApplicationExit += (a,b) =>
@@ -246,47 +248,49 @@ namespace SimShift
                                                        var rpms =
                                                            coastDat.Keys.Concat(powerDat.Keys).Distinct().ToList();
                                                        rpms.Sort();
-                                                       string o = "";
+                                                       StringBuilder o = new StringBuilder();
                                                        foreach(var r in rpms)
                                                        {
-                                                           o = o + r+",";
-                                                           if (coastDat.ContainsKey(r))
-                                                               o = o + Math.Round(coastDat[r], 6) + ",";
-                                                           else
-                                                               o = o + ",";
-                                                           if (powerDat.ContainsKey(r))
-                                                               o = o + Math.Round(powerDat[r], 6) + ",";
-                                                           else
-                                                               o = o + ",";
-                                                           o = o + "\n";
-                                                       }
-                                                       File.WriteAllText("PowerCoastScaniaR.csv", o);
-                                                   };
+                                                           o.Append(r + ", ");
 
+                                                           if (coastDat.ContainsKey(r))
+                                                               o.Append(Math.Round(coastDat[r], 6));
+                                                           o.Append(", ");
+                                                           if (powerDat.ContainsKey(r))
+                                                               o .Append(Math.Round(powerDat[r], 6));
+                                                           o.AppendLine(" ");
+                                                           
+                                                       }
+                                                       File.WriteAllText("PowerCoastScaniaR.csv", o.ToString());
+                                                   };
                 Main.Data.DataReceived += (o, args) =>
-                                              {
+                {
+                    Debug.WriteLine(Main.Drivetrain.CalculateSpeedForRpm(8, 1000));
                                                   var tel = (Ets2DataMiner)(Main.Data.Active);
                                                   var ets2Tel = tel.MyTelemetry;
-                                                  var r = Math.Round(ets2Tel.engineRpm/10, 0)*10;
+                    var targetgear = 8;
+                    var r = ets2Tel.gear == targetgear ? ets2Tel.engineRpm :
+                                                      Main.Drivetrain.CalculateRpmForSpeed(targetgear, ets2Tel.speed);
 
-                                                  if(ets2Tel.gameThrottle==1)
+                                                  r = Math.Round(r/10)*10;
+                                                  if (ets2Tel.gear == targetgear)
                                                   {
                                                       if (powerDat.ContainsKey(r))
-                                                          powerDat[r] = powerDat[r] * 0.5 + ets2Tel.accelerationZ;
+                                                          powerDat[r] = powerDat[r] * 0.5 + ets2Tel.accelerationZ*0.5;
                                                       else
                                                           powerDat.Add(r, ets2Tel.accelerationZ);
-                                                  }else
+                                                  }else if(ets2Tel.gear == 0)
                                                   {
                                                       if(coastDat.ContainsKey(r))
                                                       {
-                                                          coastDat[r] = coastDat[r]*0.5 + ets2Tel.accelerationZ;
+                                                          coastDat[r] = coastDat[r] * 0.5 + ets2Tel.accelerationZ * 0.5;
                                                       }else
                                                       {
                                                           coastDat.Add(r, ets2Tel.accelerationZ);
                                                       }
                                                   }
                                               };
-
+*/
             }
         }
 

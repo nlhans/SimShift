@@ -78,7 +78,7 @@ namespace SimShift.Data
 
         /*** MyTelemetry data source & update control ***/
         private readonly SharedMemory<Ets2DataDefinition> _sharedMem = new SharedMemory<Ets2DataDefinition>();
-        private readonly Timer _telemetryUpdater = new Timer {Interval = 10};
+        private readonly Timer _telemetryUpdater = new Timer {Interval = 25};
 
         /*** Required for computing fuel flow ***/
         private float _previousFuel;

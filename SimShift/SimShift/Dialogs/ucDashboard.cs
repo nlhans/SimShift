@@ -411,10 +411,35 @@ namespace SimShift.Dialogs
             g.FillRectangle(new SolidBrush(Color.DarkGreen), ptCenterSpeedo.X - 50, this.Height - 30, (float)tWidth, 10);
             g.FillRectangle(new SolidBrush(Color.DarkRed), ptCenterSpeedo.X - 50, this.Height - 20, (float)bWidth, 10);
 
+            var literPerHour = Main.Drivetrain.CalculateFuelConsumption(data.EngineRpm, Main.GetAxisOut(JoyControls.Throttle));
+            var kmPerHour = data.Speed*3.6;
+            var kmPerLiter = kmPerHour/literPerHour;
+
+            var literPer100KmInst = 100/kmPerLiter;
+            if (literPer100Km < 0) literPer100Km = literPer100KmInst;
+            else literPer100Km = literPer100KmInst;
+            if (literPer100Km > 400) literPer100Km = 400;
+            if (literPer100Km < 0) literPer100Km = 0;
+            if (!double.IsNaN(literPer100Km) && !double.IsInfinity(literPer100Km))
+                literPer100KmAvg = literPer100KmAvg*0.9995 + literPer100Km*0.0005;
+            if (double.IsNaN(literPer100KmAvg) || double.IsInfinity(literPer100KmAvg))
+                literPer100KmAvg = 0;
+
+            g.DrawString(literPerHour.ToString("000.00 L/h"), new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 0);
+            g.DrawString(string.Format("1:{0:00.000}km", kmPerLiter), new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 20);
+            g.DrawString(string.Format("{0:00.000}l/100km", literPer100Km), new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 40);
+            g.DrawString(string.Format("{0:00.000}l/100km", literPer100KmAvg), new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 60);
+
+            g.DrawString(string.Format("{0:000.000}Nm", Main.Drivetrain.CalculateTorqueP(data.EngineRpm, data.Throttle)), new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 80);
+            g.DrawString(string.Format("{0:000.000}Nm", Main.Drivetrain.CalculateTorqueN(data.EngineRpm)), new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 100);
+
             //g.DrawString(data.EngineRpm+"rpm", new Font("Arial", 10), Brushes.White, 10, 10 );
 
            // g.DrawString(myPwr + "HP", new Font("Arial", 10), Brushes.White, 10, 40);
 
         }
+
+        private double literPer100KmAvg = 0;
+        private double literPer100Km = -1;
     }
 }

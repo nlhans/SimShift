@@ -385,17 +385,18 @@ namespace SimShift.Services
                         Debug.WriteLine("[Kickdown] Reset on overspeed");
                         KickdownCooldown = false;
                     }
-                    var pwrCurrentGear = Main.Drivetrain.CalculatePower(data.Telemetry.EngineRpm,
-                                                                        data.Telemetry.Throttle);
+
                     var maxPwr = Main.Drivetrain.CalculateMaxPower();
-                    var pwrNewGear =
-                        Main.Drivetrain.CalculatePower(
-                            Main.Drivetrain.CalculateRpmForSpeed(idealGear-1, data.Telemetry.Speed),
-                            data.Telemetry.Throttle);
+
+                    var engineRpmCurrentGear = Main.Drivetrain.CalculateRpmForSpeed(ShifterOldGear - 1, data.Telemetry.Speed);
+                    var pwrCurrentGear = Main.Drivetrain.CalculatePower(engineRpmCurrentGear, data.Telemetry.Throttle);
+
+                    var engineRpmNewGear = Main.Drivetrain.CalculateRpmForSpeed(idealGear - 1, data.Telemetry.Speed);
+                    var pwrNewGear = Main.Drivetrain.CalculatePower(engineRpmNewGear, data.Telemetry.Throttle);
                     //Debug.WriteLine("N"+pwrCurrentGear.ToString("000") + " I:" + pwrNewGear.ToString("000"));
                     // This makes sure the gearbox shifts down if on low revs and the user is requesting power from the engine
-                    if (pwrNewGear/pwrCurrentGear > 1+KickdownPowerReset && 
-                        pwrNewGear/maxPwr > KickdownPowerReset)
+                    if (pwrNewGear / pwrCurrentGear > 1 + KickdownPowerReset &&
+                        pwrNewGear / maxPwr > KickdownPowerReset)
                     {
                         Debug.WriteLine("[Kickdown] Reset on power / " + pwrCurrentGear + " / " + pwrNewGear);
                         KickdownCooldown = false;
@@ -781,6 +782,9 @@ namespace SimShift.Services
                             break;
                         case "Performance":
                             def = ShifterTableConfigurationDefault.Performance;
+                            break;
+                        case "Henk":
+                            def = ShifterTableConfigurationDefault.Henk;
                             break;
                     }
 

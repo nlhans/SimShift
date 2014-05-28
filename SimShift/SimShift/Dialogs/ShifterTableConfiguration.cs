@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using SimShift.Models;
 using SimShift.Services;
@@ -40,12 +41,69 @@ namespace SimShift.Dialogs
                 case ShifterTableConfigurationDefault.AlsEenOpa:
                     DefaultByOpa();
                     break;
+                case ShifterTableConfigurationDefault.Henk:
+                    DefaultByHenk();
+                    break;
             }
 
             if (spdPerGear > 0)
                 MinimumSpeedPerGear(spdPerGear);
 
+            string l = "";
+            for(var r = 0; r < 2500; r+=10)
+            {
+                var fuel=Drivetrain.CalculateFuelConsumption(r, 1);
+                var ratio = drivetrain.CalculatePower(r, 1)/fuel;
+                
+                l +=  r + "," + Drivetrain.CalculatePower(r, 1) + "," + Drivetrain.CalculatePower(r, 0) + ","+fuel+","+ratio+"\r\n";
+            }
+            //File.WriteAllText("./ets2engine.csv", l);
+        }
 
+        public void DefaultByHenk()
+        {
+            var shiftRpmHigh = new float[12] { 1000, 1000, 1000, 1100, 1700, 1900,
+                2000, 2000, 1900, 1800, 1500, 1300 };
+            var shiftRpmLow = new float[12]
+                                   {600, 600, 600, 600, 600, 700, 
+                                       750, 800, 850, 800, 700, 600};
+
+            table = new Dictionary<int, Dictionary<double, int>>();
+
+            // Make sure there are 20 rpm steps, and 20 load steps
+            // (20x20 = 400 items)
+            for (int speed = 0; speed <= MaximumSpeed; speed += 1)
+            {
+                table.Add(speed, new Dictionary<double, int>());
+                for (var load = 0.0; load <= 1.0; load += 0.1)
+                {
+                    var gearSet = false;
+                    var smallestDelta = double.MaxValue;
+                    var smallestDeltaGear = 0;
+                    var highestGearBeforeStalling = 0;
+                    for (int gear = 0; gear < Drivetrain.Gears; gear++)
+                    {
+                        var calculatedRpm = Drivetrain.GearRatios[gear] * speed;
+                        if (calculatedRpm < shiftRpmLow[gear]) continue;
+                        highestGearBeforeStalling = gear;
+                        if (calculatedRpm > shiftRpmHigh[gear]) continue;
+
+                        var driveRpm = shiftRpmLow[gear] + (shiftRpmHigh[gear] - shiftRpmLow[gear])*load;
+                        var delta = Math.Abs(calculatedRpm - driveRpm);
+
+                        if(delta < smallestDelta)
+                        {
+                            smallestDelta = delta;
+                            smallestDeltaGear = gear;
+                            gearSet = true;
+                        }
+                    }
+                    if (gearSet)
+                        table[speed].Add(load, smallestDeltaGear + 1);
+                    else
+                        table[speed].Add(load, highestGearBeforeStalling + 1);
+                }
+            }
         }
 
         public void DefaultByOpa()
@@ -203,9 +261,16 @@ namespace SimShift.Dialogs
                         }
                     }
                     if (!gearSet)
-                        table[speed].Add(load, 1);
+                    {
+                        if (Drivetrain is Ets2Drivetrain)
+                            table[speed].Add(load, 3);
+                        else
+                            table[speed].Add(load, 1);
+                    }
                     else
                     {
+                        if (Drivetrain is Ets2Drivetrain)
+                            bestFuelGear = Math.Max(2, bestFuelGear);
                         table[speed].Add(load, bestFuelGear + 1);
                     }
                 }
@@ -215,7 +280,7 @@ namespace SimShift.Dialogs
         public void DefaultByPowerEconomy()
         {
             var maxPwr =  Drivetrain.CalculateMaxPower() * 0.75;
-            maxPwr = 350;
+            maxPwr = 500;
             table = new Dictionary<int, Dictionary<double, int>>();
             // Make sure there are 20 rpm steps, and 10 load steps
             for (int speed = 0; speed <= MaximumSpeed; speed += 1)
@@ -224,7 +289,7 @@ namespace SimShift.Dialogs
                 for (var load = 0.0; load <= 1.0; load += 0.1)
                 {
                     var gearSet = false;
-                    double req = load*maxPwr;
+                    double req = Math.Max(25,load*maxPwr);
 
                     var bestFuelEfficiency = double.MaxValue;
                     var bestFuelGear = 0;
@@ -234,7 +299,7 @@ namespace SimShift.Dialogs
                     {
                         var calculatedRpm = Drivetrain.GearRatios[gear] * speed;
 
-                        if (calculatedRpm <= Drivetrain.StallRpm*1.33333)
+                        if (calculatedRpm <= Drivetrain.StallRpm*1.033333)
                         {
                             highestValidGear = 0;
                             continue;
@@ -258,9 +323,16 @@ namespace SimShift.Dialogs
                         }
                     }
                     if (!gearSet)
+                    {
+                        if (Drivetrain is Ets2Drivetrain)
+                            highestValidGear = Math.Max(2, highestValidGear);
                         table[speed].Add(load, 1+highestValidGear);
+                    }
                     else
                     {
+                        bestFuelGear = Math.Max(2, bestFuelGear);
+                        if (Drivetrain is Ets2Drivetrain)
+                            highestValidGear = Math.Max(2, bestFuelGear);
                         table[speed].Add(load, bestFuelGear + 1);
                     }
                 }

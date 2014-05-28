@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using SimShift.Controllers;
 using SimShift.Data;
 using SimShift.Models;
@@ -60,7 +61,7 @@ namespace SimShift.Services
             Map.Export();
         }
 
-        public static void Setup()
+        public static bool Setup()
         {
             if (requiresSetup)
             {
@@ -122,6 +123,13 @@ namespace SimShift.Services
                                           }
                                       };
 
+
+                if (ps3Cont == null && g25Cont == null)
+                {
+                    MessageBox.Show("No contorllers found");
+                    return false;
+                }
+
                 // Modules
                 Antistall = new Antistall();
                 CruiseControl = new CruiseControl();
@@ -141,7 +149,10 @@ namespace SimShift.Services
                 Controls = new ControlChain();
 
                 Data.Run();
+                return true;
+
             }
+            return false;
         }
 
         public static void Store(IEnumerable<IniValueObject> settings, string f)
@@ -201,13 +212,14 @@ namespace SimShift.Services
 
         public static void Start()
         {
+            var isNowRunning = Running;
             if (requiresSetup)
-                Setup();
+                isNowRunning  = Setup();
             //
             if (!Running)
             {
                 Data.DataReceived += tick;
-                Running = true;
+                Running = isNowRunning;
             }
         }
 

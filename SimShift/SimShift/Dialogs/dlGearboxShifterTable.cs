@@ -82,13 +82,13 @@ namespace SimShift.Dialogs
             return rgb;
         }
 
-        private ShifterTableConfiguration activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Economy, new Ets2Drivetrain(), 5);
+        private ShifterTableConfiguration activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Efficiency, new Ets2Drivetrain(), 5);
 
         public dlGearboxShifterTable()
         {
             var myEngine = new Ets2Drivetrain();
             Main.Load(myEngine, "Settings/Drivetrain/eurotrucks2.scania.r.ini");
-            activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Efficiency, myEngine, 5);
+            activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Henk, myEngine, 5);
 
             string headline = "RPM";
             for (int k = 0; k <= 10; k++)
@@ -105,8 +105,9 @@ namespace SimShift.Dialogs
                         float throttle = load/20.0f;
                         var fuelConsumption = activeConfiguration.Drivetrain.CalculateFuelConsumption(rpm, throttle);
                         var power = activeConfiguration.Drivetrain.CalculatePower(rpm, throttle);
+                        var fuel2 = (power / fuelConsumption) / rpm;
                         //"," + fuelConsumption + "," + power + 
-                        l = l + "," + (power/fuelConsumption);
+                        l = l + "," +fuel2;
                     }
 
                     fuelStats.Add(l);

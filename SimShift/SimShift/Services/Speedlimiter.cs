@@ -17,7 +17,8 @@ namespace SimShift.Services
         public bool Enabled { get; private set; }
 
         private bool fuelTest = false;
-
+        private float fuelRpm = 500;
+        private DateTime fuelLastChange = DateTime.Now;
         private double limiterFactor;
 
         public bool Requires(JoyControls c)
@@ -29,7 +30,9 @@ namespace SimShift.Services
 
                 case JoyControls.Brake:
                     return fuelTest;
-
+                case JoyControls.CruiseControlUp:
+                case JoyControls.CruiseControlDown:
+                    return true;
                 default:
                     return false;
             }
@@ -40,12 +43,12 @@ namespace SimShift.Services
             switch(c)
             {
                 case JoyControls.Throttle:
-                    return fuelTest ? 0.95 : val*this.limiterFactor;
+                    return fuelTest ? 1 : val*this.limiterFactor;
                     break;
 
                     case JoyControls.Brake:
                     return fuelTest? 0.5*brakeFactor:val;
-
+                    
                 default:
                     return val;
             }
@@ -55,6 +58,22 @@ namespace SimShift.Services
 
         public bool GetButton(JoyControls c, bool val)
         {
+            if (c == JoyControls.CruiseControlUp && Main.GetButtonIn(c))
+            {
+                if (DateTime.Now.Subtract(fuelLastChange).TotalMilliseconds > 500)
+                {
+                    fuelRpm += 100;
+                    fuelLastChange = DateTime.Now;
+                }
+            }
+            if (c == JoyControls.CruiseControlDown && Main.GetButtonIn(c))
+            {
+                if (DateTime.Now.Subtract(fuelLastChange).TotalMilliseconds > 500)
+                {
+                    fuelRpm -= 100;
+                    fuelLastChange = DateTime.Now;
+                }
+            }
             return val;
         }
 
@@ -70,7 +89,7 @@ namespace SimShift.Services
                 Enabled = true;
                 SpeedLimit = 10;
                 SpeedSlope = 2.5f;
-                var rpmLimit = 1000;
+                var rpmLimit = fuelRpm;
 
                 var e = (data.Telemetry.EngineRpm - rpmLimit);
                 integralBrake += e / 250 * 0.0025;

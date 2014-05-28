@@ -57,6 +57,8 @@ namespace SimShift.Services
             }
         }
 
+        private float integralIdleRevver = 0.0f;
+
         private int tick = 0;
         public double GetAxis(JoyControls c, double val)
         {
@@ -75,11 +77,14 @@ namespace SimShift.Services
                     {
                         _throttle = 0;
                         tick++;
-                        var targetRpm = 700 + Math.Sin(tick*2*Math.PI/80.0)*50;
+                        var targetRpm = 800 + Math.Sin(tick*2*Math.PI/160.0)*50;
                         if (Blip)
                             targetRpm = 2000;
-                        targetRpm = 700;
-                        return 1 - Rpm / targetRpm;
+
+                        integralIdleRevver += (float)(targetRpm-Rpm)*0.00015f;
+                        if (integralIdleRevver > 0.5) integralIdleRevver = 0.5f;
+                        if (integralIdleRevver < -0.5) integralIdleRevver = -0.5f;
+                        return (targetRpm-Rpm)/1000*1 +integralIdleRevver;
                     }
                     else
                     {
