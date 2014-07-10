@@ -56,7 +56,7 @@ namespace SimShift.Data
             Telemetry = default(GenericDataDefinition);
 
             reader = new SimTelemetry.Domain.Memory.MemoryReader();
-            reader.Open(Process.GetProcessesByName("WINWORD")[0]);
+            reader.Open(Process.GetProcessesByName("flux")[0]);
 
             provider = new MemoryProvider(reader);
             provider.Scanner.Enable(@"C:\Users\Desktop\Documents\New folder\eurotrucks2 1.10.exe");

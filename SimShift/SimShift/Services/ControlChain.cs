@@ -33,6 +33,7 @@ namespace SimShift.Services
             chain.Add(Main.DrivetrainCalibrator);
             chain.Add(Main.CameraHorizon);
             chain.Add(Main.LaneAssistance);
+            chain .Add(new ThrottleMapping());
 
 
             Axis.Add(JoyControls.Steering);

@@ -65,8 +65,8 @@ namespace SimShift.Dialogs
             var shiftRpmHigh = new float[12] { 1000, 1000, 1000, 1100, 1700, 1900,
                 2000, 2000, 1900, 1800, 1500, 1300 };
             var shiftRpmLow = new float[12]
-                                   {600, 600, 600, 600, 600, 700, 
-                                       750, 800, 850, 800, 700, 600};
+                                   {750, 750, 750, 750, 750, 750, 
+                                       750, 800, 850, 800, 850, 900};
 
             table = new Dictionary<int, Dictionary<double, int>>();
 
@@ -118,12 +118,12 @@ namespace SimShift.Dialogs
                 for (var load = 0.0; load <= 1.0; load += 0.1)
                 {
                     var gearSet = false;
-                    var shiftRpm = 600 + 700*load;
+                    var shiftRpm = 800 + 600*load;
                     var highestGearBeforeStalling = 0;
                     for (int gear = 0; gear < Drivetrain.Gears; gear++)
                     {
                         var calculatedRpm = Drivetrain.GearRatios[gear] * speed;
-                        if (calculatedRpm < 600) continue;
+                        if (calculatedRpm < 800) continue;
                         highestGearBeforeStalling = gear;
                         if (calculatedRpm > shiftRpm) continue;
 

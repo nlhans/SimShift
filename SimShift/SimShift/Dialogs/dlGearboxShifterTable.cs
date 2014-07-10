@@ -87,8 +87,8 @@ namespace SimShift.Dialogs
         public dlGearboxShifterTable()
         {
             var myEngine = new Ets2Drivetrain();
-            Main.Load(myEngine, "Settings/Drivetrain/eurotrucks2.scania.r.ini");
-            activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Henk, myEngine, 5);
+            Main.Load(myEngine, "Settings/Drivetrain/eurotrucks2.volvo.g7ld6x2.ini");
+            activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.AlsEenOpa, myEngine, 14);
 
             string headline = "RPM";
             for (int k = 0; k <= 10; k++)

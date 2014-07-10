@@ -17,6 +17,9 @@ namespace SimShift.Dialogs
         private Color transparant = Color.Gray;
         private IDataDefinition data;
         private Bitmap needle;
+        private double DrivenDistance;
+        private double DrivenTime;
+        private double DrivenFuel;
 
         public ucDashboard(Color t)
         {
@@ -24,12 +27,18 @@ namespace SimShift.Dialogs
 
             needle = (Bitmap)Image.FromFile(@"C:\Projects\Software\SimShift\Resources\needle_150px.png");
 
+            this.DoubleClick+=new EventHandler(ucDashboard_DoubleClick);
             InitializeComponent();
             SetStyle(ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
         }
-
+        private void ucDashboard_DoubleClick(object sender, EventArgs e)
+        {
+            DrivenDistance = 0;
+            DrivenFuel = 0;
+            DrivenTime = 0;
+        }
         private Bitmap RotatePic(Bitmap bmpBU, float w, bool keepWholeImg)
         {
             Bitmap bmp = null;
@@ -103,6 +112,8 @@ namespace SimShift.Dialogs
 
             return bmp;
         }
+
+        private DateTime lastCalc = DateTime.Now;
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -432,6 +443,24 @@ namespace SimShift.Dialogs
 
             g.DrawString(string.Format("{0:000.000}Nm", Main.Drivetrain.CalculateTorqueP(data.EngineRpm, data.Throttle)), new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 80);
             g.DrawString(string.Format("{0:000.000}Nm", Main.Drivetrain.CalculateTorqueN(data.EngineRpm)), new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 100);
+            
+
+            if (!Main.Data.Telemetry.Paused)
+            {
+                var scale = 3;
+                var dt = DateTime.Now.Subtract(lastCalc).TotalMilliseconds/1000.0*scale;
+                DrivenTime += dt;
+                DrivenFuel += literPerHour*dt/3600.0;
+                DrivenDistance += Math.Abs(data.Speed*dt);
+            }
+            if (double.IsNaN(DrivenTime) || double.IsInfinity(DrivenTime)) ucDashboard_DoubleClick(null, null);
+            if (double.IsNaN(DrivenFuel) || double.IsInfinity(DrivenFuel)) ucDashboard_DoubleClick(null, null);
+            if (double.IsNaN(DrivenDistance) || double.IsInfinity(DrivenDistance)) ucDashboard_DoubleClick(null, null);
+            var tripStr = "Trip meter: " + (DrivenTime/60).ToString("000.0") + "m / " + (DrivenDistance/1000).ToString("000.00km") + " / " +
+                          (DrivenFuel).ToString("000.00L") + "\r\n" +
+                          (DrivenFuel/(DrivenDistance/100000)).ToString("000.00") + "l/100km / 1:" + (DrivenDistance/1000/DrivenFuel).ToString("0.00") + "km / " + (DrivenDistance/DrivenTime*3.6).ToString("000.00kmh");
+            g.DrawString(tripStr, new Font("Verdana", 10.0f), Brushes.White, 80, 0);
+            lastCalc = DateTime.Now;
 
             //g.DrawString(data.EngineRpm+"rpm", new Font("Arial", 10), Brushes.White, 10, 10 );
 

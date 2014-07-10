@@ -179,6 +179,7 @@
     <Compile Include="Services\ShiftPattern.cs" />
     <Compile Include="Services\ShiftPatternFrame.cs" />
     <Compile Include="Services\Speedlimiter.cs" />
+    <Compile Include="Services\ThrottleMapping.cs" />
     <Compile Include="Services\TractionControl.cs" />
     <Compile Include="Services\Transmission.cs" />
     <Compile Include="Utils\Direct3DCapture.cs" />
@@ -234,6 +235,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -127,6 +127,9 @@ namespace SimShift.Services
         {
             if(IsShifting) return;
 
+            if (EnableSportShiftdown && Main.GetAxisIn(JoyControls.Throttle) < 0.2)
+                KickdownTime = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, (int)KickdownTimeout/10));
+            else
             KickdownTime = DateTime.Now.Add(new TimeSpan(0,0,0,0,(int)KickdownTimeout));
 
             if (ShiftPatterns.ContainsKey(style))
@@ -342,6 +345,9 @@ namespace SimShift.Services
             }
             else
             {
+                if (EnableSportShiftdown)
+                    transmissionThrottle = Math.Max(Main.GetAxisIn(JoyControls.Brake)*8, transmissionThrottle);
+                transmissionThrottle= Math.Min(1, Math.Max(0, transmissionThrottle));
                 var lookupResult = configuration.Lookup(data.Telemetry.Speed*3.6, transmissionThrottle);
                 idealGear = lookupResult.Gear;
 
@@ -427,6 +433,8 @@ namespace SimShift.Services
                 Shift(data.Telemetry.Gear, idealGear, shiftStyle);
             }
         }
+
+        protected bool EnableSportShiftdown { get; set; }
 
         #endregion
 
@@ -725,6 +733,8 @@ namespace SimShift.Services
                 LoadShiftPattern("up_1thr", "fast");
             else
                 LoadShiftPattern("up_1thr", "normal");
+
+            EnableSportShiftdown = false;
         }
 
         public int speedHoldoff { get; private set; }
@@ -745,6 +755,10 @@ namespace SimShift.Services
 
                 case "GenerateSpeedHoldoff":
                     speedHoldoff = obj.ReadAsInteger();
+                    break;
+
+                case "EnableSportShiftdown":
+                    EnableSportShiftdown = obj.ReadAsInteger() == 1;
                     break;
 
                 case "KickdownEnable":
