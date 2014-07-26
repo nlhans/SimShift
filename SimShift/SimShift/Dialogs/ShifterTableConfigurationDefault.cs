@@ -7,6 +7,7 @@ namespace SimShift.Dialogs
         Performance,
         PeakRpm,
         AlsEenOpa,
-        Henk
+        Henk,
+        PowerEfficiency
     }
 }

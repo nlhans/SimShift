@@ -22,6 +22,7 @@ namespace SimShift.Services
 
         public ControlChain()
         {
+            chain.Add(new ThrottleMapping());
             chain.Add(Main.CruiseControl);
             chain.Add(Main.TractionControl);
             chain.Add(Main.Speedlimiter);
@@ -33,7 +34,7 @@ namespace SimShift.Services
             chain.Add(Main.DrivetrainCalibrator);
             chain.Add(Main.CameraHorizon);
             chain.Add(Main.LaneAssistance);
-            chain .Add(new ThrottleMapping());
+            chain.Add(new EarlyClutch());
 
 
             Axis.Add(JoyControls.Steering);

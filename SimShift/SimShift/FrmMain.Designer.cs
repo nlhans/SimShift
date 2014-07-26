@@ -57,6 +57,7 @@
             this.lbProfiles = new System.Windows.Forms.ListBox();
             this.gbModules = new System.Windows.Forms.GroupBox();
             this.gbModulesPane = new System.Windows.Forms.Panel();
+            this.plotterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.gpSim.SuspendLayout();
             this.gbCarSelect.SuspendLayout();
@@ -71,7 +72,8 @@
             this.modulesToolStripMenuItem,
             this.settingsToolStripMenuItem,
             this.dashboardToolStripMenuItem,
-            this.gamesToolStripMenuItem1});
+            this.gamesToolStripMenuItem1,
+            this.plotterToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(824, 24);
@@ -112,7 +114,7 @@
             // generalSetupToolStripMenuItem
             // 
             this.generalSetupToolStripMenuItem.Name = "generalSetupToolStripMenuItem";
-            this.generalSetupToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.generalSetupToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.generalSetupToolStripMenuItem.Text = "General Setup";
             this.generalSetupToolStripMenuItem.Click += new System.EventHandler(this.generalSetupToolStripMenuItem_Click);
             // 
@@ -326,6 +328,13 @@
             this.gbModulesPane.Size = new System.Drawing.Size(467, 299);
             this.gbModulesPane.TabIndex = 0;
             // 
+            // plotterToolStripMenuItem
+            // 
+            this.plotterToolStripMenuItem.Name = "plotterToolStripMenuItem";
+            this.plotterToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.plotterToolStripMenuItem.Text = "Plotter";
+            this.plotterToolStripMenuItem.Click += new System.EventHandler(this.plotterToolStripMenuItem_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -387,6 +396,7 @@
         private System.Windows.Forms.ListBox lbProfiles;
         private System.Windows.Forms.GroupBox gbModules;
         private System.Windows.Forms.Panel gbModulesPane;
+        private System.Windows.Forms.ToolStripMenuItem plotterToolStripMenuItem;
     }
 }
 

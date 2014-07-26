@@ -46,6 +46,9 @@ namespace SimShift.Services
         {
             switch (c)
             {
+                    case JoyControls.Steering:
+                    return false;
+
                 case JoyControls.Throttle:
                     return Enabled&& Stalling;
                     
@@ -64,6 +67,25 @@ namespace SimShift.Services
         {
             switch (c)
             {
+                    case JoyControls.Steering:
+                    var str = val*2 - 1;
+                    var gain = 1-Main.Data.Telemetry.Speed*3.6/80;
+                    gain *= 4;
+                    if (gain < 0.5) gain = 0.5;
+                    str *= gain;
+
+                    if (str > 1) str = 1;
+                    if (str < -1) str = -1;
+                    return str/2 + 0.5;
+                    var gameVal = 0.5 - (Main.Data.Active as Ets2DataMiner).MyTelemetry.gameSteer/2;
+                    var err = val -gameVal;
+                    return val + err*.5;
+                        return val;
+                    ;
+                    if (tick % 160 > 80)
+                        return 0;
+                    else
+                        return 1;
                 case JoyControls.Throttle:
                     if (ReverseAndAccelerate) return 0;
                     if (!Stalling) return val;

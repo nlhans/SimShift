@@ -446,5 +446,11 @@ namespace SimShift
                 btClutch.Text = "Auto Clutch";
             }
         }
+
+        private void plotterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var plotter = new dlPlotter();
+            plotter.Show();
+        }
     }
 }

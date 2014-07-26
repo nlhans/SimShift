@@ -16,7 +16,8 @@ namespace SimShift.Dialogs
         public Ets2Aero Air { get; private set; }
 
         // Speed / Load / [Gear]
-        public Dictionary<int, Dictionary<double, int>> table;
+        public Dictionary<int, Dictionary<double, int>> tableGear;
+        public Dictionary<int, Dictionary<double, double>> tableThrottle;
 
         public ShifterTableConfiguration(ShifterTableConfigurationDefault def, IDrivetrain drivetrain, int spdPerGear)
         {
@@ -44,6 +45,10 @@ namespace SimShift.Dialogs
                 case ShifterTableConfigurationDefault.Henk:
                     DefaultByHenk();
                     break;
+
+                case ShifterTableConfigurationDefault.PowerEfficiency:
+                    DefaultByPowerEfficiency2();
+                    break;
             }
 
             if (spdPerGear > 0)
@@ -60,6 +65,66 @@ namespace SimShift.Dialogs
             //File.WriteAllText("./ets2engine.csv", l);
         }
 
+        private void DefaultByPowerEfficiency2()
+        {
+            tableGear = new Dictionary<int, Dictionary<double, int>>();
+            tableThrottle = new Dictionary<int, Dictionary<double, double>>();
+
+            if (Drivetrain.Gears == 0) return;
+            // Make sure there are 20 rpm steps, and 10 load steps
+            for (int speed = 0; speed <= MaximumSpeed; speed += 1)
+            {
+                tableGear.Add(speed, new Dictionary<double, int>());
+                tableThrottle.Add(speed, new Dictionary<double, double>());
+
+                Dictionary<int, float> pwrPerGear = new Dictionary<int, float>();
+
+                // Populate:
+                for (int gear = 0; gear < Drivetrain.Gears; gear++)
+                {
+                    var calculatedRpm = Drivetrain.GearRatios[gear]*speed;
+                    var power = (float) Drivetrain.CalculatePower(calculatedRpm, 1);
+                    pwrPerGear.Add(gear, power);
+                }
+
+                var maxPwrAvailable = pwrPerGear.Values.Max()*0.85;
+
+                for (var load = 0.0; load <= 1.0; load += 0.1)
+                {
+
+                    Dictionary<int, float> efficiencyPerGear = new Dictionary<int, float>();
+                    var highestGearBeforeStalling = 0;
+
+                    for (int gear = 0; gear < Drivetrain.Gears; gear++)
+                    {
+                        var calculatedRpm = Drivetrain.GearRatios[gear]*speed;
+                        if (calculatedRpm > Drivetrain.StallRpm) highestGearBeforeStalling = gear;
+                        var power = (float) Drivetrain.CalculatePower(calculatedRpm, 1);
+                        var fuel = (float) Drivetrain.CalculateFuelConsumption(calculatedRpm, Math.Max(0.05,load));
+                        efficiencyPerGear.Add(gear, fuel/power);
+                    }
+                    var bestGear = highestGearBeforeStalling;
+                    var bestGearV = 100.0f;
+                    foreach (var kvp in efficiencyPerGear)
+                    {
+                        if (kvp.Value < bestGearV && kvp.Value>0)
+                        {
+                            bestGearV = kvp.Value;
+                            bestGear = kvp.Key;
+                        }
+                    }
+                    var actualRpm = Drivetrain.GearRatios[bestGear]*speed;
+
+                    var reqThr = Drivetrain.CalculateThrottleByPower(actualRpm, load * maxPwrAvailable);
+                    var thrScale = reqThr/Math.Max(load,0.1);
+                    if (thrScale > 1.5) thrScale = 1.5;
+                    tableGear[speed].Add(load, bestGear+1);
+                    tableThrottle[speed].Add(load,thrScale);
+
+                }
+            }
+        }
+
         public void DefaultByHenk()
         {
             var shiftRpmHigh = new float[12] { 1000, 1000, 1000, 1100, 1700, 1900,
@@ -68,13 +133,15 @@ namespace SimShift.Dialogs
                                    {750, 750, 750, 750, 750, 750, 
                                        750, 800, 850, 800, 850, 900};
 
-            table = new Dictionary<int, Dictionary<double, int>>();
+            tableGear = new Dictionary<int, Dictionary<double, int>>();
+            tableThrottle = new Dictionary<int, Dictionary<double, double>>();
 
             // Make sure there are 20 rpm steps, and 20 load steps
             // (20x20 = 400 items)
             for (int speed = 0; speed <= MaximumSpeed; speed += 1)
             {
-                table.Add(speed, new Dictionary<double, int>());
+                tableGear.Add(speed, new Dictionary<double, int>());
+                tableThrottle.Add(speed, new Dictionary<double, double>());
                 for (var load = 0.0; load <= 1.0; load += 0.1)
                 {
                     var gearSet = false;
@@ -99,24 +166,29 @@ namespace SimShift.Dialogs
                         }
                     }
                     if (gearSet)
-                        table[speed].Add(load, smallestDeltaGear + 1);
+                        tableGear[speed].Add(load, smallestDeltaGear + 1);
                     else
-                        table[speed].Add(load, highestGearBeforeStalling + 1);
+                        tableGear[speed].Add(load, highestGearBeforeStalling + 1);
+
+                    tableThrottle[speed].Add(load, 1);
                 }
             }
         }
 
         public void DefaultByOpa()
         {
-            table = new Dictionary<int, Dictionary<double, int>>();
+            tableGear = new Dictionary<int, Dictionary<double, int>>();
+            tableThrottle = new Dictionary<int, Dictionary<double, double>>();
 
             // Make sure there are 20 rpm steps, and 20 load steps
             // (20x20 = 400 items)
             for (int speed = 0; speed <= MaximumSpeed; speed += 1)
             {
-                table.Add(speed, new Dictionary<double, int>());
+                tableGear.Add(speed, new Dictionary<double, int>());
+                tableThrottle.Add(speed, new Dictionary<double, double>());
                 for (var load = 0.0; load <= 1.0; load += 0.1)
                 {
+                    tableThrottle[speed].Add(load, 1);
                     var gearSet = false;
                     var shiftRpm = 800 + 600*load;
                     var highestGearBeforeStalling = 0;
@@ -128,11 +200,11 @@ namespace SimShift.Dialogs
                         if (calculatedRpm > shiftRpm) continue;
 
                         gearSet = true;
-                        table[speed].Add(load, gear + 1);
+                        tableGear[speed].Add(load, gear + 1);
                         break;
                     }
                     if (!gearSet)
-                        table[speed].Add(load, highestGearBeforeStalling+1);
+                        tableGear[speed].Add(load, highestGearBeforeStalling+1);
                 }
             }
 
@@ -140,15 +212,18 @@ namespace SimShift.Dialogs
 
         public void DefaultByPeakRpm()
         {
-            table = new Dictionary<int, Dictionary<double, int>>();
+            tableGear = new Dictionary<int, Dictionary<double, int>>();
+            tableThrottle = new Dictionary<int, Dictionary<double, double>>();
 
             // Make sure there are 20 rpm steps, and 20 load steps
             // (20x20 = 400 items)
             for (int speed = 0; speed <= MaximumSpeed; speed += 1)
             {
-                table.Add(speed, new Dictionary<double, int>());
+                tableGear.Add(speed, new Dictionary<double, int>());
+                tableThrottle.Add(speed, new Dictionary<double, double>());
                 for (var load = 0.0; load <= 1.0; load += 0.1)
                 {
+                    tableThrottle[speed].Add(load, 1);
                     var gearSet = false;
                     var latestGearThatWasNotStalling = 1;
 
@@ -166,11 +241,11 @@ namespace SimShift.Dialogs
                         if (calculatedRpm > shiftRpm) continue;
 
                         gearSet = true;
-                        table[speed].Add(load, gear + 1);
+                        tableGear[speed].Add(load, gear + 1);
                         break;
                     }
                     if (!gearSet)
-                        table[speed].Add(load, latestGearThatWasNotStalling == 1 ? 1 : latestGearThatWasNotStalling + 1);
+                        tableGear[speed].Add(load, latestGearThatWasNotStalling == 1 ? 1 : latestGearThatWasNotStalling + 1);
                 }
             }
 
@@ -178,13 +253,16 @@ namespace SimShift.Dialogs
 
         public void DefaultByPowerPerformance()
         {
-            table = new Dictionary<int, Dictionary<double, int>>();
+            tableGear = new Dictionary<int, Dictionary<double, int>>();
+            tableThrottle = new Dictionary<int, Dictionary<double, double>>();
             // Make sure there are 20 rpm steps, and 10 load steps
             for (int speed = 0; speed <= MaximumSpeed; speed += 1)
             {
-                table.Add(speed, new Dictionary<double, int>());
+                tableGear.Add(speed, new Dictionary<double, int>());
+                tableThrottle.Add(speed, new Dictionary<double, double>());
                 for (var load = 0.0; load <= 1.0; load += 0.1)
                 {
+                    tableThrottle[speed].Add(load, 1);
                     var gearSet = false;
 
                     var bestPower = double.MinValue;
@@ -198,7 +276,7 @@ namespace SimShift.Dialogs
                         {
                             calculatedRpm = Drivetrain.StallRpm;
                         }
-                        if (calculatedRpm < 1500) continue;
+                        if (calculatedRpm < 1200) continue;
                         var pwr = Drivetrain.CalculatePower(calculatedRpm+200, load <0.2?0.2:load);
 
                         latestGearThatWasNotStalling = gear;
@@ -213,13 +291,13 @@ namespace SimShift.Dialogs
                     }
                     
                     //if (speed < 30 )
-                    //    table[speed].Add(load, latestGearThatWasNotStalling);
+                    //    tableGear[speed].Add(load, latestGearThatWasNotStalling);
                     //else 
                         if (!gearSet)
-                            table[speed].Add(load, (latestGearThatWasNotStalling == 1?1: latestGearThatWasNotStalling+1));
+                            tableGear[speed].Add(load, (latestGearThatWasNotStalling == 1?1: latestGearThatWasNotStalling+1));
                     else
                     {
-                        table[speed].Add(load, bestPowerGear + 1);
+                        tableGear[speed].Add(load, bestPowerGear + 1);
                     }
                 }
             }
@@ -227,13 +305,16 @@ namespace SimShift.Dialogs
 
         public void DefaultByPowerEfficiency()
         {
-            table = new Dictionary<int, Dictionary<double, int>>();
+            tableGear = new Dictionary<int, Dictionary<double, int>>();
+            tableThrottle = new Dictionary<int, Dictionary<double, double>>();
             // Make sure there are 20 rpm steps, and 10 load steps
             for (int speed = 0; speed <= MaximumSpeed; speed += 1)
             {
-                table.Add(speed, new Dictionary<double, int>());
+                tableGear.Add(speed, new Dictionary<double, int>());
+                tableThrottle.Add(speed, new Dictionary<double, double>());
                 for (var load = 0.0; load <= 1.0; load += 0.1)
                 {
+                    tableThrottle[speed].Add(load, 1);
                     var gearSet = false;
                     var bestFuelEfficiency = double.MinValue;
                     var bestFuelGear = 0;
@@ -263,15 +344,15 @@ namespace SimShift.Dialogs
                     if (!gearSet)
                     {
                         if (Drivetrain is Ets2Drivetrain)
-                            table[speed].Add(load, 3);
+                            tableGear[speed].Add(load, 3);
                         else
-                            table[speed].Add(load, 1);
+                            tableGear[speed].Add(load, 1);
                     }
                     else
                     {
                         if (Drivetrain is Ets2Drivetrain)
                             bestFuelGear = Math.Max(2, bestFuelGear);
-                        table[speed].Add(load, bestFuelGear + 1);
+                        tableGear[speed].Add(load, bestFuelGear + 1);
                     }
                 }
             }
@@ -281,13 +362,16 @@ namespace SimShift.Dialogs
         {
             var maxPwr =  Drivetrain.CalculateMaxPower() * 0.75;
             maxPwr = 500;
-            table = new Dictionary<int, Dictionary<double, int>>();
+            tableGear = new Dictionary<int, Dictionary<double, int>>();
+            tableThrottle = new Dictionary<int, Dictionary<double, double>>();
             // Make sure there are 20 rpm steps, and 10 load steps
             for (int speed = 0; speed <= MaximumSpeed; speed += 1)
             {
-                table.Add(speed, new Dictionary<double, int>());
+                tableGear.Add(speed, new Dictionary<double, int>());
+                tableThrottle.Add(speed, new Dictionary<double, double>());
                 for (var load = 0.0; load <= 1.0; load += 0.1)
                 {
+                    tableThrottle[speed].Add(load, 1);
                     var gearSet = false;
                     double req = Math.Max(25,load*maxPwr);
 
@@ -326,14 +410,14 @@ namespace SimShift.Dialogs
                     {
                         if (Drivetrain is Ets2Drivetrain)
                             highestValidGear = Math.Max(2, highestValidGear);
-                        table[speed].Add(load, 1+highestValidGear);
+                        tableGear[speed].Add(load, 1+highestValidGear);
                     }
                     else
                     {
                         bestFuelGear = Math.Max(2, bestFuelGear);
                         if (Drivetrain is Ets2Drivetrain)
                             highestValidGear = Math.Max(2, bestFuelGear);
-                        table[speed].Add(load, bestFuelGear + 1);
+                        tableGear[speed].Add(load, bestFuelGear + 1);
                     }
                 }
             }
@@ -342,8 +426,20 @@ namespace SimShift.Dialogs
 
         public void MinimumSpeedPerGear(int minimum)
         {
-            var loads = table.FirstOrDefault().Value.Keys.ToList();
-            var speeds = table.Keys.ToList();
+            if (Drivetrain.Gears == 0) return;
+            var loads = tableGear.FirstOrDefault().Value.Keys.ToList();
+            var speeds = tableGear.Keys.ToList();
+            // Clean up first gear.
+            var lowestFirstGear = tableGear[minimum][loads.LastOrDefault()];
+            // Set up for all gears
+            for(int k = 0; k < minimum+2;k++)
+            {
+                foreach(var load in loads)
+                {
+                    tableGear[k][load] = lowestFirstGear;
+                }
+            }
+
             foreach(var load in loads)
             {
                 for (int i = 0; i < speeds.Count; i++)
@@ -351,17 +447,17 @@ namespace SimShift.Dialogs
                     int startI = i;
                     int endI = i;
 
-                    int g = table[speeds[i]][load];
+                    int g = tableGear[speeds[i]][load];
 
                     do
                     {
-                        while (endI < speeds.Count-1 && table[speeds[endI]][load] == g)
+                        while (endI < speeds.Count-1 && tableGear[speeds[endI]][load] == g)
                             endI++;
                         g++;
                     } while (endI - startI < minimum && g < Drivetrain.Gears);
 
                     for (int j = startI; j <= endI; j++)
-                        table[speeds[j]][load] = g-1;
+                        tableGear[speeds[j]][load] = g-1;
 
                     i = endI;
                 }
@@ -375,7 +471,7 @@ namespace SimShift.Dialogs
             var loadA = 0.0;
             var loadB = 0.0;
 
-            foreach (var spd in table.Keys)
+            foreach (var spd in tableGear.Keys)
             {
                 if (spd >= speed && speedA <= speed)
                 {
@@ -386,7 +482,7 @@ namespace SimShift.Dialogs
             }
 
 
-            foreach (var ld in table[(int)speedA].Keys)
+            foreach (var ld in tableGear[(int)speedA].Keys)
             {
                 if (ld >= load && loadA <= load)
                 {
@@ -398,28 +494,28 @@ namespace SimShift.Dialogs
 
             if (speedB == speedA)
             {
-                speedA = table.Keys.FirstOrDefault();
-                speedB = table.Keys.Skip(1).FirstOrDefault();
+                speedA = tableGear.Keys.FirstOrDefault();
+                speedB = tableGear.Keys.Skip(1).FirstOrDefault();
             }
             if (loadB == loadA)
             {
-                loadA = table[(int)speedA].Keys.FirstOrDefault();
-                loadB = table[(int)speedA].Keys.Skip(1).FirstOrDefault();
+                loadA = tableGear[(int)speedA].Keys.FirstOrDefault();
+                loadB = tableGear[(int)speedA].Keys.Skip(1).FirstOrDefault();
             }
 
             var gear = 1.0/(speedB - speedA)/(loadB - loadA)*(
-                                                                 table[(int)speedA][loadA] * (speedB - speed) * (loadB - load) +
-                                                                 table[(int)speedB][loadA] * (speed - speedA) * (loadB - load) +
-                                                                 table[(int)speedA][loadB] * (speedB - speed) * (load - loadA) +
-                                                                 table[(int)speedB][loadB] * (speed - speedA) * (load - loadA));
+                                                                 tableGear[(int)speedA][loadA] * (speedB - speed) * (loadB - load) +
+                                                                 tableGear[(int)speedB][loadA] * (speed - speedA) * (loadB - load) +
+                                                                 tableGear[(int)speedA][loadB] * (speedB - speed) * (load - loadA) +
+                                                                 tableGear[(int)speedB][loadB] * (speed - speedA) * (load - loadA));
             if (double.IsNaN(gear))
                 gear = 1;
             // Look up the closests RPM.
-            var closestsSpeed = table.Keys.OrderBy(x => Math.Abs(speed - x)).FirstOrDefault();
-            var closestsLoad = table[closestsSpeed].Keys.OrderBy(x => Math.Abs(x-load)).FirstOrDefault();
+            var closestsSpeed = tableGear.Keys.OrderBy(x => Math.Abs(speed - x)).FirstOrDefault();
+            var closestsLoad = tableGear[closestsSpeed].Keys.OrderBy(x => Math.Abs(x-load)).FirstOrDefault();
             
             //return new ShifterTableLookupResult((int)Math.Round(gear), closestsSpeed, closestsLoad);
-            return new ShifterTableLookupResult(table[closestsSpeed][closestsLoad], closestsSpeed, closestsLoad);
+            return new ShifterTableLookupResult(tableGear[closestsSpeed][closestsLoad], tableThrottle[closestsSpeed][closestsLoad], closestsSpeed, closestsLoad);
         }
 
         public double RpmForSpeed(float speed, int gear)

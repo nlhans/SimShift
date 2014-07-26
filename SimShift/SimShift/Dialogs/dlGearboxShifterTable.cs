@@ -82,13 +82,13 @@ namespace SimShift.Dialogs
             return rgb;
         }
 
-        private ShifterTableConfiguration activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Efficiency, new Ets2Drivetrain(), 5);
+        private ShifterTableConfiguration activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.PowerEfficiency, new Ets2Drivetrain(), 1);
 
         public dlGearboxShifterTable()
         {
             var myEngine = new Ets2Drivetrain();
-            Main.Load(myEngine, "Settings/Drivetrain/eurotrucks2.volvo.g7ld6x2.ini");
-            activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.AlsEenOpa, myEngine, 14);
+            Main.Load(myEngine, "Settings/Drivetrain/eurotrucks2.mercedes.actros.ini");
+            activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Performance, myEngine, 1);
 
             string headline = "RPM";
             for (int k = 0; k <= 10; k++)
@@ -175,7 +175,7 @@ namespace SimShift.Dialogs
 
             var spdBins = 0;
             var spdBinsData = new List<double>();
-            foreach (var spd in activeConfiguration.table.Keys)
+            foreach (var spd in activeConfiguration.tableThrottle.Keys)
             {
                 if (spd % 3 == 0)
                 {
@@ -185,7 +185,7 @@ namespace SimShift.Dialogs
                     spdBins++;
                 }
             }
-            foreach (var load in activeConfiguration.table[0].Keys)
+            foreach (var load in activeConfiguration.tableThrottle[0].Keys)
             {
                 var data = new object[spdBins + 1];
                 data[0] = Math.Round(load*100).ToString();

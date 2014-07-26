@@ -107,6 +107,15 @@ namespace SimShift.Services
             LoadShiftPattern("down_1thr", "normal");
             LoadShiftPattern("down_0thr", "normal");
 
+            // Add power shift pattern
+            var powerShiftPattern = new ShiftPattern();
+            powerShiftPattern.Frames.Add(new ShiftPatternFrame(0, 1, false, false, true));
+            powerShiftPattern.Frames.Add(new ShiftPatternFrame(0, 1, false, false, false));
+            powerShiftPattern.Frames.Add(new ShiftPatternFrame(0, 1, false, false, true));
+            powerShiftPattern.Frames.Add(new ShiftPatternFrame(1, 0.5, true, false, true));
+            powerShiftPattern.Frames.Add(new ShiftPatternFrame(1, 0.5, true, false, true));
+            ShiftPatterns.Add("PowerShift", powerShiftPattern);
+
             // Initialize all shfiting stuff.
             Shift(0, 1, "up_1thr");
             Enabled = true;
@@ -115,6 +124,8 @@ namespace SimShift.Services
 
         public void LoadShiftPatterns(List<ConfigurableShiftPattern> patterns)
         {
+            ShiftPatterns.Clear();
+
             foreach(var p in patterns)
             {
                 LoadShiftPattern(p.Region, p.File);
@@ -132,6 +143,9 @@ namespace SimShift.Services
             else
             KickdownTime = DateTime.Now.Add(new TimeSpan(0,0,0,0,(int)KickdownTimeout));
 
+            if (PowerShift)
+                style = "PowerShift";
+            
             if (ShiftPatterns.ContainsKey(style))
                 ActiveShiftPatternStr = style;
             else 
@@ -175,6 +189,7 @@ namespace SimShift.Services
 
             ShiftFrame = 0;
             IsShifting = true;
+            powerShiftStage = 0;
 
         }
 
@@ -350,6 +365,7 @@ namespace SimShift.Services
                 transmissionThrottle= Math.Min(1, Math.Max(0, transmissionThrottle));
                 var lookupResult = configuration.Lookup(data.Telemetry.Speed*3.6, transmissionThrottle);
                 idealGear = lookupResult.Gear;
+                ThrottleScale = GetHomeMode ? 1 : lookupResult.ThrottleScale;
 
                 if (data.Telemetry.Gear == 0 && ShiftCtrlNewGear != 0)
                 {
@@ -434,7 +450,9 @@ namespace SimShift.Services
             }
         }
 
+        protected double ThrottleScale { get; set; }
         protected bool EnableSportShiftdown { get; set; }
+        protected bool PowerShift { get; set; }
 
         #endregion
 
@@ -446,7 +464,7 @@ namespace SimShift.Services
             {
                     // Only required when changing
                 case JoyControls.Throttle:
-                    return Enabled;
+                    return Enabled|| true;
 
                 case JoyControls.Clutch:
                     return Enabled && IsShifting;
@@ -483,14 +501,22 @@ namespace SimShift.Services
             switch (c)
             {
                 case JoyControls.Throttle:
+ 
                     transmissionThrottle = val;
                     if (transmissionThrottle > 1) transmissionThrottle = 1;
                     if (transmissionThrottle < 0) transmissionThrottle = 0;
                     lock (ActiveShiftPattern)
                     {
+                        if (!Enabled)
+                            return val * ThrottleScale;
+                        if (shiftRetry > 0)
+                            return 0;
                         if (ShiftFrame >= ActiveShiftPattern.Count)
-                            return val;
-                        return IsShifting ? ActiveShiftPattern.Frames[ShiftFrame].Throttle*val : val;
+                            return val * ThrottleScale;
+                        var candidateValue= IsShifting ?ActiveShiftPattern.Frames[ShiftFrame].Throttle*val : val;
+                        candidateValue *= ThrottleScale;
+
+                        return candidateValue;
                     }
                 case JoyControls.Clutch:
                     lock (ActiveShiftPattern)
@@ -680,6 +706,8 @@ namespace SimShift.Services
         }
 
         private int shiftRetry = 0;
+        private int powerShiftStage = 0;
+        private int powerShiftTimer = 0;
 
         public void TickControls()
         {
@@ -687,34 +715,102 @@ namespace SimShift.Services
             {
                 lock (ActiveShiftPattern)
                 {
-                    ShiftFrame++;
-                    if (ShiftFrame > ActiveShiftPattern.Count)
-                        ShiftFrame = 0;
-                    if (shiftRetry < 10 && ShiftFrame > 4
-                        && ActiveShiftPattern.Frames[ShiftFrame - 3].UseNewGear &&
-                        GameGear != ShifterNewGear)
+                    if (PowerShift)
                     {
-                        // So we are shifting, check lagging by 1, and new gear doesn't work
-                        // We re-shfit
-                        var tmp = ShiftFrame;
-                        Shift(GameGear, ShifterNewGear, "up_1thr");
-                        ShiftFrame = tmp - 4;
-                        shiftRetry++;
-
-                        if (ShiftCtrlNewRange != ShiftCtrlOldRange)
+                        var stage = powerShiftStage;
+                        if (powerShiftStage == ActiveShiftPattern.Count - 2)
                         {
-
-                            ShiftFrame = 0;
-
-                            RangeButtonFreeze1Untill = DateTime.Now;
-                            RangeButtonFreeze2Untill = DateTime.Now;
+                            if (Main.Data.Telemetry.Gear == ShifterNewGear) powerShiftStage++;
+                        }
+                        else if (powerShiftStage == ActiveShiftPattern.Count - 1)
+                        {
+                            IsShifting = false;
+                            shiftRetry = 0;
+                            TransmissionFreezeUntill =
+                                DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, ShiftDeadTime + 50 * ShiftCtrlNewGear));
 
                         }
+                        else
+                        {
+                            powerShiftStage++;}
+                        
+                        if (powerShiftStage != stage)
+                        {
+                            powerShiftTimer = 0;
+                        }
+                        else
+                        {
+                            powerShiftTimer++;
+                            if(powerShiftTimer >= 20)
+                            {
+                                powerShiftTimer = 0;
+                                // So we are shifting, check lagging by 1, and new gear doesn't work
+                                // We re-shfit
+                                var tmp = ShiftFrame;
+                                IsShifting = false;
+                                if (shiftRetry >= 7)
+                                {
+                                    GameGear = shiftRetry;
+                                }
+                                GameGear = GameGear%18;
+                                if (shiftRetry > 18+8)
+                                {
+                                    IsShifting = false;
+                                    return;
+                                }
+                                Shift(GameGear, ShifterNewGear, "PowerShift");
+                                ShiftFrame = 0;
+                                shiftRetry++;
+
+                                if (ShiftCtrlNewRange != ShiftCtrlOldRange)
+                                {
+
+                                    ShiftFrame = 0;
+                                    RangeButtonFreeze1Untill = DateTime.Now;
+                                    RangeButtonFreeze2Untill = DateTime.Now;
+
+                                }
+                            }
+                        }
+                        ShiftFrame = powerShiftStage;
                     }
-                    else if (ShiftFrame >= ActiveShiftPattern.Count)
+                    else
                     {
-                        IsShifting = false;
-                        TransmissionFreezeUntill = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, ShiftDeadTime+50*ShiftCtrlNewGear));
+                        ShiftFrame++;
+                        if (ShiftFrame > ActiveShiftPattern.Count)
+                            ShiftFrame = 0;
+                        if (ShiftFrame >= ActiveShiftPattern.Count)
+                        {
+                            if (shiftRetry < 20 && ShiftFrame > 4 &&
+                                GameGear != ShifterNewGear)
+                            {
+                                // So we are shifting, check lagging by 1, and new gear doesn't work
+                                // We re-shfit
+                                var tmp = ShiftFrame;
+                                IsShifting = false;
+                                if (shiftRetry >= 7)
+                                    GameGear = shiftRetry;
+                                Shift(GameGear, ShifterNewGear, "up_1thr");
+                                ShiftFrame = 0;
+                                shiftRetry++;
+
+                                if (ShiftCtrlNewRange != ShiftCtrlOldRange)
+                                {
+
+                                    ShiftFrame = 0;
+                                    RangeButtonFreeze1Untill = DateTime.Now;
+                                    RangeButtonFreeze2Untill = DateTime.Now;
+
+                                }
+                            }
+                            else
+                            {
+                                IsShifting = false;
+                                shiftRetry = 0;
+                                TransmissionFreezeUntill =
+                                    DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, ShiftDeadTime + 50*ShiftCtrlNewGear));
+                            }
+                        }
                     }
                 }
             }
@@ -735,6 +831,7 @@ namespace SimShift.Services
                 LoadShiftPattern("up_1thr", "normal");
 
             EnableSportShiftdown = false;
+            PowerShift = false;
         }
 
         public int speedHoldoff { get; private set; }
@@ -777,6 +874,10 @@ namespace SimShift.Services
                     KickdownRpmReset = obj.ReadAsDouble();
                     break;
 
+                case "PowerShift":
+                    PowerShift = obj.ReadAsInteger() == 1;
+                    break;
+
                 case "Generate":
                     var def = ShifterTableConfigurationDefault.PeakRpm;
                     GeneratedShiftTable = obj.ReadAsString();
@@ -787,6 +888,9 @@ namespace SimShift.Services
                             break;
                         case "Efficiency":
                             def = ShifterTableConfigurationDefault.Efficiency;
+                            break;
+                        case "Efficiency2":
+                            def = ShifterTableConfigurationDefault.PowerEfficiency;
                             break;
                         case "Opa":
                             def = ShifterTableConfigurationDefault.AlsEenOpa;

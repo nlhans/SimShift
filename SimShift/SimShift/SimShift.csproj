@@ -127,6 +127,12 @@
     <Compile Include="Dialogs\dlLaneAssistance.Designer.cs">
       <DependentUpon>dlLaneAssistance.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\dlPlotter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\dlPlotter.Designer.cs">
+      <DependentUpon>dlPlotter.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\ShifterTableConfiguration.cs" />
     <Compile Include="Dialogs\ShifterTableConfigurationDefault.cs" />
     <Compile Include="Dialogs\ShifterTableLookupResult.cs" />
@@ -148,6 +154,12 @@
     <Compile Include="Dialogs\ucJoystickChannel.Designer.cs">
       <DependentUpon>ucJoystickChannel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\ucPlotter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ucPlotter.Designer.cs">
+      <DependentUpon>ucPlotter.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -166,6 +178,7 @@
     <Compile Include="Services\ControlChain.cs" />
     <Compile Include="Services\CruiseControl.cs" />
     <Compile Include="Services\DrivetrainCalibrator.cs" />
+    <Compile Include="Services\EarlyClutch.cs" />
     <Compile Include="Services\IConfigurable.cs" />
     <Compile Include="Services\IControlChainObj.cs" />
     <Compile Include="Services\JoyControls.cs" />
@@ -203,6 +216,9 @@
     <EmbeddedResource Include="Dialogs\dlLaneAssistance.resx">
       <DependentUpon>dlLaneAssistance.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\dlPlotter.resx">
+      <DependentUpon>dlPlotter.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\ucDashboard.resx">
       <DependentUpon>ucDashboard.cs</DependentUpon>
     </EmbeddedResource>
@@ -212,6 +228,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\ucJoystickChannel.resx">
       <DependentUpon>ucJoystickChannel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ucPlotter.resx">
+      <DependentUpon>ucPlotter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmMain.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
