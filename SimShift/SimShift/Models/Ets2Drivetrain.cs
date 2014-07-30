@@ -130,7 +130,7 @@ namespace SimShift.Models
                             + 0.027293*throttle
                             + 0.0019368;
             
-            var fuel = amplitude* linearity;
+            var fuel = amplitude* linearity*1.22;
             fuel -= 0.25;
             if (fuel < 0) fuel = 0;
             return fuel;
