@@ -31,6 +31,10 @@ namespace SimShift.Services
                 ResetParameters();
                 var performanceProfile = new Profile(this, "Performance");
                 Loaded.Add(performanceProfile);
+                var efficiencyProfile = new Profile(this, "Efficiency");
+                Loaded.Add(efficiencyProfile);
+                var economyProfile = new Profile(this, "Economy");
+                Loaded.Add(economyProfile);
 
                 Main.Store(ExportParameters(), MasterFile);
             }

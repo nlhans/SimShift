@@ -24,10 +24,10 @@ namespace SimShift.Services
         {
             chain.Add(new ThrottleMapping());
             chain.Add(Main.CruiseControl);
-            chain.Add(Main.TractionControl);
             chain.Add(Main.Speedlimiter);
             chain.Add(Main.Transmission);
             chain.Add(Main.Antistall);
+            chain.Add(Main.TractionControl);
             chain.Add(Main.LaunchControl);
             chain.Add(Main.ProfileSwitcher);
             chain.Add(Main.PowerLimiter); 

@@ -59,22 +59,47 @@ namespace SimShift.Data
             reader.Open(Process.GetProcessesByName("flux")[0]);
 
             provider = new MemoryProvider(reader);
-            provider.Scanner.Enable(@"C:\Users\Desktop\Documents\New folder\eurotrucks2 1.10.exe");
+            provider.Scanner.Enable(@"C:\Users\Desktop\Documents\New folder\eurotrucks2 1.12.exe");
             
-            basePtr = provider.Scanner.Scan<int>(MemoryRegionType.READ, "A1????????33C93BC6"); // OK: 1 
-            carPtr = provider.Scanner.Scan<int>(MemoryRegionType.READ, "8B87????????85C074108B80"); // 8F8
+            basePtr = provider.Scanner.Scan<int>(MemoryRegionType.READ, "8B0D????????D987XXXXXXXX"); // OK: 1 
+            carPtr = provider.Scanner.Scan<int>(MemoryRegionType.READ, "8B87????????85C0"); // 8F8
             rpmPtr = provider.Scanner.Scan<int>(MemoryRegionType.READ, "D99E????????83C408C3"); // RPM; 514
 
             spdPtrPtr = provider.Scanner.Scan<int>(MemoryRegionType.READ, "8B48??85C974XX8B01"); // Speed 28
-            spdPtr = provider.Scanner.Scan<int>(MemoryRegionType.READ, "8B4128F30F1080????????F30F5905"); // Speed 17C
+            spdPtr = provider.Scanner.Scan<int>(MemoryRegionType.READ, "F30F1080????????8D45E4"); // Speed 17C
             gearPtr = provider.Scanner.Scan<int>(MemoryRegionType.READ, "8B4424XX83B8????????0074XX84DB"); // Gear 67C
+
+            Console.WriteLine("BasePtr: " + basePtr.ToString("X"));
+            Console.WriteLine("CarPtr: " + carPtr.ToString("X"));
+            Console.WriteLine("RpmPtr: " + rpmPtr.ToString("X"));
+            Console.WriteLine("SpdPtr: " + spdPtr.ToString("X"));
+            Console.WriteLine("SpdPtrPtr: " + spdPtrPtr.ToString("X"));
+            Console.WriteLine("GearPtr: " + gearPtr.ToString("X"));
 
             // Base
             // RPM: rpmPtr -> carPtr -> base
             // Speed: spdPtr -> spdPtrPtr -> carPtr -> base
             // Gear: gearPtr -> spdPtrPtr -> carPtr -> base
 
+            /* playerPtr				8F8
+rpmBase = player+car		
+rpm = rpmBase + rpmOffset
 
+speedBase = rpmbase + spdPtrPtr		27
+speed = speedBase + sptrPtr		17C
+
+             * 1.12
+C26520 	C28	28 	17C			<--
+C26520	898	28	17C
+C32DB0	920	28	17C			<-- ?
+             
+             
+             [C32DB0] + 95C = X
+             [C32DB0] + 960 = Y
+             [C32DB0] + 964 = Z
+             * 
+             [C32DB0] + 9B0 = Time
+             */
         }
 
         public void EvtStart()

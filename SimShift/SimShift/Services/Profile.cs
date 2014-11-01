@@ -32,7 +32,18 @@ namespace SimShift.Services
                 Debug.WriteLine("Cannot find file " + phFile + " - creating defaults");
                 Antistall = "easy";
                 CruiseControl = "easy";
-                ShiftCurve = "Performance.5kmh.slow";
+                switch (file)
+                {
+                    case "Performance":
+                        ShiftCurve = "Performance.5kmh.slow";
+                        break;
+                    case "Efficiency":
+                        ShiftCurve = "Efficiency.5kmh.slow";
+                        break;
+                    case "Economy":
+                        ShiftCurve = "Economy.5kmh.slow";
+                        break;
+                }
                 SpeedLimiter = "nolimit";
                 TractionControl = "notc";
 

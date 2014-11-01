@@ -7,6 +7,7 @@ using SimShift.Data;
 using SimShift.Data.Common;
 using SimShift.Dialogs;
 using SimShift.Services;
+using SimShift.Simulation;
 
 namespace SimShift
 {
@@ -16,6 +17,7 @@ namespace SimShift
 
         public FrmMain()
         {
+            SimulationEnvironment sim = new SimulationEnvironment();
             InitializeComponent();
             FormClosing += FrmMain_FormClosing;
 

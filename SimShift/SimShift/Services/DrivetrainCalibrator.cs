@@ -337,6 +337,7 @@ namespace SimShift.Services
                             }
                             reqThrottle = true;
                             throttle = gearRatioSpeedCruise - data.Telemetry.Speed;
+                            throttle /= 3;
 
                             var ratio = data.Telemetry.EngineRpm / (3.6 * data.Telemetry.Speed);
                             if (ratio > 400 || ratio < 1)

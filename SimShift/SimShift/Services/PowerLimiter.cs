@@ -52,7 +52,7 @@ namespace SimShift.Services
 
         public void TickTelemetry(IDataMiner data)
         {
-            if(false && data.Telemetry.Car == "scania.r" && Main.CarProfile.Active == "Economy")// && !Main.Data.Active.SelectManually)
+            if (data.Telemetry.Car == "iveco.hiway" && Main.CarProfile.Active != "Race" && Main.CarProfile.Active != "Performance")// && !Main.Data.Active.SelectManually)
             {
                 Enabled = true;
 
@@ -65,14 +65,14 @@ namespace SimShift.Services
                 else
                 {
                     Active = true;
-                    var pwrLimit = 300 + data.Weight / 1000.0 * 20;
+                    var pwrLimit = 320 + data.Weight / 1000.0 * 12.5;
                     //pwrLimit += 2500;
                     //if (data.Telemetry.Gear >= 7)
-                    pwrLimit += data.Weight / 1000.0 * data.Telemetry.Gear;
-                    pwrLimit = 400;
+                    if (Main.Data.Telemetry.Gear >= 11) pwrLimit += 155;
                     var thrFactor = Main.Drivetrain.CalculateThrottleByPower(data.Telemetry.EngineRpm, pwrLimit);
+                    //var thrFactor = Main.Drivetrain.CalculateThrottleByTorque(data.Telemetry.EngineRpm, 5000);
                     if (thrFactor > 1) thrFactor = 1;
-                    if (thrFactor < 0.2) thrFactor = 0.2;
+                    if (thrFactor < 0.1) thrFactor = 0.1;
                     throttleFactor = thrFactor;
                 }
             }else

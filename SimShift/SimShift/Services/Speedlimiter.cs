@@ -84,6 +84,7 @@ namespace SimShift.Services
         private double integralBrake = 0;
         public void TickTelemetry(IDataMiner data)
         {
+            SpeedLimit = 125;
             if (fuelTest)
             {
                 Enabled = true;

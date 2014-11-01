@@ -21,12 +21,13 @@ namespace SimShift.Dialogs
         private float samplesPerDiv = 10;
 
         private Pen gridPen = new Pen(Color.DarkSeaGreen, 1.0f);
-        private Pen[] pens = new Pen[4]
+        private Pen[] pens = new Pen[]
                                        {
                                            new Pen(Color.Yellow, 1.0f),
                                            new Pen(Color.Red, 1.0f),
                                            new Pen(Color.DeepSkyBlue, 1.0f),
-                                           new Pen(Color.GreenYellow, 1.0f)
+                                           new Pen(Color.GreenYellow, 1.0f),
+                                           new Pen(Color.Magenta, 3.0f)
                                        };
 
         public ucPlotter(int ch, float[] scale)

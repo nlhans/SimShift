@@ -282,6 +282,9 @@ namespace SimShift.Services
                 case JoyControls.GearRange1:
                     return RawJoysticksIn[1].GetButton(6);
 
+                case JoyControls.GearRange2:
+                    return RawJoysticksIn[1].GetButton(17);
+
                 case Services.JoyControls.LaneAssistance:
                     if (ps3Controller)
                         return false;
@@ -319,7 +322,7 @@ namespace SimShift.Services
                     if (ps3Controller)
                         return RawJoysticksIn[0].GetButton(11);
                     else
-                        return false && RawJoysticksIn[1].GetButton(18);
+                        return RawJoysticksIn[1].GetButton(18);
 
                 default:
                     return false;

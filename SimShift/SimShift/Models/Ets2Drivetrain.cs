@@ -98,14 +98,14 @@ namespace SimShift.Models
         public override double CalculatePower(double rpm, double throttle)
         {
             var torque = CalculateTorqueP(rpm, throttle);
-            return torque * (rpm / 1000) / (1 / 0.1904);
+            return torque * (rpm / 1000) / (1 / 0.1904) * 0.75f;
 
         }
 
         public override double CalculateThrottleByTorque(double rpm, double torque)
         {
-            var positiveTorque = CalculateTorqueP(rpm, 1);
             var negativeTorque = CalculateTorqueN(rpm);
+            var positiveTorque = CalculateTorqueP(rpm, 1) - negativeTorque;
 
             return (torque - negativeTorque) / positiveTorque;
         }

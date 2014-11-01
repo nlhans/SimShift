@@ -386,8 +386,7 @@ namespace SimShift.Dialogs
                 var x3 = radius3 * Math.Cos(a) + ptCenterSpeedo.X - 8;
                 var y3 = radius3 * Math.Sin(a) + ptCenterSpeedo.Y - 8;
 
-                if (pwr >= 200)
-                    g.DrawString((pwr).ToString()+"hp", new Font("Verdana", 10.0f, FontStyle.Bold), Brushes.White, (float)x3, (float)y3);
+                g.DrawString((pwr).ToString()+"hp", new Font("Verdana", 10.0f, FontStyle.Bold), Brushes.White, (float)x3, (float)y3);
 
                 g.DrawLine(new Pen(secondaryBackground, (pwr % 500 == 0) ? 3.0f : 2.0f), (float)x1, (float)y1, (float)x2, (float)y2);
             }
@@ -415,12 +414,14 @@ namespace SimShift.Dialogs
             g.DrawString(sGear, new Font("Verdana", 14.0f), Brushes.White, ptCenterSpeedo.X-10, 10 );
 
             // Throttle
-            var tWidth = Main.GetAxisOut(JoyControls.Throttle)*100;
-            var bWidth = Main.GetAxisOut(JoyControls.Brake)*100;
+            var tWidth = Main.GetAxisOut(JoyControls.Throttle) * 100;
+            var bWidth = Main.GetAxisOut(JoyControls.Brake) * 100;
+            var cWidth = Main.GetAxisOut(JoyControls.Clutch) * 100;
 
             g.FillRectangle(new SolidBrush(Color.FromArgb(30,30,30)), ptCenterSpeedo.X-50, this.Height-30, 100, 20);
             g.FillRectangle(new SolidBrush(Color.DarkGreen), ptCenterSpeedo.X - 50, this.Height - 30, (float)tWidth, 10);
-            g.FillRectangle(new SolidBrush(Color.DarkRed), ptCenterSpeedo.X - 50, this.Height - 20, (float)bWidth, 10);
+            g.FillRectangle(new SolidBrush(Color.DarkRed), ptCenterSpeedo.X - 50, this.Height - 30, (float)bWidth, 10);
+            g.FillRectangle(new SolidBrush(Color.Aqua), ptCenterSpeedo.X - 50, this.Height - 20, (float)cWidth, 10);
 
             var literPerHour = Main.Drivetrain.CalculateFuelConsumption(data.EngineRpm, Main.GetAxisOut(JoyControls.Throttle));
             var kmPerHour = data.Speed*3.6;
@@ -435,6 +436,7 @@ namespace SimShift.Dialogs
                 literPer100KmAvg = literPer100KmAvg*0.9995 + literPer100Km*0.0005;
             if (double.IsNaN(literPer100KmAvg) || double.IsInfinity(literPer100KmAvg))
                 literPer100KmAvg = 0;
+            return;
 
             g.DrawString(literPerHour.ToString("000.00 L/h"), new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 0);
             g.DrawString(string.Format("1:{0:00.000}km", kmPerLiter), new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 20);
@@ -443,6 +445,7 @@ namespace SimShift.Dialogs
 
             g.DrawString(string.Format("{0:000.000}Nm", Main.Drivetrain.CalculateTorqueP(data.EngineRpm, data.Throttle)), new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 80);
             g.DrawString(string.Format("{0:000.000}Nm", Main.Drivetrain.CalculateTorqueN(data.EngineRpm)), new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 100);
+            g.DrawString(string.Format("{0:000.000}Nm", Main.Drivetrain.CalculateTorqueP(data.EngineRpm, data.Throttle) + Main.Drivetrain.CalculateTorqueN(data.EngineRpm)), new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 120);
             
 
             if (!Main.Data.Telemetry.Paused)

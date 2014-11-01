@@ -195,6 +195,7 @@
     <Compile Include="Services\ThrottleMapping.cs" />
     <Compile Include="Services\TractionControl.cs" />
     <Compile Include="Services\Transmission.cs" />
+    <Compile Include="Simulation\SimulationEnvironment.cs" />
     <Compile Include="Utils\Direct3DCapture.cs" />
     <Compile Include="Utils\IniReader.cs" />
     <Compile Include="Utils\IniValueObject.cs" />

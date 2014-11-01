@@ -87,7 +87,7 @@ namespace SimShift.Services
                     else
                         return 1;
                 case JoyControls.Throttle:
-                    if (ReverseAndAccelerate) return 0;
+                    //if (ReverseAndAccelerate) return 0;
                     if (!Stalling) return val;
                     if (EngineStalled)
                     {
@@ -99,14 +99,14 @@ namespace SimShift.Services
                     {
                         _throttle = 0;
                         tick++;
-                        var targetRpm = 800 + Math.Sin(tick*2*Math.PI/160.0)*50;
+                        var targetRpm = 770 + Math.Sin(tick * 2 * Math.PI / 1570.0) * Math.Cos(tick * 2 * Math.PI / (200+90*Math.Sin(tick*2*Math.PI*1010))) * 110;
                         if (Blip)
                             targetRpm = 2000;
 
                         integralIdleRevver += (float)(targetRpm-Rpm)*0.00015f;
                         if (integralIdleRevver > 0.5) integralIdleRevver = 0.5f;
                         if (integralIdleRevver < -0.5) integralIdleRevver = -0.5f;
-                        return (targetRpm-Rpm)/1000*1 +integralIdleRevver;
+                        return (targetRpm-Rpm)/1000 +integralIdleRevver;
                     }
                     else
                     {
@@ -120,7 +120,7 @@ namespace SimShift.Services
                     break;
 
                 case JoyControls.Clutch:
-                    if (ReverseAndAccelerate) return 1;
+                    if (ReverseAndAccelerate) return 0.85;
                     if (!Stalling && !SlippingLowGear) return 0;
                     if (Blip || BlipFull) return 1;
                     if (Override) return 1;
@@ -218,8 +218,8 @@ namespace SimShift.Services
                 }else
                 {
                     Override = false;
-                    if (Stalling && DateTime.Now.Subtract(TimeStopped).TotalMilliseconds % 43000 > 12500 &&
-                        DateTime.Now.Subtract(TimeStopped).TotalMilliseconds % 43000 < 13500)
+                    if (Stalling && DateTime.Now.Subtract(TimeStopped).TotalMilliseconds % 123000 > 62500 &&
+                        DateTime.Now.Subtract(TimeStopped).TotalMilliseconds % 123000 < 63500)
                     {
                         Blip = true;
                     }
