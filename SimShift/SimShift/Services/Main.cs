@@ -51,7 +51,7 @@ namespace SimShift.Services
 
         public static JoystickInput Controller
         {
-            get { return ps3Controller ? RawJoysticksIn[0] : RawJoysticksIn[1]; }
+            get { return RawJoysticksIn[0]; }
         }
 
 
@@ -69,38 +69,16 @@ namespace SimShift.Services
             {
                 requiresSetup = false;
 
-                // Joysticks
-                var ps3 = JoystickInputDevice.Search("Motion").FirstOrDefault();
-                JoystickInput ps3Cont, g25Cont;
-                if (ps3 == null)
-                    ps3Cont = default(JoystickInput);
-                else
-                    ps3Cont = new JoystickInput(ps3);
-                var g25 = JoystickInputDevice.Search("G25").FirstOrDefault();
-                if (g25 == null)
-                    g25Cont = default(JoystickInput);
-                else
-                    g25Cont = new JoystickInput(g25);
+                var hotas = JoystickInputDevice.Search("Hotas").FirstOrDefault();
+                var hotasController = hotas == null ? default(JoystickInput) : new JoystickInput(hotas);
                 var vJoy = new JoystickOutput();
 
-                RawJoysticksIn.Add(ps3Cont);
-                RawJoysticksIn.Add(g25Cont);
+                RawJoysticksIn.Add(hotasController);
                 RawJoysticksOut.Add(vJoy);
+
 
                 // Data source
                 Data = new DataArbiter();
-                Socket server = new Socket(AddressFamily.InterNetwork,
-                           SocketType.Dgram, ProtocolType.Udp);
-                var ep = new IPEndPoint(IPAddress.Parse("192.168.1.158"), 12345);
-                Data.DataReceived += (sender, args) =>
-                                         {
-                                             var r = (Data.Telemetry.EngineRpm - 300)/(2500 - 300);
-                                             if (Data.Telemetry.EngineRpm < 300) r = -1;
-                                             var s = ((int) (r*10000)).ToString() + "," +
-                                                 ((int) (Data.Telemetry.Throttle*1000)).ToString()+","+((Data.Telemetry.Paused)?1:0);
-                                             var sb = ASCIIEncoding.ASCII.GetBytes(s);
-                                             server.SendTo(sb, ep);
-                                         };
 
                 Data.CarChanged += (s, e) =>
                                        {
@@ -137,13 +115,11 @@ namespace SimShift.Services
                                           }
                                       };
 
-
-                if (ps3Cont == null && g25Cont == null)
+                if (hotasController == null)
                 {
-                    MessageBox.Show("No contorllers found");
+                    MessageBox.Show("No controllers found");
                     return false;
                 }
-
                 // Modules
                 Antistall = new Antistall();
                 CruiseControl = new CruiseControl();
@@ -253,76 +229,59 @@ namespace SimShift.Services
 
         #region Control mapping
 
-        private static bool ps3Controller = false;
-
         public static bool GetButtonIn(JoyControls c)
         {
             switch (c)
             {
                     // Unimplemented as of now.
                 case Services.JoyControls.Gear1:
-                    return RawJoysticksIn[1].GetButton(8);
+                    return Controller.GetButton(1);
                 case Services.JoyControls.Gear2:
-                    return RawJoysticksIn[1].GetButton(9);
+                    return false;
                 case Services.JoyControls.Gear3:
-                    return RawJoysticksIn[1].GetButton(10);
+                    return false;
                 case Services.JoyControls.Gear4:
-                    return RawJoysticksIn[1].GetButton(11);
+                    return false;
                 case Services.JoyControls.Gear5:
-                    return RawJoysticksIn[1].GetButton(12);
+                    return false;
                 case Services.JoyControls.Gear6:
-                    return RawJoysticksIn[1].GetButton(13);
+                    return false;
                 case Services.JoyControls.Gear7:
                     return false;
                 case Services.JoyControls.Gear8:
                     return false;
                 case Services.JoyControls.GearR:
-                    return RawJoysticksIn[1].GetButton(14);
+                    return Controller.GetButton(3);
 
                 case JoyControls.GearRange1:
-                    return RawJoysticksIn[1].GetButton(6);
+                    return false;
 
                 case JoyControls.GearRange2:
-                    return RawJoysticksIn[1].GetButton(17);
+                    return false;
 
                 case Services.JoyControls.LaneAssistance:
-                    if (ps3Controller)
-                        return false;
-                    else
-                        return false; //return RawJoysticksIn[1].GetButton(7);
+                    return false;
 
                     // PS3 (via DS3 tool) L1/R1
                 case Services.JoyControls.GearDown:
-                    if (ps3Controller)
-                        return RawJoysticksIn[0].GetButton(4);
-                    else if (Transmission.Enabled)
-                        return RawJoysticksIn[1].GetButton(8);
-                    else return false;
+                    return Controller.GetButton(4);
+
                 case Services.JoyControls.GearUp:
-                    if (ps3Controller)
-                        return RawJoysticksIn[0].GetButton(5);
-                    else if (Transmission.Enabled)
-                        return RawJoysticksIn[1].GetButton(9);
-                    else return false;
+                    return Controller.GetButton(8);
+
                 case Services.JoyControls.CruiseControlMaintain:
-                    if (ps3Controller)
-                        return RawJoysticksIn[0].GetButton(0);
-                    else
-                        return RawJoysticksIn[1].GetButton(15);
+                    return Controller.GetButton(0);
 
                 case JoyControls.CruiseControlUp:
-                    return !ps3Controller && RawJoysticksIn[1].GetPov(2);
+                    return Controller.GetPov(2);
                 case JoyControls.CruiseControlDown:
-                    return !ps3Controller && RawJoysticksIn[1].GetPov(0);
+                    return Controller.GetPov(0);
                 case JoyControls.CruiseControlOnOff:
-                    return !ps3Controller && RawJoysticksIn[1].GetPov(1);
-                
-                
+                    return Controller.GetPov(1);
+
+
                 case Services.JoyControls.LaunchControl:
-                    if (ps3Controller)
-                        return RawJoysticksIn[0].GetButton(11);
-                    else
-                        return RawJoysticksIn[1].GetButton(18);
+                    return Controller.GetButton(11);
 
                 default:
                     return false;
@@ -335,43 +294,34 @@ namespace SimShift.Services
             switch(c)
             {
                 case Services.JoyControls.Steering:
+                    var steer1 = Controller.GetAxis(3) / Math.Pow(2, 15) - 1;
+                    var steer2 = Controller.GetAxis(0)/Math.Pow(2,15) - 1;
+                    if (steer1 < 0) steer1 = steer1*steer1*-1;
+                    else steer1 *= steer1;
+                    if (steer2 < 0) steer2 = steer2*steer2*-1;
+                    else steer2 *= steer2;
+                    if (Math.Abs(steer1) > Math.Abs(steer2)) return (steer1 + 1) / 2;
+                    else return (steer2 + 1) / 2;
 
-                    if (ps3Controller)
-                        return 0.5;
-                    else
-                        return RawJoysticksIn[1].GetAxis(0)/Math.Pow(2,16);
-                    
                 case Services.JoyControls.Throttle:
-
-                    double t = 0;
-                    if (ps3Controller)
-                        t = ((RawJoysticksIn[0].GetAxis(3) / Math.Pow(2, 16) - 0.5) * 2 - 0.25) / 0.75;
-                    else
-                        t = 1 - RawJoysticksIn[1].GetAxis(2)/Math.Pow(2, 16);
+                    var t = 0.5 - Controller.GetAxis(2) / Math.Pow(2, 16);
+                    t *= 2;
                     if (t < 0) t = 0;
-                   
-                if (Main.Data.Active!=null && Main.Data.Active.Application.Contains("ruck")) t = t*t;
-                    //t *= 0.8;
                     return t;
 
                 case Services.JoyControls.Brake:
-                    if (ps3Controller)
-                        return ((RawJoysticksIn[0].GetAxis(2) - Math.Pow(2, 15)) / Math.Pow(2, 15) - 0.25) / 0.75;
-                    else
-                    {
-                        var b = 1 - RawJoysticksIn[1].GetAxis(3)/Math.Pow(2, 16);
-                        if (b < 0) b = 0;
+                    var b = Controller.GetAxis(2) / Math.Pow(2, 16) - 0.5;
+                    b *= 2;
+                    if (b < 0) b = 0;
                         
-                        if (Main.Data.Active == null || Main.Data.Active.Application == "TestDrive2") return b;
-                        return b * b;
-                    }
+                    if (Main.Data.Active == null || Main.Data.Active.Application == "TestDrive2") return b;
+                    return b * b;
+
                 case Services.JoyControls.Clutch:
-                    return 1 - RawJoysticksIn[1].GetAxis(4) / Math.Pow(2, 16);
+                    return 0;
 
                 case Services.JoyControls.CameraHorizon:
-                    if (ps3Controller)
-                        return RawJoysticksIn[0].GetAxis(5) / Math.Pow(2, 15) - 1;
-                    else return 0;
+                    return 0;
                     
                 default:
                     return 0.0;

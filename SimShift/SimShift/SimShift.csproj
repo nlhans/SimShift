@@ -192,6 +192,7 @@
     <Compile Include="Services\ShiftPattern.cs" />
     <Compile Include="Services\ShiftPatternFrame.cs" />
     <Compile Include="Services\Speedlimiter.cs" />
+    <Compile Include="Services\SteerngSmoothing.cs" />
     <Compile Include="Services\ThrottleMapping.cs" />
     <Compile Include="Services\TractionControl.cs" />
     <Compile Include="Services\Transmission.cs" />

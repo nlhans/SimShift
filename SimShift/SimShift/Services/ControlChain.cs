@@ -23,6 +23,7 @@ namespace SimShift.Services
         public ControlChain()
         {
             chain.Add(new ThrottleMapping());
+            chain.Add(new SteerngSmoothing());
             chain.Add(Main.CruiseControl);
             chain.Add(Main.Speedlimiter);
             chain.Add(Main.Transmission);
