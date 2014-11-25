@@ -185,7 +185,6 @@
     <Compile Include="Services\LaneAssistance.cs" />
     <Compile Include="Services\LaunchControl.cs" />
     <Compile Include="Services\Main.cs" />
-    <Compile Include="Services\PowerLimiter.cs" />
     <Compile Include="Services\Profile.cs" />
     <Compile Include="Services\Profiles.cs" />
     <Compile Include="Services\ProfileSwitcher.cs" />
@@ -195,6 +194,7 @@
     <Compile Include="Services\ThrottleMapping.cs" />
     <Compile Include="Services\TractionControl.cs" />
     <Compile Include="Services\Transmission.cs" />
+    <Compile Include="Services\WheelTorqueLimiter.cs" />
     <Compile Include="Simulation\SimulationEnvironment.cs" />
     <Compile Include="Utils\Direct3DCapture.cs" />
     <Compile Include="Utils\IniReader.cs" />

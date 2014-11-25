@@ -37,7 +37,6 @@ namespace SimShift.Services
         public static Speedlimiter Speedlimiter;
         public static Transmission Transmission;
         public static TractionControl TractionControl;
-        public static PowerLimiter PowerLimiter;
         public static LaunchControl LaunchControl;
         public static LaneAssistance LaneAssistance;
         
@@ -152,7 +151,6 @@ namespace SimShift.Services
                 TractionControl = new TractionControl();
                 ProfileSwitcher = new ProfileSwitcher();
                 Speedlimiter = new Speedlimiter();
-                PowerLimiter = new PowerLimiter();
                 LaunchControl = new LaunchControl();
                 DrivetrainCalibrator = new DrivetrainCalibrator();
                 LaneAssistance = new LaneAssistance();

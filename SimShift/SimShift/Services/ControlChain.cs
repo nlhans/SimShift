@@ -30,11 +30,11 @@ namespace SimShift.Services
             chain.Add(Main.TractionControl);
             chain.Add(Main.LaunchControl);
             chain.Add(Main.ProfileSwitcher);
-            chain.Add(Main.PowerLimiter); 
             chain.Add(Main.DrivetrainCalibrator);
             chain.Add(Main.CameraHorizon);
             chain.Add(Main.LaneAssistance);
             chain.Add(new EarlyClutch());
+            chain.Add(new WheelTorqueLimiter());
 
 
             Axis.Add(JoyControls.Steering);

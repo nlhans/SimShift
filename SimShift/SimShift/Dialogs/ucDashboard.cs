@@ -7,6 +7,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using SimShift.Data;
 using SimShift.Data.Common;
 using SimShift.Services;
 
@@ -436,6 +437,16 @@ namespace SimShift.Dialogs
                 literPer100KmAvg = literPer100KmAvg*0.9995 + literPer100Km*0.0005;
             if (double.IsNaN(literPer100KmAvg) || double.IsInfinity(literPer100KmAvg))
                 literPer100KmAvg = 0;
+
+            var ets2Data = ((Ets2DataMiner) Main.Data.Active ).MyTelemetry;
+            g.DrawString(Encoding.UTF8.GetString(ets2Data.jobCitySource), new Font("Verdana", 10.0f), Brushes.White, 0, 0);
+            g.DrawString(Encoding.UTF8.GetString(ets2Data.jobCityDestination), new Font("Verdana", 10.0f), Brushes.White, 0, 20);
+            g.DrawString(Encoding.UTF8.GetString(ets2Data.jobCompanySource), new Font("Verdana", 10.0f), Brushes.White, 0, 40);
+            g.DrawString(Encoding.UTF8.GetString(ets2Data.jobCompanyDestination), new Font("Verdana", 10.0f), Brushes.White, 0, 60);
+            g.DrawString(Encoding.UTF8.GetString(ets2Data.trailerId), new Font("Verdana", 10.0f), Brushes.White, 0, 80);
+            g.DrawString(Encoding.UTF8.GetString(ets2Data.trailerName), new Font("Verdana", 10.0f), Brushes.White, 0, 100);
+            g.DrawString(string.Format("{0:00000}kg", ets2Data.trailerMass), new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 120);
+            g.DrawString(string.Format("{0:00000}", ets2Data.jobDeadline - ets2Data.timeAbsolute), new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 140);
             return;
 
             g.DrawString(literPerHour.ToString("000.00 L/h"), new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 0);

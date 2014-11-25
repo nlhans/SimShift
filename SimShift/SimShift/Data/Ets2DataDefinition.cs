@@ -74,6 +74,34 @@ namespace SimShift.Data
         [FieldOffset(152)] public int trailerOffset;
         [FieldOffset(156)] public int trailerLength;
 
+        [FieldOffset(160)] public int timeAbsolute;
+        [FieldOffset(164)] public int gearsReverse;
+
+        [FieldOffset(168)] public float trailerMass;
+        [FieldOffset(172)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
+        public byte[] trailerId;
+        [FieldOffset(236)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
+        public byte[] trailerName;
+        
+        [FieldOffset(300)] public int jobIncome;
+        [FieldOffset(304)] public int jobDeadline;
+        
+        [FieldOffset(308)] 
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
+        public byte[] jobCitySource;
+        [FieldOffset(372)] 
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
+        public byte[] jobCityDestination;
+        
+        [FieldOffset(436)] 
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
+        public byte[] jobCompanySource;
+        [FieldOffset(500)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
+        public byte[] jobCompanyDestination;
+
         public IDataDefinition ToGeneric(string truck)
         {
             var generic = new GenericDataDefinition(truck, time/1000000.0f, (paused == 0 ? false : true), gear, gears,

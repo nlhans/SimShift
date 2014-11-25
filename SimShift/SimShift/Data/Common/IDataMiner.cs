@@ -20,7 +20,6 @@ namespace SimShift.Data.Common
         bool SupportsCar { get; }
         bool TransmissionSupportsRanges { get; }
         bool EnableWeirdAntistall { get; }
-        double Weight { get;  }
 
         void EvtStart();
         void EvtStop();
