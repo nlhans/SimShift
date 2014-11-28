@@ -15,8 +15,9 @@ namespace SimShift.Data
         [FieldOffset(16)] public uint ets2_version_minor;
 
 
-        [FieldOffset(20)] public bool engine_enabled;
-        [FieldOffset(21)] public bool trailer_attached;
+        [FieldOffset(20)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        public byte[] flags;
 
         // vehicle dynamics
 

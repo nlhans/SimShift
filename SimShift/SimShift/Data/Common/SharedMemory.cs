@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO.MemoryMappedFiles;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -97,6 +98,7 @@ namespace SimShift.Data.Common
             // Then free memory.
             var reservedMemPtr = Marshal.AllocHGlobal(memoryObjectSize);
 
+            Debug.WriteLine("20: {0} 21: {1}", structureDataBytes[20], structureDataBytes[21]);
             Marshal.Copy(structureDataBytes, 0, reservedMemPtr, memoryObjectSize);
 
             createdObject = (T)Marshal.PtrToStructure(reservedMemPtr, typeof(T));

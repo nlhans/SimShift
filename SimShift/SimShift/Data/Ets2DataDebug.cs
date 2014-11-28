@@ -53,8 +53,8 @@ namespace SimShift.Data
                 }
                 inftext.AppendLine("Game paused flag:" + (ets2Tel.paused == 1 ? "Yes" : "No"));
                 inftext.AppendLine("Time: " + ets2Tel.time);
-                inftext.AppendLine("Engine: " + (ets2Tel.engine_enabled ? "Running" : "Stalled"));
-                inftext.AppendLine("Trailer: " + (ets2Tel.trailer_attached ? "Attached" : "Distached"));
+                inftext.AppendLine("Engine: " + (ets2Tel.flags[0] == 1 ? "Running" : "Stalled"));
+                inftext.AppendLine("Trailer: " + (ets2Tel.flags[1] == 1 ? "Attached" : "Distached"));
                 inftext.AppendLine("Truck ID: " + ets2Miner.Truck);
                 inftext.AppendLine("Trailer ID: " + ets2Miner.Trailer);
                 inftext.AppendLine("");

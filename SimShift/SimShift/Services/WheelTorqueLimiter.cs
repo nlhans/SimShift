@@ -43,7 +43,7 @@ namespace SimShift.Services
             do
             {
                 var wheelTorque = Main.Drivetrain.CalculateTorqueP(data.Telemetry.EngineRpm, TorqueLimit * throttle) * f;
-                if (wheelTorque > 15000)
+                if (wheelTorque > 20000)
                 {
                     TorqueLimit *= 0.999f;
                     NotGood = true;
