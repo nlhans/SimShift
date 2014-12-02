@@ -58,13 +58,13 @@ namespace SimShift.Services
             Unloaded.Clear();
         }
 
-        public void Load(string profile)
+        public void Load(string profile, float staticMass)
         {
             if(Loaded.Any(x=>x.Name == profile))
             {
                 Debug.WriteLine("Loading profile "+profile);
                 Active = profile;
-                Loaded.FirstOrDefault(x => x.Name == profile).Load();
+                Loaded.FirstOrDefault(x => x.Name == profile).Load(staticMass);
 
                 if(LoadedProfile != null)
                     LoadedProfile(this, new EventArgs());

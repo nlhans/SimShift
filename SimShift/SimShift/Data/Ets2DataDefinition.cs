@@ -14,6 +14,7 @@ namespace SimShift.Data
         [FieldOffset(12)] public uint ets2_version_major;
         [FieldOffset(16)] public uint ets2_version_minor;
 
+        // ***** REVISION 1 ****** //
 
         [FieldOffset(20)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
@@ -75,6 +76,8 @@ namespace SimShift.Data
         [FieldOffset(152)] public int trailerOffset;
         [FieldOffset(156)] public int trailerLength;
 
+
+        // ***** REVISION 2 ****** //
         [FieldOffset(160)] public int timeAbsolute;
         [FieldOffset(164)] public int gearsReverse;
 
@@ -102,6 +105,55 @@ namespace SimShift.Data
         [FieldOffset(500)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
         public byte[] jobCompanyDestination;
+
+        // ***** REVISION 3 ****** //
+        [FieldOffset(564)]
+		public int retarderBrake;
+        [FieldOffset(568)]
+        public int shifterSlot;
+        [FieldOffset(572)]
+        public int shifterToggle;
+        //[FieldOffset(576)]
+        //public int fill;
+
+        [FieldOffset(580)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 24)]
+        public byte[] aux;
+        [FieldOffset(604)]
+        public float airPressure;
+        [FieldOffset(608)]
+        public float brakeTemperature;
+        [FieldOffset(612)]
+        public float fuelWarning;
+        [FieldOffset(616)]
+        public float adblue;
+        [FieldOffset(620)]
+        public float adblueConsumption;
+        [FieldOffset(624)]
+        public float oilPressure;
+        [FieldOffset(628)]
+        public float oilTemperature;
+        [FieldOffset(632)]
+        public float waterTemperature;
+        [FieldOffset(636)]
+        public float batteryVoltage;
+        [FieldOffset(640)]
+        public float lightsDashboard;
+        [FieldOffset(644)]
+        public float wearEngine;
+        [FieldOffset(648)]
+        public float wearTransmission;
+        [FieldOffset(652)]
+        public float wearCabin;
+        [FieldOffset(656)]
+        public float wearChassis;
+        [FieldOffset(660)]
+        public float wearWheels;
+        [FieldOffset(664)]
+        public float wearTrailer;
+        [FieldOffset(668)]
+        public float truckOdometer;
+        
 
         public IDataDefinition ToGeneric(string truck)
         {

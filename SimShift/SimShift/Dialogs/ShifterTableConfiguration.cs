@@ -19,7 +19,7 @@ namespace SimShift.Dialogs
         public Dictionary<int, Dictionary<double, int>> tableGear;
         public Dictionary<int, Dictionary<double, double>> tableThrottle;
 
-        public ShifterTableConfiguration(ShifterTableConfigurationDefault def, IDrivetrain drivetrain, int spdPerGear)
+        public ShifterTableConfiguration(ShifterTableConfigurationDefault def, IDrivetrain drivetrain, int spdPerGear, float staticMass)
         {
             Air = new Ets2Aero();
             Drivetrain = drivetrain;
@@ -52,7 +52,12 @@ namespace SimShift.Dialogs
             }
 
             if (spdPerGear > 0)
-                MinimumSpeedPerGear(spdPerGear);
+            {
+                var spdPerGearReduced = spdPerGear - staticMass/1000/1.25;
+                if (spdPerGearReduced < 1) spdPerGearReduced = 1;
+                Console.WriteLine("Spd per gear:"+spdPerGearReduced);
+                MinimumSpeedPerGear((int)Math.Round(spdPerGearReduced));
+            }
 
             string l = "";
             for(var r = 0; r < 2500; r+=10)
@@ -323,7 +328,7 @@ namespace SimShift.Dialogs
                     {
                         var calculatedRpm = Drivetrain.GearRatios[gear] * speed;
 
-                        if (calculatedRpm < Drivetrain.StallRpm * 1.25) continue;
+                        if (calculatedRpm < Drivetrain.StallRpm * 1.5) continue;
                         if (calculatedRpm > Drivetrain.MaximumRpm) continue;
 
                         var thr = (load < 0.05)

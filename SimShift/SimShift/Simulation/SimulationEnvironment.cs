@@ -21,7 +21,7 @@ namespace SimShift.Simulation
         {
             drivetrain = new Ets2Drivetrain();
             Main.Load(drivetrain, "Settings/Drivetrain/eurotrucks2.scania.g7ld6x2.ini");
-            shifter = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Performance, drivetrain, 1);
+            shifter = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Performance, drivetrain, 1, 0);
 
             Speed = 30/3.6;
             StringBuilder sim = new StringBuilder();

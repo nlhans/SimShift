@@ -82,13 +82,13 @@ namespace SimShift.Dialogs
             return rgb;
         }
 
-        private ShifterTableConfiguration activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.PowerEfficiency, new Ets2Drivetrain(), 1);
+        private ShifterTableConfiguration activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.PowerEfficiency, new Ets2Drivetrain(), 1, 0);
 
         public dlGearboxShifterTable()
         {
             var myEngine = new Ets2Drivetrain();
             Main.Load(myEngine, "Settings/Drivetrain/eurotrucks2.mercedes.actros.ini");
-            activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Performance, myEngine, 1);
+            activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Performance, myEngine, 1, 0);
 
             string headline = "RPM";
             for (int k = 0; k <= 10; k++)

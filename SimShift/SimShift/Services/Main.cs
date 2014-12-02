@@ -117,7 +117,7 @@ namespace SimShift.Services
                                            Speedlimiter.ResetParameters();
 
                                            CarProfile = new Profiles(Data.Active.Application, Data.Telemetry.Car);
-                                           LoadNextProfile();
+                                           LoadNextProfile(10000);
                                        };
 
                 Data.AppActive += (s, e) => { Map = new WorldMapper(Data.Active); };
@@ -485,16 +485,25 @@ namespace SimShift.Services
         }
 
         private static int profileIndexLoaded = 0;
-        public static void LoadNextProfile()
+        public static void LoadNextProfile(float staticMass)
         {
             if (profileIndexLoaded >= CarProfile.Loaded.Count) profileIndexLoaded = 0;
             if (CarProfile.Loaded.Count == 0) return;
-            CarProfile.Load(CarProfile.Loaded.Skip(profileIndexLoaded).FirstOrDefault().Name);
+            CarProfile.Load(CarProfile.Loaded.Skip(profileIndexLoaded).FirstOrDefault().Name, staticMass);
             profileIndexLoaded++;
             if (profileIndexLoaded >= CarProfile.Loaded.Count)
             {
                 profileIndexLoaded = 0;
             }
+        }
+
+        public static void ReloadProfile(float staticMass)
+        {
+            if (CarProfile.Loaded.Count == 0) return;
+            var pr = profileIndexLoaded - 1;
+            if (pr < 0) pr = CarProfile.Loaded.Count - 1;
+
+            CarProfile.Load(CarProfile.Loaded.Skip(pr).FirstOrDefault().Name, staticMass);
         }
     }
 }

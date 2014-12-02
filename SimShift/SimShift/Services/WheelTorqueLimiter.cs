@@ -58,6 +58,8 @@ namespace SimShift.Services
                     break;
                 }
             } while (NotGood);
+
+            TorqueLimit = 1.0f;
         }
 
         public bool Enabled { get; private set; }

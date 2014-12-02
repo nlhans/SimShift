@@ -58,6 +58,8 @@ namespace SimShift.Services
             get { return ShifterNewGear; }
         }
 
+        public float StaticMass = 0;
+
         public bool IsShifting { get; private set; }
 
         public int ShiftCtrlOldGear { get; private set; }
@@ -100,7 +102,7 @@ namespace SimShift.Services
 
         public Transmission()
         {
-            configuration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.PeakRpm, Main.Drivetrain, 20);
+            configuration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.PeakRpm, Main.Drivetrain, 20, 0);
 
             LoadShiftPattern("up_1thr", "normal");
             LoadShiftPattern("up_0thr", "normal");
@@ -808,7 +810,7 @@ namespace SimShift.Services
                                 IsShifting = false;
                                 shiftRetry = 0;
                                 TransmissionFreezeUntill =
-                                    DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, ShiftDeadTime + 50*ShiftCtrlNewGear));
+                                    DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, ShiftDeadTime +20*ShiftCtrlNewGear));
                             }
                         }
                     }
@@ -823,7 +825,7 @@ namespace SimShift.Services
         public IEnumerable<string> AcceptsConfigs { get { return new [] { "ShiftCurve" }; } }
         public void ResetParameters()
         {
-            configuration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.PeakRpm, Main.Drivetrain, 10);
+            configuration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.PeakRpm, Main.Drivetrain, 10, 0);
 
             if (Main.Data.Active.Application == "TestDrive2")
                 LoadShiftPattern("up_1thr", "fast");
@@ -906,7 +908,7 @@ namespace SimShift.Services
                             break;
                     }
 
-                    configuration = new ShifterTableConfiguration(def, Main.Drivetrain, speedHoldoff);
+                    configuration = new ShifterTableConfiguration(def, Main.Drivetrain, speedHoldoff, StaticMass);
                     break;
             }
         }

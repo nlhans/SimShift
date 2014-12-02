@@ -68,6 +68,7 @@
     <Compile Include="Data\Common\MemoryWriter.cs" />
     <Compile Include="Data\Common\ProcessMemoryReaderApi.cs" />
     <Compile Include="Data\DataArbiter.cs" />
+    <Compile Include="Data\Ets2DataAuxilliary.cs" />
     <Compile Include="Data\Ets2DataDebug.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -19,6 +19,7 @@ namespace SimShift.Services
         public string TractionControl { get; private set; }
 
         private Profiles Car { get; set; }
+        private float TrailerMass = 0;
 
         public Profile(Profiles car, string file)
         {
@@ -66,9 +67,12 @@ namespace SimShift.Services
             Main.Load(this, phFile);
         }
 
-        public void Load()
+        public void Load(float staticMass)
         {
             //
+            Main.Transmission.StaticMass = staticMass;
+            TrailerMass = staticMass;
+
             Main.Load(Main.Antistall, "Settings/Antistall/" + Antistall + ".ini");
             Main.Load(Main.CruiseControl, "Settings/CruiseControl/" + CruiseControl + ".ini");
 

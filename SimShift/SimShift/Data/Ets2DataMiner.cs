@@ -96,6 +96,16 @@ namespace SimShift.Data
         private void UpdateTelemetry(object sender, ElapsedEventArgs args)
         {
             _sharedMem.Update();
+            for (int i = 0; i < 24; i++)
+            {
+                Console.Write((i%10));
+            }
+            Console.WriteLine(" ");
+            for (int i = 0; i < 24; i++)
+            {
+                Console.Write(_sharedMem.Data.aux[i] == 1?"1":"0");
+            }
+            Console.WriteLine(" ");
             MyTelemetry = _sharedMem.Data;
 
             // read ID
