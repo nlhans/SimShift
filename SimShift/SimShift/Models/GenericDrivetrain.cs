@@ -24,6 +24,12 @@ namespace SimShift.Models
             Calibrated = true;
         }
 
+        public virtual bool GotDamage(float damage)
+        {
+            // gears might go kaput in other games
+            return false;
+        }
+
         public double StallRpm { get;  set; }
         public double MaximumRpm { get; set; }
         protected float GearReverse { get; set; }
@@ -135,7 +141,7 @@ namespace SimShift.Models
         }
 
         public double[] GearRatios { get; set; }
-        public int Gears { get; set; }
+        public virtual int Gears { get; set; }
         public bool Calibrated { get; set; }
 
         #endregion

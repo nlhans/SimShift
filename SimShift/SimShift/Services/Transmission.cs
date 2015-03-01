@@ -843,6 +843,7 @@ namespace SimShift.Services
 
         public void ApplyParameter(IniValueObject obj)
         {
+            return;
             switch(obj.Key)
             {
                 case "ShiftDeadSpeed":
@@ -926,5 +927,10 @@ namespace SimShift.Services
         }
 
         #endregion
+
+        public void RecalcTable()
+        {
+            configuration = new ShifterTableConfiguration(configuration.Mode, Main.Drivetrain, configuration.SpdPerGear, configuration.Mass);
+        }
     }
 }

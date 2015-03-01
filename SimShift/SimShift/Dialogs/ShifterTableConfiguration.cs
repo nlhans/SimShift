@@ -10,6 +10,10 @@ namespace SimShift.Dialogs
 {
     public class ShifterTableConfiguration
     {
+        public ShifterTableConfigurationDefault Mode;
+        public int SpdPerGear;
+        public float Mass;
+
         public int MaximumSpeed { get; private set; }
 
         public IDrivetrain Drivetrain { get; private set; }
@@ -21,6 +25,10 @@ namespace SimShift.Dialogs
 
         public ShifterTableConfiguration(ShifterTableConfigurationDefault def, IDrivetrain drivetrain, int spdPerGear, float staticMass)
         {
+            Mode = def;
+            SpdPerGear = spdPerGear;
+            Mass = staticMass;
+
             Air = new Ets2Aero();
             Drivetrain = drivetrain;
             MaximumSpeed = 600;
@@ -232,7 +240,7 @@ namespace SimShift.Dialogs
                     var gearSet = false;
                     var latestGearThatWasNotStalling = 1;
 
-                    var shiftRpm = Drivetrain.StallRpm + (Drivetrain.MaximumRpm - 300 - Drivetrain.StallRpm) * load;
+                    var shiftRpm = Drivetrain.StallRpm + (Drivetrain.MaximumRpm - 700 - Drivetrain.StallRpm) * load;
                     //shiftRpm = 3000 + (Drivetrain.MaximumRpm - 3000-1000) * load;
                     for (int gear = 0; gear < Drivetrain.Gears; gear++)
                     {

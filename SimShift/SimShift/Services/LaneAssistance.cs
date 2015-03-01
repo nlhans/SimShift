@@ -255,8 +255,8 @@ namespace SimShift.Services
 
                 Bitmap screenBitmap;
 
-                if (UseDirectXCapture) 
-                    screenBitmap = Direct3DCapture.CaptureRegionDirect3D(ets2Handle, screenSrc);
+                if (UseDirectXCapture)
+                    screenBitmap = null;//Direct3DCapture.CaptureRegionDirect3D(ets2Handle, screenSrc);
                 else
                 {
                     screenBitmap = new Bitmap(screenSrc.Width, screenSrc.Height);

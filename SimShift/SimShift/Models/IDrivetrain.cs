@@ -5,6 +5,8 @@ namespace SimShift.Models
 {
     public interface IDrivetrain : IConfigurable
     {
+        bool GotDamage(float damage);
+
         double StallRpm { get; set; }
         double MaximumRpm { get; set; }
         double CalculateTorqueN(double rpm);

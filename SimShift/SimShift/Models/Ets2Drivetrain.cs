@@ -12,6 +12,19 @@ namespace SimShift.Models
 
         private double Ets2Torque { get; set; }
 
+        private int damagedGears;
+        public override int Gears
+        {
+            get { return base.Gears - damagedGears; }
+        }
+
+        public override bool GotDamage(float damage)
+        {
+            var wasDamaged = damagedGears;
+            damagedGears = (int) Math.Floor(damage*Gears);
+            return wasDamaged != damagedGears;
+        }
+
         //public double StallRpm { get; set; }
         //public double MaximumRpm { get; set; }
 

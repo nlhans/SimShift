@@ -88,18 +88,6 @@ namespace SimShift.Services
 
                 // Data source
                 Data = new DataArbiter();
-                Socket server = new Socket(AddressFamily.InterNetwork,
-                           SocketType.Dgram, ProtocolType.Udp);
-                var ep = new IPEndPoint(IPAddress.Parse("192.168.1.158"), 12345);
-                Data.DataReceived += (sender, args) =>
-                                         {
-                                             var r = (Data.Telemetry.EngineRpm - 300)/(2500 - 300);
-                                             if (Data.Telemetry.EngineRpm < 300) r = -1;
-                                             var s = ((int) (r*10000)).ToString() + "," +
-                                                 ((int) (Data.Telemetry.Throttle*1000)).ToString()+","+((Data.Telemetry.Paused)?1:0);
-                                             var sb = ASCIIEncoding.ASCII.GetBytes(s);
-                                             server.SendTo(sb, ep);
-                                         };
 
                 Data.CarChanged += (s, e) =>
                                        {

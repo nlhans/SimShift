@@ -153,6 +153,8 @@ namespace SimShift.Data
         public float wearTrailer;
         [FieldOffset(668)]
         public float truckOdometer;
+        [FieldOffset(672)]
+        public float cruiseControlSpeed;
         
 
         public IDataDefinition ToGeneric(string truck)

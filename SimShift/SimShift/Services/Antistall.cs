@@ -110,8 +110,8 @@ namespace SimShift.Services
                     }
                     else
                     {
-                        var maxRpm = Main.Drivetrain.MaximumRpm/2;
-                        var maxV =1.5 - 1.5*Rpm/(maxRpm);
+                        var maxRpm = Main.Drivetrain.StallRpm*1.4;
+                        var maxV = 2 -  2*Rpm/(maxRpm);
                         if (maxV > 1) maxV = 1;
                         if (maxV < 0) maxV = 0;
                         _throttle = val;
@@ -129,6 +129,7 @@ namespace SimShift.Services
                     {
                         var cl = 1 - _throttle*ThrottleSensitivity; // 2
                         if (cl < MinClutch) cl = MinClutch; // 0.1
+                        cl = Math.Max(cl, val);
                         return cl;
                     }
                     else if(SlippingLowGear)

@@ -93,6 +93,10 @@ namespace SimShift.Dialogs
                 {
                     MessageBox.Show("This will stop main service");
                     Main.Stop();
+                    for (int i = 0; i < (int) JoyControls.NUM_OF_CONTROLS; i++)
+                    {
+                        Main.SetButtonOut((JoyControls) i, false);
+                    }
                 }
                 int buttonState = 0;
                 _mCalibrateButton = new Timer();

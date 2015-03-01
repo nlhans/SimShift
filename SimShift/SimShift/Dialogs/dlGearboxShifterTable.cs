@@ -87,8 +87,9 @@ namespace SimShift.Dialogs
         public dlGearboxShifterTable()
         {
             var myEngine = new Ets2Drivetrain();
-            Main.Load(myEngine, "Settings/Drivetrain/eurotrucks2.mercedes.actros.ini");
-            activeConfiguration = new ShifterTableConfiguration(ShifterTableConfigurationDefault.Performance, myEngine, 1, 0);
+            Main.Load(myEngine, "Settings/Drivetrain/eurotrucks2.iveco.hiway.ini");
+            activeConfiguration = Main.Running ? Main.Transmission.configuration :
+                new ShifterTableConfiguration(ShifterTableConfigurationDefault.Efficiency, myEngine, 19, 25000);
 
             string headline = "RPM";
             for (int k = 0; k <= 10; k++)

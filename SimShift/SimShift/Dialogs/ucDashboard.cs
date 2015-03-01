@@ -438,15 +438,17 @@ namespace SimShift.Dialogs
             if (double.IsNaN(literPer100KmAvg) || double.IsInfinity(literPer100KmAvg))
                 literPer100KmAvg = 0;
 
-            var ets2Data = ((Ets2DataMiner) Main.Data.Active ).MyTelemetry;
-            g.DrawString(Encoding.UTF8.GetString(ets2Data.jobCitySource), new Font("Verdana", 10.0f), Brushes.White, 0, 0);
-            g.DrawString(Encoding.UTF8.GetString(ets2Data.jobCityDestination), new Font("Verdana", 10.0f), Brushes.White, 0, 20);
-            g.DrawString(Encoding.UTF8.GetString(ets2Data.jobCompanySource), new Font("Verdana", 10.0f), Brushes.White, 0, 40);
-            g.DrawString(Encoding.UTF8.GetString(ets2Data.jobCompanyDestination), new Font("Verdana", 10.0f), Brushes.White, 0, 60);
-            g.DrawString(Encoding.UTF8.GetString(ets2Data.trailerId), new Font("Verdana", 10.0f), Brushes.White, 0, 80);
-            g.DrawString(Encoding.UTF8.GetString(ets2Data.trailerName), new Font("Verdana", 10.0f), Brushes.White, 0, 100);
-            g.DrawString(string.Format("{0:00000}kg", ets2Data.trailerMass), new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 120);
-            g.DrawString(string.Format("{0:00000}", ets2Data.jobDeadline - ets2Data.timeAbsolute), new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 140);
+            var ets2 = ((Ets2DataMiner) Main.Data.Active);
+            var ets2Data = ets2.MyTelemetry;
+            
+            var citySrc = Encoding.UTF8.GetString(ets2Data.jobCitySource);
+            var cityDst = Encoding.UTF8.GetString(ets2Data.jobCityDestination);
+            var trailer = Encoding.UTF8.GetString(ets2Data.trailerName);
+            var trailerWeight = ets2Data.trailerMass/1000.0f;
+
+            var str = ets2.TrailerName.Length>2 ? string.Format("Transporting:\r\n{0} from {1} to {2}", trailer, citySrc, cityDst) : "Empty!";
+
+            g.DrawString(str, new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 170);
             return;
 
             g.DrawString(literPerHour.ToString("000.00 L/h"), new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 0);

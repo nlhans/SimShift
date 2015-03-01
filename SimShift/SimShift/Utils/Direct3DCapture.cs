@@ -4,6 +4,7 @@ using System.Drawing;
 
 namespace SimShift.Utils
 {
+    /*
     public static class Direct3DCapture
     {
         private static SlimDX.Direct3D9.Direct3D _direct3D9 = new SlimDX.Direct3D9.Direct3D();
@@ -76,4 +77,5 @@ namespace SimShift.Utils
             return bitmap;
         }
     }
+     */
 }
