@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using SimShift.Data;
 using SimShift.Data.Common;
+using SimShift.Entities;
 
 namespace SimShift.Services
 {
@@ -19,6 +20,8 @@ namespace SimShift.Services
 
         private Dictionary<JoyControls, Dictionary<string, double>> axisProgression =
             new Dictionary<JoyControls, Dictionary<string, double>>();
+
+        private string ActiveSimulator;
 
         public ControlChain()
         {
@@ -83,7 +86,7 @@ namespace SimShift.Services
 
             // Put it serially through each control block
             // Each time a block requires a control, it receives the current value of that control
-            foreach(var obj in chain)
+            foreach(var obj in chain.Where(FilterSimulators))
             {
                 buttonValues = buttonValues.ToDictionary(c => c.Key, k => obj.Requires(k.Key) ? obj.GetButton(k.Key, k.Value) : k.Value);
                 axisValues = axisValues.ToDictionary(c => c.Key, k => obj.Requires(k.Key) ? obj.GetAxis(k.Key, k.Value) : k.Value);
@@ -108,5 +111,20 @@ namespace SimShift.Services
             }
         }
 
+        private bool FilterSimulators(IControlChainObj arg)
+        {
+            if (arg.SimulatorsOnly.Any())
+            {
+                if (!arg.SimulatorsOnly.Contains(ActiveSimulator))
+                    return false;
+            }
+            if (arg.SimulatorsBan.Any())
+            {
+                if (arg.SimulatorsBan.Contains(ActiveSimulator))
+                    return false;
+            }
+
+            return true;
+        }
     }
 }

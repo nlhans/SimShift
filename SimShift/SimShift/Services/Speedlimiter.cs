@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using SimShift.Data;
 using SimShift.Data.Common;
+using SimShift.Entities;
 using SimShift.Utils;
 
 namespace SimShift.Services
@@ -44,17 +45,11 @@ namespace SimShift.Services
             {
                 case JoyControls.Throttle:
                     return val*this.limiterFactor;
-                    break;
 
-                    case JoyControls.Brake:
-                    return brakeFactor:val;
-                    
                 default:
                     return val;
             }
         }
-
-        private double brakeFactor;
 
         public bool GetButton(JoyControls c, bool val)
         {
@@ -65,7 +60,6 @@ namespace SimShift.Services
         {
         }
 
-        private double integralBrake = 0;
         public void TickTelemetry(IDataMiner data)
         {
             SpeedLimit = 125;

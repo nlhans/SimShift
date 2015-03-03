@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using SimShift.Data;
 using SimShift.Data.Common;
+using SimShift.Entities;
 
 namespace SimShift.Services
 {

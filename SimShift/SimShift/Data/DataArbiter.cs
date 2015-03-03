@@ -38,7 +38,6 @@ namespace SimShift.Data
             AutoMode = true;
 
             miners.Add(new Ets2DataMiner());
-            miners.Add(new Ets2MpDataMiner());
             miners.Add(new Tdu2DataMiner());
 
             miners.ForEach(app =>

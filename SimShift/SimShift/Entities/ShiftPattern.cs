@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using SimShift.Services;
 using SimShift.Utils;
 
-namespace SimShift.Services
+namespace SimShift.Entities
 {
     public class ShiftPattern : IConfigurable
     {

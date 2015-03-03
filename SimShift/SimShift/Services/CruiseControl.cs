@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using SimShift.Data;
 using SimShift.Data.Common;
+using SimShift.Entities;
 using SimShift.Utils;
 
 namespace SimShift.Services

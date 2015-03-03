@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using SimShift.Utils;
 
-namespace SimShift.Services
+namespace SimShift.Entities
 {
     public interface IConfigurable
     {

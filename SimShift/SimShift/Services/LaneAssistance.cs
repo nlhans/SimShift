@@ -10,6 +10,7 @@ using System.Text;
 using System.Windows.Forms;
 using AForge.Imaging;
 using SimShift.Data.Common;
+using SimShift.Entities;
 using SimShift.Utils;
 
 namespace SimShift.Services

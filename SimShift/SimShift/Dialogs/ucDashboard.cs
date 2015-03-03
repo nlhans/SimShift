@@ -9,6 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using SimShift.Data;
 using SimShift.Data.Common;
+using SimShift.Entities;
 using SimShift.Services;
 
 namespace SimShift.Dialogs

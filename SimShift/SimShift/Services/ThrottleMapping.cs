@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using SimShift.Data.Common;
+using SimShift.Entities;
 
 namespace SimShift.Services
 {

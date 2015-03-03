@@ -1,10 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using SimShift.Services;
 using SimShift.Utils;
 
-namespace SimShift.Services
+namespace SimShift.Entities
 {
     public class Profile : IConfigurable
     {

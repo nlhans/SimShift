@@ -1,4 +1,4 @@
-namespace SimShift.Services
+namespace SimShift.Entities
 {
     public struct ConfigurableShiftPattern
     {

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using SimShift.Services;
 using SimShift.Utils;
 
-namespace SimShift.Services
+namespace SimShift.Entities
 {
     public class Profiles : IConfigurable
     {

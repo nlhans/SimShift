@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Timers;
 using SimShift.Data.Common;
+using SimShift.Entities;
 using SimShift.Utils;
 
 namespace SimShift.Services

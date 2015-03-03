@@ -1,4 +1,5 @@
 using System.Linq;
+using SimShift.Entities;
 using SimShift.Services;
 
 namespace SimShift.Models

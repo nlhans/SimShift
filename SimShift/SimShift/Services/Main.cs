@@ -9,6 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using SimShift.Controllers;
 using SimShift.Data;
+using SimShift.Entities;
 using SimShift.Models;
 using SimShift.Utils;
 
@@ -246,23 +247,23 @@ namespace SimShift.Services
             switch (c)
             {
                     // Unimplemented as of now.
-                case Services.JoyControls.Gear1:
+                case JoyControls.Gear1:
                     return RawJoysticksIn[1].GetButton(8);
-                case Services.JoyControls.Gear2:
+                case JoyControls.Gear2:
                     return RawJoysticksIn[1].GetButton(9);
-                case Services.JoyControls.Gear3:
+                case JoyControls.Gear3:
                     return RawJoysticksIn[1].GetButton(10);
-                case Services.JoyControls.Gear4:
+                case JoyControls.Gear4:
                     return RawJoysticksIn[1].GetButton(11);
-                case Services.JoyControls.Gear5:
+                case JoyControls.Gear5:
                     return RawJoysticksIn[1].GetButton(12);
-                case Services.JoyControls.Gear6:
+                case JoyControls.Gear6:
                     return RawJoysticksIn[1].GetButton(13);
-                case Services.JoyControls.Gear7:
+                case JoyControls.Gear7:
                     return false;
-                case Services.JoyControls.Gear8:
+                case JoyControls.Gear8:
                     return false;
-                case Services.JoyControls.GearR:
+                case JoyControls.GearR:
                     return RawJoysticksIn[1].GetButton(14);
 
                 case JoyControls.GearRange1:
@@ -271,26 +272,26 @@ namespace SimShift.Services
                 case JoyControls.GearRange2:
                     return RawJoysticksIn[1].GetButton(17);
 
-                case Services.JoyControls.LaneAssistance:
+                case JoyControls.LaneAssistance:
                     if (ps3Controller)
                         return false;
                     else
                         return false; //return RawJoysticksIn[1].GetButton(7);
 
                     // PS3 (via DS3 tool) L1/R1
-                case Services.JoyControls.GearDown:
+                case JoyControls.GearDown:
                     if (ps3Controller)
                         return RawJoysticksIn[0].GetButton(4);
                     else if (Transmission.Enabled)
                         return RawJoysticksIn[1].GetButton(8);
                     else return false;
-                case Services.JoyControls.GearUp:
+                case JoyControls.GearUp:
                     if (ps3Controller)
                         return RawJoysticksIn[0].GetButton(5);
                     else if (Transmission.Enabled)
                         return RawJoysticksIn[1].GetButton(9);
                     else return false;
-                case Services.JoyControls.CruiseControlMaintain:
+                case JoyControls.CruiseControlMaintain:
                     if (ps3Controller)
                         return RawJoysticksIn[0].GetButton(0);
                     else
@@ -304,7 +305,7 @@ namespace SimShift.Services
                     return !ps3Controller && RawJoysticksIn[1].GetPov(1);
                 
                 
-                case Services.JoyControls.LaunchControl:
+                case JoyControls.LaunchControl:
                     if (ps3Controller)
                         return RawJoysticksIn[0].GetButton(11);
                     else
@@ -320,14 +321,14 @@ namespace SimShift.Services
         {
             switch(c)
             {
-                case Services.JoyControls.Steering:
+                case JoyControls.Steering:
 
                     if (ps3Controller)
                         return 0.5;
                     else
                         return RawJoysticksIn[1].GetAxis(0)/Math.Pow(2,16);
                     
-                case Services.JoyControls.Throttle:
+                case JoyControls.Throttle:
 
                     double t = 0;
                     if (ps3Controller)
@@ -340,7 +341,7 @@ namespace SimShift.Services
                     //t *= 0.8;
                     return t;
 
-                case Services.JoyControls.Brake:
+                case JoyControls.Brake:
                     if (ps3Controller)
                         return ((RawJoysticksIn[0].GetAxis(2) - Math.Pow(2, 15)) / Math.Pow(2, 15) - 0.25) / 0.75;
                     else
@@ -351,10 +352,10 @@ namespace SimShift.Services
                         if (Main.Data.Active == null || Main.Data.Active.Application == "TestDrive2") return b;
                         return b * b;
                     }
-                case Services.JoyControls.Clutch:
+                case JoyControls.Clutch:
                     return 1 - RawJoysticksIn[1].GetAxis(4) / Math.Pow(2, 16);
 
-                case Services.JoyControls.CameraHorizon:
+                case JoyControls.CameraHorizon:
                     if (ps3Controller)
                         return RawJoysticksIn[0].GetAxis(5) / Math.Pow(2, 15) - 1;
                     else return 0;
@@ -371,51 +372,51 @@ namespace SimShift.Services
                 default:
                     break;
 
-                case Services.JoyControls.Gear1:
+                case JoyControls.Gear1:
                     RawJoysticksOut[0].SetButton(1, value);
                     break;
 
-                case Services.JoyControls.Gear2:
+                case JoyControls.Gear2:
                     RawJoysticksOut[0].SetButton(2, value);
                     break;
 
-                case Services.JoyControls.Gear3:
+                case JoyControls.Gear3:
                     RawJoysticksOut[0].SetButton(3, value);
                     break;
 
-                case Services.JoyControls.Gear4:
+                case JoyControls.Gear4:
                     RawJoysticksOut[0].SetButton(4, value);
                     break;
 
-                case Services.JoyControls.Gear5:
+                case JoyControls.Gear5:
                     RawJoysticksOut[0].SetButton(5, value);
                     break;
 
-                case Services.JoyControls.Gear6:
+                case JoyControls.Gear6:
                     RawJoysticksOut[0].SetButton(6, value);
                     break;
 
-                case Services.JoyControls.Gear7:
+                case JoyControls.Gear7:
                     RawJoysticksOut[0].SetButton(11, value);
                     break;
 
-                case Services.JoyControls.Gear8:
+                case JoyControls.Gear8:
                     RawJoysticksOut[0].SetButton(12, value);
                     break;
 
-                case Services.JoyControls.GearR:
+                case JoyControls.GearR:
                     RawJoysticksOut[0].SetButton(7, value);
                     break;
 
-                case Services.JoyControls.GearRange1:
+                case JoyControls.GearRange1:
                     RawJoysticksOut[0].SetButton(8, value);
                     break;
 
-                case Services.JoyControls.GearRange2:
+                case JoyControls.GearRange2:
                     RawJoysticksOut[0].SetButton(9, value);
                     break;
 
-                case Services.JoyControls.CruiseControlMaintain:
+                case JoyControls.CruiseControlMaintain:
                     RawJoysticksOut[0].SetButton(10, value);
                     break;
             }
@@ -435,19 +436,19 @@ namespace SimShift.Services
                 default:
                     break;
 
-                case Services.JoyControls.Steering:
+                case JoyControls.Steering:
                     RawJoysticksOut[0].SetAxis(HID_USAGES.HID_USAGE_RX, value/2);
                     break;
 
-                case Services.JoyControls.Throttle:
+                case JoyControls.Throttle:
                     RawJoysticksOut[0].SetAxis(HID_USAGES.HID_USAGE_X, value/2);
                     break;
 
-                case Services.JoyControls.Brake:
+                case JoyControls.Brake:
                     RawJoysticksOut[0].SetAxis(HID_USAGES.HID_USAGE_Y, value/2);
                     break;
 
-                case Services.JoyControls.Clutch:
+                case JoyControls.Clutch:
                     RawJoysticksOut[0].SetAxis(HID_USAGES.HID_USAGE_Z, value/2);
                     break;
             }

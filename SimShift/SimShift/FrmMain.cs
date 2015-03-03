@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using SimShift.Data;
 using SimShift.Data.Common;
 using SimShift.Dialogs;
+using SimShift.Entities;
 using SimShift.Services;
 using SimShift.Simulation;
 

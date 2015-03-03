@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using SimShift.Data;
 using SimShift.Data.Common;
+using SimShift.Entities;
 using SimShift.Utils;
 
 namespace SimShift.Services

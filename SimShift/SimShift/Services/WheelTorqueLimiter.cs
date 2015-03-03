@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using SimShift.Data.Common;
+using SimShift.Entities;
 
 namespace SimShift.Services
 {
+    /// <summary>
+    /// This module is a gimmick to simulate a torque limiter for the drive wheels. It practically limits the throttle in lower gears, because it may exceed torque limit of the drivetrain.
+    /// /
+    /// </summary>
     class WheelTorqueLimiter: IControlChainObj
     {
         public bool Enabled { get; private set; }

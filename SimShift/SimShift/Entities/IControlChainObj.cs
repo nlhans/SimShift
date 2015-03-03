@@ -1,10 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
-using SimShift.Data;
 using SimShift.Data.Common;
+using SimShift.Services;
 
-namespace SimShift.Services
+namespace SimShift.Entities
 {
     public interface IControlChainObj
     {
