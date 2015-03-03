@@ -7,10 +7,20 @@ using SimShift.Utils;
 
 namespace SimShift.Services
 {
+    /// <summary>
+    /// This module is the "Auto-Clutch" feature and engages the clutch when the engine is about to stall.
+    /// It also ensures smooth get-away when the user engages throttle when the vehicle has stopped.
+    /// </summary>
     public class Antistall : IControlChainObj, IConfigurable
     {
         public bool Enabled { get; set; }
-        public bool Active { get { return Stalling; }}
+        public bool Active { get { return Stalling; } }
+
+        public IEnumerable<string> SimulatorsOnly { get { return new String[0]; } }
+        public IEnumerable<string> SimulatorsBan { get { return new String[0]; } }
+
+
+        //
         public static bool Stalling { get; private set; }
         public double Speed { get; private set; }
 
@@ -46,9 +56,6 @@ namespace SimShift.Services
         {
             switch (c)
             {
-                    case JoyControls.Steering:
-                    return false;
-
                 case JoyControls.Throttle:
                     return Enabled&& Stalling;
                     
@@ -60,34 +67,12 @@ namespace SimShift.Services
             }
         }
 
-        private float integralIdleRevver = 0.0f;
-
-        private int tick = 0;
         public double GetAxis(JoyControls c, double val)
         {
             switch (c)
             {
-                    case JoyControls.Steering:
-                    var str = val*2 - 1;
-                    var gain = 1-Main.Data.Telemetry.Speed*3.6/80;
-                    gain *= 4;
-                    if (gain < 0.5) gain = 0.5;
-                    str *= gain;
-
-                    if (str > 1) str = 1;
-                    if (str < -1) str = -1;
-                    return str/2 + 0.5;
-                    var gameVal = 0.5 - (Main.Data.Active as Ets2DataMiner).MyTelemetry.gameSteer/2;
-                    var err = val -gameVal;
-                    return val + err*.5;
-                        return val;
-                    ;
-                    if (tick % 160 > 80)
-                        return 0;
-                    else
-                        return 1;
                 case JoyControls.Throttle:
-                    //if (ReverseAndAccelerate) return 0;
+
                     if (!Stalling) return val;
                     if (EngineStalled)
                     {
@@ -95,18 +80,10 @@ namespace SimShift.Services
                         return val; }
                     if (BlipFull) return 1;
                     if (Override) return 0;
-                    if (val < 0.025)
+                    if (val < 0.01)
                     {
                         _throttle = 0;
-                        tick++;
-                        var targetRpm = 770 + Math.Sin(tick * 2 * Math.PI / 1570.0) * Math.Cos(tick * 2 * Math.PI / (200+90*Math.Sin(tick*2*Math.PI*1010))) * 110;
-                        if (Blip)
-                            targetRpm = 2000;
-
-                        integralIdleRevver += (float)(targetRpm-Rpm)*0.00015f;
-                        if (integralIdleRevver > 0.5) integralIdleRevver = 0.5f;
-                        if (integralIdleRevver < -0.5) integralIdleRevver = -0.5f;
-                        return (targetRpm-Rpm)/1000 +integralIdleRevver;
+                        return 0;
                     }
                     else
                     {
@@ -132,15 +109,14 @@ namespace SimShift.Services
                         cl = Math.Max(cl, val);
                         return cl;
                     }
-                    else if(SlippingLowGear)
+                    if(SlippingLowGear)
                     {
-                         var t =1 - 1.3*(Rpm-1500)/500;
+                        var t =1 - 1.3*(Rpm-1500)/500;
                         t = Math.Max(val, Math.Min(1, Math.Max(0, t)));
                         return t;
-                    }else
-                    {
-                        return 0;
                     }
+                    return 0;
+                    break;
 
                 default:
                     return val;

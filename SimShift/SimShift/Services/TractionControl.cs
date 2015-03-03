@@ -11,6 +11,11 @@ using SimShift.Utils;
 
 namespace SimShift.Services
 {
+    /// <summary>
+    /// Traction Control limits the wheel slip via open-loop control by reducing throttle when a slip % exceeds predetermined offset.
+    /// The aggressiveness is adjusted by slope.
+    /// Optionally a rattling sound can be played to alert the driver TC is overriding control.
+    /// </summary>
     public class TractionControl : IControlChainObj, IConfigurable
     {
         public bool Enabled { get
@@ -19,6 +24,10 @@ namespace SimShift.Services
         } }
         public bool Active { get { return Slipping; } }
 
+        public IEnumerable<string> SimulatorsOnly { get { return new String[0]; } }
+        public IEnumerable<string> SimulatorsBan { get { return new String[0]; } }
+
+        //
         private SoundPlayer tcSound;
 
         public bool Slipping { get; private set; }

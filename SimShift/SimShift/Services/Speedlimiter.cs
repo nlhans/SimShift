@@ -8,17 +8,22 @@ using SimShift.Utils;
 
 namespace SimShift.Services
 {
+    /// <summary>
+    /// Limits maximum speed of vehicle to avoid reckless driving, or create realism for some vehicles (eg 255km/h limit on german saloon cars).
+    /// Maximum speed can be adjusted and must be set some km/h lower than the desired speed. Aggresiveness is determined by slope.
+    /// </summary>
     public class Speedlimiter : IControlChainObj, IConfigurable
     {
         public bool Active { get { return limiterFactor < 0.99; } }
-
-        public int SpeedLimit { get; private set; }
-        public float SpeedSlope { get; private set; }
         public bool Enabled { get; private set; }
 
-        private bool fuelTest = false;
-        private float fuelRpm = 500;
-        private DateTime fuelLastChange = DateTime.Now;
+        public IEnumerable<string> SimulatorsOnly { get { return new String[0]; } }
+        public IEnumerable<string> SimulatorsBan { get { return new String[0]; } }
+
+        //
+        public int SpeedLimit { get; private set; }
+        public float SpeedSlope { get; private set; }
+
         private double limiterFactor;
 
         public bool Requires(JoyControls c)
@@ -28,11 +33,6 @@ namespace SimShift.Services
                 case JoyControls.Throttle:
                     return true;
 
-                case JoyControls.Brake:
-                    return fuelTest;
-                case JoyControls.CruiseControlUp:
-                case JoyControls.CruiseControlDown:
-                    return true;
                 default:
                     return false;
             }
@@ -43,11 +43,11 @@ namespace SimShift.Services
             switch(c)
             {
                 case JoyControls.Throttle:
-                    return fuelTest ? 1 : val*this.limiterFactor;
+                    return val*this.limiterFactor;
                     break;
 
                     case JoyControls.Brake:
-                    return fuelTest? 0.5*brakeFactor:val;
+                    return brakeFactor:val;
                     
                 default:
                     return val;
@@ -58,22 +58,6 @@ namespace SimShift.Services
 
         public bool GetButton(JoyControls c, bool val)
         {
-            if (c == JoyControls.CruiseControlUp && Main.GetButtonIn(c))
-            {
-                if (DateTime.Now.Subtract(fuelLastChange).TotalMilliseconds > 500)
-                {
-                    fuelRpm += 100;
-                    fuelLastChange = DateTime.Now;
-                }
-            }
-            if (c == JoyControls.CruiseControlDown && Main.GetButtonIn(c))
-            {
-                if (DateTime.Now.Subtract(fuelLastChange).TotalMilliseconds > 500)
-                {
-                    fuelRpm -= 100;
-                    fuelLastChange = DateTime.Now;
-                }
-            }
             return val;
         }
 
@@ -85,20 +69,7 @@ namespace SimShift.Services
         public void TickTelemetry(IDataMiner data)
         {
             SpeedLimit = 125;
-            if (fuelTest)
-            {
-                Enabled = true;
-                SpeedLimit = 10;
-                SpeedSlope = 2.5f;
-                var rpmLimit = fuelRpm;
 
-                var e = (data.Telemetry.EngineRpm - rpmLimit);
-                integralBrake += e / 250 * 0.0025;
-                if (integralBrake > 2.5) integralBrake = 2.5;
-                if (integralBrake < 0) integralBrake = 0;
-                //brakeFactor = (data.Telemetry.Speed * 3.6 - SpeedLimit) / SpeedSlope;
-                brakeFactor = e / 750 + integralBrake;
-            }
             if (!Enabled)
             {
                 limiterFactor = 1;

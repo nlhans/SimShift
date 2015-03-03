@@ -22,11 +22,24 @@ namespace SimShift.Services
         ShiftToFirst
     }
 
+    /// <summary>
+    /// This module calibrates the "Drivetrain" object so most driving helps can be used.
+    /// The calibration data acquired is:
+    /// - Idle RPM
+    /// - Maximum RPM
+    /// - Gear Ratio's (forward gears only)
+    /// 
+    /// </summary>
     public class DrivetrainCalibrator : IControlChainObj
     {
         public bool Enabled { get { return Calibrating; } }
         public bool Active { get { return Calibrating; } }
 
+        public IEnumerable<string> SimulatorsOnly { get { return new String[0]; } }
+        public IEnumerable<string> SimulatorsBan { get { return new String[0]; } }
+
+
+        //
         public bool Calibrating { get; private set; }
 
         public DateTime MeasurementSettletime { get; private set; }

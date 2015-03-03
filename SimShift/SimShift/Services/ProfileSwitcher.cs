@@ -1,13 +1,23 @@
 using System;
+using System.Collections.Generic;
 using SimShift.Data;
 using SimShift.Data.Common;
 
 namespace SimShift.Services
 {
+    /// <summary>
+    /// This module monitors user inputs to switch driving profiles.
+    /// Driving profiles contain a set of settings for all different driving modules, e.g. transmission, speedlimiter, traction control, etc.
+    /// </summary>
     public class ProfileSwitcher : IControlChainObj
     {
         public bool Active { get { return ProfileSwitchFrozen; } }
         public bool Enabled { get { return true; } }
+
+        public IEnumerable<string> SimulatorsOnly { get { return new String[0]; } }
+        public IEnumerable<string> SimulatorsBan { get { return new String[0]; } }
+
+        //
 
         public DateTime ProfileSwitchTimeout { get; private set; }
         public bool ProfileSwitchFrozen { get { return ProfileSwitchTimeout > DateTime.Now; } }

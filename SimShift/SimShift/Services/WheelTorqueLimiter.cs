@@ -1,10 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using SimShift.Data.Common;
 
 namespace SimShift.Services
 {
     class WheelTorqueLimiter: IControlChainObj
     {
+        public bool Enabled { get; private set; }
+        public bool Active { get; private set; }
+
+        public IEnumerable<string> SimulatorsOnly { get { return new String[0]; } }
+        public IEnumerable<string> SimulatorsBan { get { return new String[0]; } }
+
+        //
         private double TorqueLimit = 0;
         #region Implementation of IControlChainObj
 
@@ -61,9 +69,6 @@ namespace SimShift.Services
 
             TorqueLimit = 1.0f;
         }
-
-        public bool Enabled { get; private set; }
-        public bool Active { get; private set; }
 
         #endregion
     }

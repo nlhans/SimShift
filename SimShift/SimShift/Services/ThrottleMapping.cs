@@ -7,8 +7,18 @@ using SimShift.Data.Common;
 
 namespace SimShift.Services
 {
+    /// <summary>
+    /// This module can make the throttle less sensitive. This is adventagous when driving some vehicles, like trucks.
+    /// </summary>
     class ThrottleMapping : IControlChainObj
     {
+        public bool Enabled { get; private set; }
+        public bool Active { get; private set; }
+
+        public IEnumerable<string> SimulatorsOnly { get { return new String[0]; } }
+        public IEnumerable<string> SimulatorsBan { get { return new String[0]; } }
+
+        //
         #region Implementation of IControlChainObj
 
         public bool Requires(JoyControls c)
@@ -41,9 +51,6 @@ namespace SimShift.Services
             Enabled = true;
             Active = true;
         }
-
-        public bool Enabled { get; private set; }
-        public bool Active { get; private set; }
 
         #endregion
     }

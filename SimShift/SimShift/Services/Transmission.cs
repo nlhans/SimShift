@@ -9,6 +9,10 @@ using SimShift.Utils;
 
 namespace SimShift.Services
 {
+    /// <summary>
+    /// Automatic shifter for vehicles. Support 1 reverse and up to 24 reverse gears using 6-speed 4-range gearbox.
+    /// Uses pre-calculated 2-dimensional shifter table that maps speed and throttle position to gear.
+    /// </summary>
     public class Transmission : IControlChainObj, IConfigurable
     {
         // TODO: Move to car object
@@ -18,6 +22,10 @@ namespace SimShift.Services
         public bool Enabled { get; set; }
         public bool Active { get { return IsShifting; } }
 
+        public IEnumerable<string> SimulatorsOnly { get { return new String[0]; } }
+        public IEnumerable<string> SimulatorsBan { get { return new String[0]; } }
+
+        //
         public static bool InReverse { get; set; }
 
         public bool GetHomeMode { get; set; }

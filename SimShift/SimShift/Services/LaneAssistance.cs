@@ -14,15 +14,32 @@ using SimShift.Utils;
 
 namespace SimShift.Services
 {
+    /// <summary>
+    /// Experimental module using computer vision to steer vehicle within motorway lanes. This module is NOT functional at all.
+    /// The module was aimed at ETS2 to maintain focus on the vehicle's mirrors, and adjusting the heading error and lateral error of the white road side lines to desired values.
+    /// Some struggles:
+    /// - Computer vision can be hard for various road conditions (dark, fog, rain)
+    /// - Some ETS2 mods mess up mirror positions and scale.
+    /// - FOV
+    /// - Measuring heading and lateral error was inaccurate, partly due to computer vision troubles.
+    /// - Control of lateral/heading error was instable.
+    /// 
+    /// This module needs a lot more work to (ever) work properly.
+    /// </summary>
     public class LaneAssistance : IControlChainObj
     {
         public bool Enabled { get { return Active; } }
+        public bool Active { get; private set; }
+
+        public IEnumerable<string> SimulatorsOnly { get { return new String[0]; } }
+        public IEnumerable<string> SimulatorsBan { get { return new String[0]; } }
+
+        //
         public const bool UseDirectXCapture = false;
 
         public static Bitmap CameraInput;
         public static Bitmap CameraOutput;
 
-        public bool Active { get; private set; }
         public double SteerAngle { get; private set; }
         public double LockedSteerAngle { get; private set; }
 

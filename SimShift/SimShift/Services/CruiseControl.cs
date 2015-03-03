@@ -9,10 +9,20 @@ using SimShift.Utils;
 
 namespace SimShift.Services
 {
+    /// <summary>
+    /// This module simulates a CruiseControl. Although some games (like ETS2) incorporate Cruise Control, previously there were no features like resume CC, speed up or slow down CC
+    /// And above all: the CC in-game disengages when shifting gear.
+    /// </summary>
     public class CruiseControl : IControlChainObj, IConfigurable
     {
         public bool Enabled { get { return true; } }
         public bool Active { get { return Cruising && !ManualOverride; } }
+
+        public IEnumerable<string> SimulatorsOnly { get { return new String[0]; } }
+        public IEnumerable<string> SimulatorsBan { get { return new String[0]; } }
+
+
+        //
         public bool Cruising { get; private set; }
         public double Speed { get; private set; }
         public double SpeedCruise { get; private set; }

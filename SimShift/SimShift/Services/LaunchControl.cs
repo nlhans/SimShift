@@ -16,10 +16,19 @@ namespace SimShift.Services
         Slipping
     }
 
+    /// <summary>
+    /// Launch Control was developed for TDU2 in order to take off with least amount of wheelspin from the line.
+    /// The module needs a user procedure to activate (engage gear, press brake, activate LC, press throttle, release brake).
+    /// </summary>
     public class LaunchControl : IControlChainObj
     {
         public bool Enabled { get { return state != LaunchControlState.Waiting; } }
         public bool Active { get { return state == LaunchControlState.Pulling; } }
+
+        public IEnumerable<string> SimulatorsOnly { get { return new String[0]; } }
+        public IEnumerable<string> SimulatorsBan { get { return new String[0]; } }
+
+        //
         protected bool LaunchControlActive { get; set; }
 
         private LaunchControlState state;
@@ -149,7 +158,7 @@ namespace SimShift.Services
                 case LaunchControlState.Slipping:
                     if (th < 0.1 || br > 0.05)
                     {
-                        Debug.WriteLine("ABORT ABORT MAYDAY MAYDAY");
+                        Debug.WriteLine("aborting");
                         state = LaunchControlState.Inactive; // abort
                     }
                     break;
@@ -187,12 +196,6 @@ namespace SimShift.Services
                     break;
 
                 case LaunchControlState.Pulling:
-                    /*if (previousAcc > acc)
-                        // Acceleration is decreasing
-                        _outThrottle -= PullingThrottleProp;
-                    else
-                        // Can still get more acceleration!
-                        _outThrottle += PullingThrottleProp;*/
                     _outThrottle = PullingThrottleProp - PullingThrottleProp * data.Telemetry.EngineRpm / LaunchRpm;
                     _outClutch = 1 - PullingClutchProp * previousAcc / PeakAcceleration;
                     if (_outClutch > 0.8) _outClutch = 0.8;
@@ -202,7 +205,6 @@ namespace SimShift.Services
                     break;
 
                 case LaunchControlState.Slipping:
-                    Debug.WriteLine("EEEeeeeuuujiiijj");
                     // revving is less harder to do than pulling
                     // so we switch back to the revving settings, and when the wheelspin is over we go back.
                     _outThrottle = RevvingProp - RevvingProp * data.Telemetry.EngineRpm / LaunchRpm;

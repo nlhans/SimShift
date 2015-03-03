@@ -6,8 +6,18 @@ using SimShift.Data.Common;
 
 namespace SimShift.Services
 {
+    /// <summary>
+    /// This module is a gimmick where the clutch is engaged when dropping below 35km/h when the vehicle was driving faster than that (55km/h+)
+    /// </summary>
     class EarlyClutch : IControlChainObj
     {
+        public bool Enabled { get; private set; }
+        public bool Active { get; private set; }
+
+        public IEnumerable<string> SimulatorsOnly { get { return new String[0]; } }
+        public IEnumerable<string> SimulatorsBan { get { return new String[0]; } }
+
+        //
         private bool clutching = false;
         private bool clutchctrl = false;
 
@@ -65,9 +75,6 @@ namespace SimShift.Services
                 triggered = false;
             }
         }
-
-        public bool Enabled { get; private set; }
-        public bool Active { get; private set; }
 
         #endregion
     }
