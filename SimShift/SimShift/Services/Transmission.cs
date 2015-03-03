@@ -843,7 +843,6 @@ namespace SimShift.Services
 
         public void ApplyParameter(IniValueObject obj)
         {
-            return;
             switch(obj.Key)
             {
                 case "ShiftDeadSpeed":
