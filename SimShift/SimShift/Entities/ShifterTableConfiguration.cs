@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using SimShift.Dialogs;
 using SimShift.Models;
-using SimShift.Services;
-using SimShift.Utils;
 
-namespace SimShift.Dialogs
+namespace SimShift.Entities
 {
     public class ShifterTableConfiguration
     {

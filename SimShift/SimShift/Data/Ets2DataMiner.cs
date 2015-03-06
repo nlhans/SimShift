@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Timers;
 using SimShift.Data.Common;
+using SimShift.Entities;
 
 namespace SimShift.Data
 {
@@ -76,7 +77,7 @@ namespace SimShift.Data
 
         /*** MyTelemetry data source & update control ***/
         private readonly SharedMemory<Ets2DataDefinition> _sharedMem = new SharedMemory<Ets2DataDefinition>();
-        private readonly Timer _telemetryUpdater = new Timer {Interval = 50 };
+        private readonly MmTimer _telemetryUpdater = new MmTimer(10);
 
         /*** Required for computing fuel flow ***/
         private float _previousFuel;
@@ -90,10 +91,10 @@ namespace SimShift.Data
             FuelFlow = 0;
             MyTelemetry = default(Ets2DataDefinition);
 
-            _telemetryUpdater.Elapsed += UpdateTelemetry;
+            _telemetryUpdater.Tick += UpdateTelemetry;
         }
 
-        private void UpdateTelemetry(object sender, ElapsedEventArgs args)
+        private void UpdateTelemetry(object sender, EventArgs args)
         {
             _sharedMem.Update();
 

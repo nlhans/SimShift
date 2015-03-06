@@ -28,7 +28,10 @@ namespace SimShift.Services
             chain.Add(new ThrottleMapping());
             chain.Add(Main.CruiseControl);
             chain.Add(Main.Speedlimiter);
-            chain.Add(Main.Transmission);
+            if (Main.VST)
+                chain.Add(Main.VariableSpeedControl);
+            else
+                chain.Add(Main.Transmission);
             chain.Add(Main.Antistall);
             chain.Add(Main.TractionControl);
             chain.Add(Main.LaunchControl);
@@ -38,6 +41,7 @@ namespace SimShift.Services
             chain.Add(Main.LaneAssistance);
             chain.Add(new EarlyClutch());
             chain.Add(new WheelTorqueLimiter());
+            chain.Add(new Ets2PowerMeter());
 
 
             Axis.Add(JoyControls.Steering);

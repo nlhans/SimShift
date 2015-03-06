@@ -54,7 +54,8 @@ namespace SimShift.Services
 
         public void TickControls()
         {
-            clutching = Main.GetAxisIn(JoyControls.Throttle) < 0.1 && clutchctrl;
+            //clutching = Main.GetAxisIn(JoyControls.Throttle) < 0.1 && clutchctrl;
+            clutching = false;
         }
 
         public void TickTelemetry(IDataMiner data)

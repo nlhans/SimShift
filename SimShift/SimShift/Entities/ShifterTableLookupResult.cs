@@ -1,4 +1,4 @@
-namespace SimShift.Dialogs
+namespace SimShift.Entities
 {
     public class ShifterTableLookupResult
     {

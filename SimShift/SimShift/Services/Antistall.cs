@@ -29,16 +29,10 @@ namespace SimShift.Services
 
         private double _throttle;
 
-        public DateTime TimeStopped { get; private set; }
-        public DateTime TimeStalled { get; set; }
-
         public bool SlipLowGear { get; private set; }
         private bool SlippingLowGear { get; set; }
 
-        public bool Blip { get; private set; }
         protected bool EngineStalled { get; set; }
-
-        public bool Override { get; private set; }
 
         public bool ReverseAndAccelerate { get; private set; }
 
@@ -61,7 +55,7 @@ namespace SimShift.Services
                     return Enabled&& Stalling;
                     
                 case JoyControls.Clutch:
-                    return Enabled && (Stalling || SlippingLowGear);
+                    return Enabled && Stalling;
                     
                 default:
                     return false;
@@ -73,14 +67,24 @@ namespace SimShift.Services
             switch (c)
             {
                 case JoyControls.Throttle:
+                    if (ReverseAndAccelerate)
+                    {
+                        return 0;
+                    }
+                    if (EngineRpm > AntiStallRpm)
+                        val /= 5*(EngineRpm-AntiStallRpm)/AntiStallRpm;
 
-                    if (!Stalling) return val;
+                    _throttle = val;
+                    return val;
+                    if (Override)
+                        return 1;
+                    if (!Stalling)
+                        return val;
                     if (EngineStalled)
                     {
-                        _throttle = 0;
-                        return val; }
-                    if (BlipFull) return 1;
-                    if (Override) return 0;
+                        _throttle = val;
+                        return val;
+                    }
                     if (val < 0.01)
                     {
                         _throttle = 0;
@@ -98,32 +102,37 @@ namespace SimShift.Services
                     break;
 
                 case JoyControls.Clutch:
-                    if (ReverseAndAccelerate) return 0.85;
-                    if (!Stalling && !SlippingLowGear) return 0;
-                    if (Blip || BlipFull) return 1;
-                    if (Override) return 1;
-
-                    if (Stalling)
+                    if (ReverseAndAccelerate)
                     {
-                        var cl = 1 - _throttle*ThrottleSensitivity; // 2
-                        if (cl < MinClutch) cl = MinClutch; // 0.1
-                        cl = Math.Max(cl, val);
-                        return cl;
+                        return 1;
                     }
-                    if(SlippingLowGear)
+                    if (Stalling && _throttle < 0.01)
                     {
-                        var t =1 - 1.3*(Rpm-1500)/500;
-                        t = Math.Max(val, Math.Min(1, Math.Max(0, t)));
-                        return t;
+                        if (SpeedCutoff >= Speed)
+                            return 1;
+                        else
+                            return 1- (Speed-SpeedCutoff)/0.5f;
                     }
-                    return 0;
-                    break;
 
+                    var cl = 1 - _throttle*ThrottleSensitivity; // 2
+                    if (cl < MinClutch) cl = MinClutch; // 0.1
+                    cl = Math.Max(cl, val);
+
+                    if (EngineRpm < AntiStallRpm)
+                        cl += (AntiStallRpm - EngineRpm) / AntiStallRpm;
+
+                    return cl;
+                    
                 default:
                     return val;
             }
         }
 
+        public double EngineRpm { get; set; }
+
+        public bool Override { get; set; }
+
+        private double AntiStallRpm;
         protected bool BlipFull;
 
         public bool GetButton(JoyControls c, bool val)
@@ -143,76 +152,36 @@ namespace SimShift.Services
 
             Rpm = telemetry.Telemetry.EngineRpm;
             EngineStalled = (telemetry.Telemetry.EngineRpm < 300);
+            AntiStallRpm = Main.Drivetrain.StallRpm*1.25f;
 
             var gear = telemetry.Telemetry.Gear - 1;
             if (gear == -2) gear = 0;
-            SpeedCutoff = Main.Drivetrain.CalculateSpeedForRpm(gear, (float)Main.Drivetrain.StallRpm);
+            if (gear == 0) gear = 1;
+            SpeedCutoff = Main.Drivetrain.CalculateSpeedForRpm(gear, (float)AntiStallRpm);
 
             if (telemetry.Telemetry.Gear == -1)
             {
-                ReverseAndAccelerate = telemetry.Telemetry.Speed > 0.1;
-                Stalling = telemetry.Telemetry.Speed > -SpeedCutoff;
+                ReverseAndAccelerate = telemetry.Telemetry.Speed > 0.5;
+                Stalling = telemetry.Telemetry.Speed+0.25 >= -SpeedCutoff;
             }
             else
             {
-                ReverseAndAccelerate = telemetry.Telemetry.Speed < -0.1;
-                Stalling = telemetry.Telemetry.Speed < SpeedCutoff;
+                ReverseAndAccelerate = telemetry.Telemetry.Speed < -0.5;
+                Stalling = telemetry.Telemetry.Speed-0.25 <= SpeedCutoff;
             }
             Stalling |= ReverseAndAccelerate;
 
             Speed = telemetry.Telemetry.Speed;
+            EngineRpm = telemetry.Telemetry.EngineRpm;
 
-            if(telemetry.EnableWeirdAntistall==false)
+            if (EngineStalled && _throttle > 0)
             {
-                Blip = false;
-                Override = false;
-                BlipFull = false;
-                return;
-            }
-
-            if (Stalling && !wasStalling)
-            {
-                TimeStopped = DateTime.Now;
-            }
-            if (!EngineStalled && wasEngineStalled)
-            {
-                TimeStalled = DateTime.Now;
-            }
-
-            if (!EngineStalled)
-            {
-                var dt = DateTime.Now.Subtract(TimeStalled).TotalMilliseconds;
-                Blip = false;
-                if (dt < 2500)
-                    BlipFull = true;
-                if(Rpm > 2000)
-                {
-                    BlipFull = false;
-                    TimeStalled = DateTime.MinValue;
-                }
-                if(dt<3500)
-                {
-                    Override = true;
-                }else
-                {
-                    Override = false;
-                    if (Stalling && DateTime.Now.Subtract(TimeStopped).TotalMilliseconds % 123000 > 62500 &&
-                        DateTime.Now.Subtract(TimeStopped).TotalMilliseconds % 123000 < 63500)
-                    {
-                        Blip = true;
-                    }
-                    else
-                    {
-                        Blip = false;
-                        BlipFull = false;
-                    }
-                }
+                Override = true;
             }
             else
             {
                 Override = false;
             }
-
         }
 
         #region Configurable parameters management
@@ -223,28 +192,19 @@ namespace SimShift.Services
         public void ResetParameters()
         {
             // Reset to default
-            Speed = 2;
             MinClutch = 0.1;
             ThrottleSensitivity = 2;
-            SlipLowGear = true;
         }
 
         public void ApplyParameter(IniValueObject obj)
         {
             switch(obj.Key)
             {
-                case "Speed":
-                    SpeedCutoff = obj.ReadAsDouble();
-                    break;
                 case "MinClutch":
                     MinClutch = obj.ReadAsDouble();
                     break;
                 case "ThrottleSensitivity":
                     ThrottleSensitivity = obj.ReadAsDouble();
-                    break;
-
-                case "SlipLowGear":
-                    SlipLowGear = obj.ReadAsString() == "yes";
                     break;
             }
         }
@@ -254,10 +214,8 @@ namespace SimShift.Services
             var group = new List<string>(new [] { "Antistall" });
             var parameters = new List<IniValueObject>();
             
-            parameters.Add(new IniValueObject(group, "Speed", SpeedCutoff.ToString("0.00")));
             parameters.Add(new IniValueObject(group, "MinClutch", SpeedCutoff.ToString("0.00")));
             parameters.Add(new IniValueObject(group, "ThrottleSensitivity", SpeedCutoff.ToString("0.00")));
-            parameters.Add(new IniValueObject(group, "SlipLowGear", SlipLowGear ? "yes" : "no"));
 
             return parameters;
         }

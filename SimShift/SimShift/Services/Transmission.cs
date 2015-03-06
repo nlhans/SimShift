@@ -212,125 +212,6 @@ namespace SimShift.Services
 
             // Load configuration file
             Main.Load(ShiftPatterns[pattern], "Settings/ShiftPattern/"+file+".ini");
-            return;
-            /*
-            switch (pattern)
-            {
-                    // very slow
-                case "up_0thr":
-                    // TODO: Patterns are not loaded from files yet.
-                    ShiftPattern = new List<ShiftPatternFrame>();
-
-                    // Phase 1: engage clutch
-                    ShiftPattern.Add(new ShiftPatternFrame(0, 1, true, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(0, 0.7, true, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.5, 0.4, true, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.8, 0, true, false));
-
-                    // Phase 2: disengage old gear
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
-
-                    // Phase 3: engage new gear
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, true));
-
-                    // Phase 4: disengage clutch
-                    ShiftPattern.Add(new ShiftPatternFrame(0.8, 0, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.5, 0.4, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.0, 0.7, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.0,1, false, true));
-                    break;
-
-                case "up_1thr":
-                    // TODO: Patterns are not loaded from files yet.
-                    ShiftPattern = new List<ShiftPatternFrame>();
-
-                    // Phase 1: engage clutch
-                    ShiftPattern.Add(new ShiftPatternFrame(0, 0.6, true, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(0, 0.3, true, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.5, 0, true, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.8, 0, true, false));
-
-                    // Phase 2: disengage old gear
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
-
-                    // Phase 3: engage new gear
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, true));
-
-                    // Phase 4: disengage clutch
-                    ShiftPattern.Add(new ShiftPatternFrame(0.8, 0, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.5, 0.0, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.0, 0.3, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.0, 0.6, false, true));
-                    break;
-
-                case "down_0thr":
-                    // TODO: Patterns are not loaded from files yet.
-                    ShiftPattern = new List<ShiftPatternFrame>();
-
-                    // Phase 1: engage clutch
-                    ShiftPattern.Add(new ShiftPatternFrame(0, 1, true, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(0, 0.7, true, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.5, 0.4, true, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.8, 0, true, false));
-
-                    // Phase 2: disengage old gear
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 1, true, false, false));
-
-                    // Phase 3: engage new gear
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 1, true, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 1, true, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0, false, true));
-
-                    // Phase 4: disengage clutch
-                    for (int i = 0; i < 25; i++)
-                        ShiftPattern.Add(new ShiftPatternFrame((25 - i)/25.0, i/25.0, false, true));
-                    break;
-
-                case "down_1thr":
-                    // TODO: Patterns are not loaded from files yet.
-                    ShiftPattern = new List<ShiftPatternFrame>();
-
-                    // Phase 1: engage clutch
-                    ShiftPattern.Add(new ShiftPatternFrame(0, 1, true, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(0, 0.7, true, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.2, 0.4, true, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.5, 0.2, true, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.8, 0.1, true, false));
-
-                    // Phase 2: disengage old gear
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0.0, false, false));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0.0, false, false));
-
-                    // Phase 3: engage new gear
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0.0, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(1, 0.0, false, true));
-
-                    // Phase 4: disengage clutch
-                    ShiftPattern.Add(new ShiftPatternFrame(0.8, 0.1, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.5, 0.2, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.2, 0.4, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.0, 0.7, false, true));
-                    ShiftPattern.Add(new ShiftPatternFrame(0.0, 1, false, true));
-                    break;
-            }*/
         }
 
         #endregion
@@ -377,6 +258,15 @@ namespace SimShift.Services
                 var lookupResult = configuration.Lookup(data.Telemetry.Speed*3.6, transmissionThrottle);
                 idealGear = lookupResult.Gear;
                 ThrottleScale = GetHomeMode ? 1 : lookupResult.ThrottleScale;
+
+                if (Main.Data.Active.Application == "eurotrucks2")
+                {
+                    var ets2Miner = (Ets2DataMiner) (data);
+                    var maxGears = (int) Math.Round(Main.Drivetrain.Gears*(1-ets2Miner.MyTelemetry.wearTransmission));
+
+                    if (idealGear >= maxGears)
+                        idealGear = maxGears;
+                }
 
                 if (data.Telemetry.Gear == 0 && ShiftCtrlNewGear != 0)
                 {
@@ -569,49 +459,6 @@ namespace SimShift.Services
                 case JoyControls.GearRange2:
                     return GetRangeButton(2);
 
-                    // TODO: Move gear up/down to main object
-                    /*
-            case JoyControls.GearUp:
-                if(val)
-                {
-                    if(!DrivingInReverse && !ChangeModeFrozen)
-                    {
-                        // We're already going forwards.
-                        // Change shifter profile
-                        switch(Active)
-                        {
-                            case "Opa":
-                                SetActiveConfiguration("Economy");
-                                break;
-
-                            case "Economy":
-                                SetActiveConfiguration("Efficiency");
-                                break;
-
-                            case "Efficiency":
-                                SetActiveConfiguration("Performance");
-                                break;
-
-                            case "Performance":
-                                SetActiveConfiguration("PeakRpm");
-                                break;
-
-                            case "PeakRpm":
-                                SetActiveConfiguration("Opa");
-                                break;
-
-                        }
-                        ChangeModeFrozenUntill = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, 1000));
-                    }
-                    DrivingInReverse = false;
-                }
-                return false;
-
-            case JoyControls.GearDown:
-                if (val)
-                    DrivingInReverse = true;
-                return false;
-                */
                 default:
                     return val;
             }
@@ -752,7 +599,7 @@ namespace SimShift.Services
                         else
                         {
                             powerShiftTimer++;
-                            if(powerShiftTimer >= 20)
+                            if(powerShiftTimer >= 100)
                             {
                                 powerShiftTimer = 0;
                                 // So we are shifting, check lagging by 1, and new gear doesn't work

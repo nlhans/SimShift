@@ -50,6 +50,8 @@ namespace SimShift.Dialogs
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
         }
 
+        public int Frequency { get; set; }
+
         public void Add(List<double> v )
         {
             for (int k = 0; k < channels; k++)
@@ -69,7 +71,7 @@ namespace SimShift.Dialogs
             var g = e.Graphics;
 
             g.FillRectangle(Brushes.Black, e.ClipRectangle);
-
+            g.DrawString(Frequency.ToString("000"), new Font("Arial",8), Brushes.White, 0,0 );
             var w = e.ClipRectangle.Width;
             var h = e.ClipRectangle.Height;
 

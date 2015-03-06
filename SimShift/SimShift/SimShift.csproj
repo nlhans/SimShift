@@ -135,9 +135,10 @@
     <Compile Include="Dialogs\dlPlotter.Designer.cs">
       <DependentUpon>dlPlotter.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\ShifterTableConfiguration.cs" />
-    <Compile Include="Dialogs\ShifterTableConfigurationDefault.cs" />
-    <Compile Include="Dialogs\ShifterTableLookupResult.cs" />
+    <Compile Include="Entities\MmTimer.cs" />
+    <Compile Include="Entities\ShifterTableConfiguration.cs" />
+    <Compile Include="Entities\ShifterTableConfigurationDefault.cs" />
+    <Compile Include="Entities\ShifterTableLookupResult.cs" />
     <Compile Include="Dialogs\ucDashboard.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -184,6 +185,7 @@
     <Compile Include="Entities\IConfigurable.cs" />
     <Compile Include="Entities\IControlChainObj.cs" />
     <Compile Include="Entities\JoyControls.cs" />
+    <Compile Include="Services\Ets2PowerMeter.cs" />
     <Compile Include="Services\LaneAssistance.cs" />
     <Compile Include="Services\LaunchControl.cs" />
     <Compile Include="Services\Main.cs" />
@@ -196,6 +198,7 @@
     <Compile Include="Services\ThrottleMapping.cs" />
     <Compile Include="Services\TractionControl.cs" />
     <Compile Include="Services\Transmission.cs" />
+    <Compile Include="Services\VariableSpeedTransmission.cs" />
     <Compile Include="Services\WheelTorqueLimiter.cs" />
     <Compile Include="Simulation\SimulationEnvironment.cs" />
     <Compile Include="Utils\Direct3DCapture.cs" />

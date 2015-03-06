@@ -164,6 +164,8 @@ namespace SimShift
 
                 if (typeof(CruiseControl) == mod.GetType())
                     l.Text = "CruiseControl " + Math.Round(3.6 * Main.CruiseControl.SpeedCruise);
+                if (typeof(VariableSpeedTransmission) == mod.GetType())
+                    l.Text = "VST " + Math.Round(Main.VariableSpeedControl.SetSpeed);
             }
 
             if(controlsChanged)

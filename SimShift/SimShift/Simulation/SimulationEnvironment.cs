@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using SimShift.Dialogs;
+using SimShift.Entities;
 using SimShift.Models;
 using SimShift.Services;
 

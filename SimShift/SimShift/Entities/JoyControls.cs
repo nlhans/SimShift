@@ -6,6 +6,7 @@ namespace SimShift.Entities
         Throttle,
         Brake,
         Clutch,
+        VstLever, // variable speed transmission module
         GearDown,
         GearUp,
         GearR,
@@ -27,6 +28,6 @@ namespace SimShift.Entities
         CameraHorizon,
         LaneAssistance,
 
-        NUM_OF_CONTROLS
+        NUM_OF_CONTROLS,
     }
 }

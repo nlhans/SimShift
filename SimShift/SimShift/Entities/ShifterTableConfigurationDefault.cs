@@ -1,4 +1,4 @@
-namespace SimShift.Dialogs
+namespace SimShift.Entities
 {
     public enum ShifterTableConfigurationDefault
     {

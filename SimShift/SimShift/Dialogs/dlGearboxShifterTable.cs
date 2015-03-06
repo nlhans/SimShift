@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using SimShift.Entities;
 using SimShift.Models;
 using SimShift.Services;
 
