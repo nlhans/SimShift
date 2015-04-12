@@ -123,6 +123,7 @@ namespace SimShift.Models
             // 1 Hp @ 1000rpm = 5.2521Nm
             if (rpm == 0) return 1;
             double torqueRequired = powerRequired/(rpm/1000)*(1/0.1904);
+            if (torqueRequired == 0) torqueRequired = 0.1;
             return CalculateThrottleByTorque(rpm, torqueRequired);
         }
 

@@ -9,6 +9,7 @@ using System.Media;
 using System.Text;
 using System.Windows.Forms;
 using AForge.Imaging;
+using AForge.Imaging.Filters;
 using SimShift.Data.Common;
 using SimShift.Entities;
 using SimShift.Utils;
@@ -29,6 +30,8 @@ namespace SimShift.Services
     /// </summary>
     public class LaneAssistance : IControlChainObj
     {
+        private float speed = 0.0f;
+
         public bool Enabled { get { return Active; } }
         public bool Active { get; private set; }
 
@@ -60,7 +63,7 @@ namespace SimShift.Services
             Main.Data.AppInactive += new EventHandler(Data_AppInactive);
             ets2Handle = IntPtr.Zero;
 
-            ScanMirrorTimer.Interval = 50;
+            ScanMirrorTimer.Interval = 100;
             ScanMirrorTimer.Tick += new EventHandler(ScanMirrorTimer_Tick);
             //ScanMirrorTimer.Start();
 
@@ -173,6 +176,7 @@ namespace SimShift.Services
         private int keepAlive = 0;
         public void TickTelemetry(IDataMiner data)
         {
+            speed = data.Telemetry.Speed;
 
             if (true)
             {
@@ -219,7 +223,7 @@ namespace SimShift.Services
                 double lineDistanceError = inputValue - mirrorWidth / 2;
                 //lineDistanceError *= -1;
                 if (driveOnLeftMirror) lineDistanceError = 0 - lineDistanceError;
-                var angleDistancError = aRight - 103;
+                var angleDistancError = aRight - 122;
 
                 //dead zone 2 pixels
                 if (Math.Abs(angleDistancError) > 30 && Active)
@@ -227,10 +231,16 @@ namespace SimShift.Services
                     beep.Play();
                 }
 
-                var totalSteerError = lineDistanceError/150.0 + angleDistancError/35;
-                var steerErrorGain = 0.5 - 0.5*(data.Telemetry.Speed*3.6/40);
+                var totalSteerError = lineDistanceError/125 + angleDistancError/35;
+                var steerErrorGain = 0.5 - 0.5*(data.Telemetry.Speed*3.6/70);
                 if (steerErrorGain < 0.17) steerErrorGain = 0.17;
                 SteerAngle = SteerAngle*0.2 + 0.8*(0.5 + totalSteerError*steerErrorGain);
+                
+                var steerAngleScaler = 1 - speed *3.6/ 80.0f;
+                if (steerAngleScaler < 0.35) steerAngleScaler = 0.35f;
+                SteerAngle -= 0.5f;
+                SteerAngle *= steerAngleScaler;
+                SteerAngle += 0.5f;
                 //Debug.WriteLine(lineDistanceError + "px error / " + angleDistancError + " angle error / " + SteerAngle);
             }
         }
@@ -254,8 +264,8 @@ namespace SimShift.Services
         public bool validLeftMirror = false;
         public bool validRightMirror = false;
 
-        public const int mirrorWidth = 108;
-        public const int mirrorHeight = 50;
+        public const int mirrorWidth = 250;
+        public const int mirrorHeight = 100;
         public float brightness = 0;
 
 
@@ -269,7 +279,7 @@ namespace SimShift.Services
             try
             {
 
-                var screenSrc = new Rectangle(0, 70 + 185, 1920, mirrorHeight);
+                var screenSrc = new Rectangle(0, 340, 1920, mirrorHeight);
 
                 Bitmap screenBitmap;
 
@@ -288,13 +298,16 @@ namespace SimShift.Services
                 var gR = Graphics.FromImage(bR);
 
                 //Copy mirros into 2 bitmaps
-                gL.DrawImage(screenBitmap, 0, 0, new Rectangle(10, 0, mirrorWidth, mirrorHeight), GraphicsUnit.Pixel);
-                gR.DrawImage(screenBitmap, 0, 0, new Rectangle(1805, 0, mirrorWidth, mirrorHeight), GraphicsUnit.Pixel);
+                gL.DrawImage(screenBitmap, new Rectangle(0, 0, mirrorWidth, mirrorHeight), new Rectangle(35, 0, mirrorWidth, mirrorHeight), GraphicsUnit.Pixel);
+                gR.DrawImage(screenBitmap, new Rectangle(0, 0, mirrorWidth, mirrorHeight), new Rectangle(1640, 0, mirrorWidth, mirrorHeight), GraphicsUnit.Pixel);
+                //gL.DrawImage(screenBitmap, 0, 0, new Rectangle(35, 545, mirrorWidth, mirrorHeight), GraphicsUnit.Pixel);
+                //gR.DrawImage(screenBitmap, 0, 0, new Rectangle(1640, 545, mirrorWidth, mirrorHeight), GraphicsUnit.Pixel);
 
                 // Copy to camera in graphic
                 var cameraInGraphics = Graphics.FromImage(CameraInput);
                 cameraInGraphics.DrawImage(bL, 0, 0, bL.Width, bL.Height);
                 cameraInGraphics.DrawImage(bR, bL.Width, 0, bR.Width, bR.Height);
+
                 // Parse the bitmaps
                 var sL = ParseMirror(bL, false);
                 var sR = ParseMirror(bR, true);
@@ -376,17 +389,17 @@ namespace SimShift.Services
 
             pxVals /= b.Width;
             pxVals /= b.Height;
-            pxVals /= 3;
-
+            pxVals /= 2;
+            pxVals += 1;
             // offset required
-            var offset = 110 - pxVals;
-            double gain = 0.75 + 55.0 / pxVals;
+            var offset = 100 - pxVals;
+            double gain = 0.75 + 130.0 / pxVals;
             if (pxVals < 35 && false)
             {
                 gain += 2 + (35 - pxVals) / 10.5;
                 offset -= 30;
             }
-            if (offset > 1)
+            //if (offset > 1)
             {
                 for (int x = 0; x < b.Width; x++)
                 {
@@ -394,15 +407,24 @@ namespace SimShift.Services
                     {
                         var px = b.GetPixel(x, y);
                         var nR = px.R * gain + offset;
-                        if (nR >= 255) nR = 255;
-                        nR /= 2;
-                        var nG = (px.G - 2) * gain + offset;
-                        if (nG >= 255) nG = 255;
-                        if (nG < 0) nG = 0;
                         var nB = (px.B - 4) * gain + offset;
-                        if (nB >= 255) nB = 255;
-                        if (nB < 0) nB = 0;
-                        px = Color.FromArgb((int)nR, (int)nG, (int)nB);
+                        var nG = (px.G - 2) * gain + offset;
+                        if (nR > 220 && nB < 220)
+                        {
+                            px = Color.FromArgb(0, 0, 0);
+                        }
+                        else
+                        {
+                            nR /= 2;
+                            if (nR < 0) nR = 0;
+                            if (nR >= 255) nR = 255;
+                            if (nG < 0) nG = 0;
+                            if (nG >= 255) nG = 255;
+                            if (nB < 0) nB = 0;
+                            if (nB >= 255) nB = 255;
+
+                            px = Color.FromArgb((int)nR, (int)nG, (int)nB);
+                        }
                         b.SetPixel(x, y, px);
                     }
                 }
@@ -410,13 +432,17 @@ namespace SimShift.Services
 
             float brightness = pxVals;
 
-            b = AdjustBrightnessAndContrast(b, -1.5f, 4.5f, 1.5f);
-            b = AdjustBrightnessAndContrast(b, 0.0f, 2.0f, 1.0f);
+            GaussianBlur filter = new GaussianBlur(3, 10);
+            filter.ApplyInPlace(b);
+            b = AdjustBrightnessAndContrast(b, -8.25f, 13.5f, 1.0f);
+            //b = AdjustBrightnessAndContrast(b, 0.0f, 2.0f, 1.0f);
+
 
             BlobCounter bc = new BlobCounter();
-            bc.MinWidth = 4;
-            bc.MaxWidth = 15;
+            bc.MinWidth = 5;
+            bc.MinHeight =20;
             bc.ObjectsOrder = ObjectsOrder.Size;
+            bc.BackgroundThreshold = Color.FromArgb(10, 10, 10);
             bc.ProcessImage(b);
             var blobs = bc.GetObjectsInformation();
 
@@ -429,7 +455,6 @@ namespace SimShift.Services
             foreach (var blob in blobs)
             {
                 Rectangle rect = blob.Rectangle;
-                if (rect.Width > 4 && rect.Width < 90 && rect.Height > 7 && rect.Height > rect.Width - 5)
                 {
                     g.DrawString(blob.ColorStdDev.R.ToString(), f, Brushes.White, 0, 0);
                     if (blob.ColorStdDev.R > 5 && blob.ColorStdDev.R < 60)
@@ -537,7 +562,7 @@ namespace SimShift.Services
             var imageAttributes = new ImageAttributes();
             imageAttributes.ClearColorMatrix();
             imageAttributes.SetColorMatrix(new ColorMatrix(ptsArray), ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-            imageAttributes.SetGamma(gamma, ColorAdjustType.Bitmap);
+            //imageAttributes.SetGamma(gamma, ColorAdjustType.Bitmap);
             Graphics g = Graphics.FromImage(adjustedImage);
             g.DrawImage(originalImage, new Rectangle(0, 0, adjustedImage.Width, adjustedImage.Height)
                         , 0, 0, originalImage.Width, originalImage.Height,

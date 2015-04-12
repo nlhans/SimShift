@@ -88,7 +88,7 @@ namespace SimShift.Services
             switch (State)
             {
                 case PowerMeterState.Idle:
-                    if (false) // Main.GetButtonIn(JoyControls.CruiseControlMaintain))
+                    if (Main.GetButtonIn(JoyControls.MeasurePower) && false)
                     {
                         integralRevver = 0;
                         State = PowerMeterState.Prearm;
@@ -104,7 +104,7 @@ namespace SimShift.Services
                     preArmThr =  (1000 - data.Telemetry.EngineRpm)/1500;
                     if (Math.Abs(data.Telemetry.EngineRpm - 1000) < 100)
                     {
-                        integralRevver += (1000 - data.Telemetry.EngineRpm)/1250000.0f;
+                        integralRevver += (1000 - data.Telemetry.EngineRpm)/750000.0f;
                     }
                     else
                     {

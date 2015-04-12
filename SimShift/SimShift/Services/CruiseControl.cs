@@ -140,7 +140,7 @@ namespace SimShift.Services
         public IEnumerable<string> AcceptsConfigs { get { return new[] {"Cruise"}; } }
         public void ResetParameters()
         {
-            SpeedCruise = 150/3.6;
+            SpeedCruise = 1000/3.6;
             PSlope = 0.25;
             ISlope = 0;
             Imax = 0;

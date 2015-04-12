@@ -243,14 +243,13 @@ namespace SimShift.Services
 
         #region Control mapping
 
-        private static bool dskCtlActive = true;
-        public static bool VST = true;
+        private static bool dskCtlActive = false ;
+        public static bool VST = false ;// { get { return Main.DrivetrainCalibrator.Active? false:true; }}
 
         public static bool GetButtonIn(JoyControls c)
         {
             switch (c)
             {
-                    // Unimplemented as of now.
                 case JoyControls.Gear1:
                     return !dskCtlActive && RawJoysticksIn[1].GetButton(8);
                 case JoyControls.Gear2:
@@ -279,17 +278,21 @@ namespace SimShift.Services
                     /*** NOT FUNCTIONAL ***/
                 case JoyControls.LaneAssistance:
                     if (dskCtlActive)
-                        return false;
+                        return RawJoysticksIn[0].GetButton(7);
                     else
-                        return false; //return RawJoysticksIn[1].GetButton(7);
+                        return RawJoysticksIn[0].GetButton(7);
 
-                    // PS3 (via DS3 tool) L1/R1
+                // PS3 (via DS3 tool) L1/R1
                 case JoyControls.GearDown:
                     if (dskCtlActive)
                         return RawJoysticksIn[0].GetButton(8);
                     else if (Transmission.Enabled)
                         return RawJoysticksIn[1].GetButton(8);
                     else return false;
+                case JoyControls.VstChange:
+                    return !dskCtlActive && RawJoysticksIn[1].GetButton(10);
+                case JoyControls.MeasurePower:
+                    return !dskCtlActive && RawJoysticksIn[1].GetButton(11);
                 case JoyControls.GearUp:
                     if (dskCtlActive)
                         return RawJoysticksIn[0].GetButton(4);

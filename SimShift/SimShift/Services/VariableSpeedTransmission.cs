@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Configuration;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading;
 using SimShift.Data;
@@ -13,7 +15,7 @@ namespace SimShift.Services
     {
         public IEnumerable<string> SimulatorsOnly { get { return new String[0]; } }
         public IEnumerable<string> SimulatorsBan { get { return new String[0]; } }
-        public bool Enabled { get; private set; }
+        public bool Enabled { get; set; }
         public bool Active { get; private set; }
         public double SetSpeed { get; set; }
 
@@ -22,6 +24,11 @@ namespace SimShift.Services
 
         private double UserThrottle = 0;
 
+        public VariableSpeedTransmission()
+        {
+            Enabled = true;
+        }
+
         public bool Requires(JoyControls c)
         {
             switch (c)
@@ -29,7 +36,7 @@ namespace SimShift.Services
                 case JoyControls.Clutch:
                     case JoyControls.Brake:
                     case JoyControls.Throttle:
-                    return true;
+                    return Enabled;
                     
                     // All gears.
                 case JoyControls.GearR:
@@ -39,11 +46,11 @@ namespace SimShift.Services
                 case JoyControls.Gear4:
                 case JoyControls.Gear5:
                 case JoyControls.Gear6:
-                    return true;
+                    return Enabled;
 
                 case JoyControls.GearRange2:
                 case JoyControls.GearRange1:
-                    return true;
+                    return Enabled;
             }
                 return false;
         }
@@ -54,7 +61,7 @@ namespace SimShift.Services
                 return val + variableBrake;
             if (c == JoyControls.Throttle)
             {
-                UserThrottle = val;
+                UserThrottle = val*0.25f + UserThrottle*0.75f;
                 switch (ShiftingPhase)
                 {
                         case ShiftPhase.OffThrottle:
@@ -196,17 +203,20 @@ namespace SimShift.Services
 
         public void TickControls()
         {
-            Enabled = true;
-            Active = true;
         }
 
         private double staticThrError = 0;
         private DateTime lastShifterTick = DateTime.Now;
         private int shiftingRetry=0;
         public static double reqpower = 0;
+        public bool fast = false;
+        private bool wasEfficiency = false;
+        private double lastSpeedError = 0;
 
         public void TickTelemetry(IDataMiner data)
         {
+            bool copyTargetThr = false;
+
             /** VARIABLE SPEED CONTROL **/
             var actualSpeed = data.Telemetry.Speed * 3.6;
 
@@ -222,21 +232,54 @@ namespace SimShift.Services
             }
             else
             {
-                SetSpeed = Main.GetAxisIn(JoyControls.VstLever) * 110;
+                SetSpeed = Main.GetAxisIn(JoyControls.VstLever)*((fast) ? 200 : 100);
 
-                thrP = 0.015 + 0.1 * actualSpeed / 70;
-                thrI = 0.01 - 0.035 * actualSpeed / 120;
+                thrP = 0.015 + 0.15 * actualSpeed / 120;
+                thrI = 0.02 - 0.015 * actualSpeed / 120;
+                if (Efficiency)
+                {
+                    thrP *= 0.5;
+                    thrI = 0.00025;
+                }
+                if (Efficiency != wasEfficiency)
+                {
+                    copyTargetThr = true;
+                    staticThrError = variableThrottle-2*thrP*lastSpeedError;
+                }
+                wasEfficiency = Efficiency;
             }
-
             var speedErrorThr = SetSpeed - actualSpeed;
-            if (staticThrError > 0.5) staticThrError = 0.5;
-            if (staticThrError < -0.5) staticThrError = -0.5;
-            variableThrottle = thrP * speedErrorThr + staticThrError;
-            variableThrottle *= UserThrottle;
+            staticThrError += speedErrorThr*thrI;
+            if (staticThrError > 0.8) staticThrError = 0.8;
+            if (staticThrError < -0.8) staticThrError = -0.8;
+            lastSpeedError = speedErrorThr;
+            var oldThr = variableThrottle;
+            if (copyTargetThr)
+            {
+                variableThrottle = thrP * speedErrorThr;
+                variableThrottle *= UserThrottle;
+                
+                // Theoratical value required to copy last throttle
+                staticThrError = (1 - variableThrottle)/UserThrottle;
+               
+                //Deduce at low speeds
+                var deductor = actualSpeed/50;
+                if (deductor > 1) deductor = 1;
+                if (deductor < 0.01) deductor = 0.01;
+                staticThrError *= deductor;
+
+                // Add it.
+                variableThrottle += staticThrError;
+            }
+            else
+            {
+                variableThrottle = thrP * speedErrorThr + staticThrError;
+                variableThrottle *= UserThrottle;
+            }
             if (variableThrottle > 1) variableThrottle = 1;
             if (variableThrottle < 0) variableThrottle = 0;
 
-            var speedErrorBr = (actualSpeed - 1) - SetSpeed;
+            var speedErrorBr = (actualSpeed - 3) - SetSpeed;
             if (speedErrorBr < 0) speedErrorBr = 0;
             if (actualSpeed < 50)
                 speedErrorBr *= (50 - actualSpeed) / 15 + 1;
@@ -244,10 +287,36 @@ namespace SimShift.Services
             if (variableBrake > 0.2) variableBrake = 0.2;
             if (variableBrake < 0) variableBrake = 0;
 
+            if (variableBrake > 0.01)
+                variableThrottle = 0;
             /** TRANSMISSION **/
-
+            if (Main.Data.Active.Application == "eurotrucks2")
+            {
+                var ets2 = (Ets2DataMiner) Main.Data.Active;
+                if (ets2.MyTelemetry.flags[1] == 0 && !fast)
+                    Efficiency = true;
+                else
+                {
+                    if (Efficiency)
+                    {
+                        if ((SetSpeed - actualSpeed) > 5)
+                        {
+                            Efficiency = false;
+                        }
+                    }
+                    else
+                    {
+                        if ((SetSpeed - actualSpeed) < 2)
+                        {
+                            Efficiency = true;
+                        }
+                    }
+                }
+            }
+            //Efficiency = (SetSpeed - actualSpeed) < 5;
             if (DateTime.Now.Subtract(lastShifterTick).TotalMilliseconds > 40)
             {
+                Active = ShiftingPhase == ShiftPhase.None ? false : true;
                 lastShifterTick = DateTime.Now;
                 switch (ShiftingPhase)
                 {
@@ -262,9 +331,9 @@ namespace SimShift.Services
                     case ShiftPhase.None:
 
                         // Reverse pressed?
-                        if (Main.GetButtonIn(JoyControls.GearUp))
+                        if (Main.GetButtonIn(JoyControls.VstChange))
                         {
-                            Efficiency = !Efficiency;
+                            fast = !fast;
                             ShiftingPhase = ShiftPhase.WaitButton;
                         }
                         if (Main.GetButtonIn(JoyControls.GearDown))
@@ -288,6 +357,8 @@ namespace SimShift.Services
                             {
                                 if (Gear == 0)
                                     Gear++;
+                                if (Gear == -1)
+                                    Gear = 1;
                                 ShiftingPhase = ShiftPhase.OffThrottle;
                             }
                             else
@@ -306,16 +377,27 @@ namespace SimShift.Services
                                 var calcEfficiency = Efficiency ? double.MaxValue : 0;
                                 var calcEfficiencyGear = -1;
                                 var calcThrottle = variableThrottle;
+                                var calcPower = curPower;
+
+                                var allStalled = true;
                                 for (int k = 0; k < maxgears; k++)
                                 {
-                                    if (k == 1 || k == 3 || k == 5) continue;
+                                    if (maxgears >= 12 && ( k == 5)) continue;
+                                    if (maxgears >= 10 && (k == 1 || k == 3)) continue;
+                                    if (!Efficiency && k < 3) continue;
 
                                     // Always pick best efficient gear with power requirement met
                                     var rpm = Main.Drivetrain.CalculateRpmForSpeed(k, data.Telemetry.Speed);
+                                    var orpm = Main.Drivetrain.CalculateRpmForSpeed(k, data.Telemetry.Speed);
+                                    var estimatedPower = Main.Drivetrain.CalculatePower(rpm, variableThrottle);
+                                    
+                                    // RPM increase linear to throttle:
+                                    rpm += estimatedPower/1200*190*variableThrottle;
 
                                     if (rpm < Main.Drivetrain.StallRpm && k > 0)
                                         continue;
-                                    if (rpm > Main.Drivetrain.MaximumRpm)
+                                    allStalled = false;
+                                    if (orpm > Main.Drivetrain.MaximumRpm)
                                         continue;
 
                                     var thr = Main.Drivetrain.CalculateThrottleByPower(rpm, reqPower);
@@ -331,6 +413,7 @@ namespace SimShift.Services
                                             calcEfficiency = eff;
                                             calcEfficiencyGear = k;
                                             calcThrottle = thr;
+                                            calcPower = pwr;
                                         }
                                     }
                                     else
@@ -339,13 +422,24 @@ namespace SimShift.Services
                                         {
                                             calcEfficiency = pwr;
                                             calcEfficiencyGear = k;
+                                            calcPower = pwr;
                                         }
                                     }
                                 }
 
-                                if (calcEfficiencyGear >= 0 &&
+                                if (allStalled)
+                                    if (maxgears >= 10)
+                                    Gear = 3;
+                                    else
+                                    {
+                                        Gear = 1;
+                                    }
+                                else if (calcEfficiencyGear >= 0 &&
                                     calcEfficiencyGear+1 != Gear)
                                 {
+
+                                    // Hysterisis
+                                    if (Math.Abs(curPower - calcPower) > 25)
                                         Gear = calcEfficiencyGear+1;
                                 }
                                 if (Efficiency)
@@ -391,7 +485,10 @@ namespace SimShift.Services
                             shiftingRetry++;
                             if (shiftingRetry > 50)
                             {
-                                Gear--;
+                                if (Gear > 0)
+                                    Gear--;
+                                else
+                                    Gear = -1;
                                 shiftingRetry = 0;
                                 ShiftingPhase = ShiftPhase.EngageGear;
                             }

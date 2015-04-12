@@ -354,14 +354,16 @@ namespace SimShift.Entities
                     }
                     if (!gearSet)
                     {
-                        if (Drivetrain is Ets2Drivetrain)
+                        if (Drivetrain is Ets2Drivetrain && 
+                            Drivetrain.Gears >= 10)
                             tableGear[speed].Add(load, 3);
                         else
                             tableGear[speed].Add(load, 1);
                     }
                     else
                     {
-                        if (Drivetrain is Ets2Drivetrain)
+                        if (Drivetrain is Ets2Drivetrain &&
+                            Drivetrain.Gears >= 10)
                             bestFuelGear = Math.Max(2, bestFuelGear);
                         tableGear[speed].Add(load, bestFuelGear + 1);
                     }

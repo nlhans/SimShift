@@ -28,8 +28,8 @@ namespace SimShift.Dialogs
                                             1,
                                             1,
                                             2500,
-                                            300,
-                                            800
+                                            150,
+                                            2000
                                         });
             plot.Dock = DockStyle.Fill;
             Controls.Add(plot);
@@ -65,7 +65,7 @@ namespace SimShift.Dialogs
                                Main.GetAxisOut(JoyControls.Clutch),
                                tel.EngineRpm - 2500,
                                tel.Speed*3.6,
-                               VariableSpeedTransmission.reqpower
+                               Main.Drivetrain.CalculatePower(tel.EngineRpm, tel.Throttle)
                            };
 
                 plot.Add(data.ToList());

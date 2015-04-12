@@ -33,7 +33,9 @@ namespace SimShift
             updateModules.Interval = 25;
             updateModules.Tick += updateModules_Tick;
             updateModules.Start();
-            
+
+            laneAssistanceToolStripMenuItem_Click(null, null);
+
         }
 
         private Dictionary<string, string> loadedIcon = new Dictionary<string, string>(); 
@@ -413,14 +415,31 @@ namespace SimShift
 
         private void btTransmission_Click(object sender, EventArgs e)
         {
-            if (Main.Transmission.Enabled)
+            if (Main.VST)
             {
-                Main.Transmission.Enabled = false;
-                btTransmission.Text = "Manual Mode";
-            }else
+                if (Main.VariableSpeedControl.Enabled)
+                {
+                    Main.VariableSpeedControl.Enabled = false;
+                    btTransmission.Text = "Manual Mode";
+                }
+                else
+                {
+                    Main.VariableSpeedControl.Enabled = true;
+                    btTransmission.Text = "Auto Mode";
+                }
+            }
+            else
             {
-                Main.Transmission.Enabled = true;
-                btTransmission.Text = "Auto Mode";
+                if (Main.Transmission.Enabled)
+                {
+                    Main.Transmission.Enabled = false;
+                    btTransmission.Text = "Manual Mode";
+                }
+                else
+                {
+                    Main.Transmission.Enabled = true;
+                    btTransmission.Text = "Auto Mode";
+                }
             }
         }
 
