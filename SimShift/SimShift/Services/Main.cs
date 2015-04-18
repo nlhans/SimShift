@@ -52,7 +52,7 @@ namespace SimShift.Services
 
         public static JoystickInput Controller
         {
-            get { return dskCtlActive ? RawJoysticksIn[0] : RawJoysticksIn[1]; }
+            get { return ps4CtlActive || dskCtlActive ? RawJoysticksIn[0] : RawJoysticksIn[1]; }
         }
 
 
@@ -71,13 +71,21 @@ namespace SimShift.Services
             {
                 requiresSetup = false;
 
+                JoystickInput dskCtllr, g25Cont, ps4Cont;
+
                 // Joysticks
                 var dskCtl = JoystickInputDevice.Search("Hotas").FirstOrDefault();
-                JoystickInput dskCtllr, g25Cont;
                 if (dskCtl == null)
                     dskCtllr = default(JoystickInput);
                 else
                     dskCtllr = new JoystickInput(dskCtl);
+                
+                var ps4Ctl = JoystickInputDevice.Search("Wireless Controller").FirstOrDefault();
+                if (ps4Ctl== null)
+                    ps4Cont = default(JoystickInput);
+                else
+                    ps4Cont = new JoystickInput(ps4Ctl);
+
                 var g25 = JoystickInputDevice.Search("G25").FirstOrDefault();
                 if (g25 == null)
                     g25Cont = default(JoystickInput);
@@ -85,7 +93,11 @@ namespace SimShift.Services
                     g25Cont = new JoystickInput(g25);
                 var vJoy = new JoystickOutput();
 
+                if (dskCtlActive)
                 RawJoysticksIn.Add(dskCtllr);
+                else if (ps4CtlActive)
+                    RawJoysticksIn.Add(ps4Cont);
+                else RawJoysticksIn.Add(default(JoystickInput));
                 RawJoysticksIn.Add(g25Cont);
                 RawJoysticksOut.Add(vJoy);
 
@@ -128,7 +140,7 @@ namespace SimShift.Services
                                       };
 
 
-                if (dskCtllr == null && g25Cont == null)
+                if (dskCtllr == null && g25Cont == null && ps4Cont == null)
                 {
                     MessageBox.Show("No controllers found");
                     return false;
@@ -243,6 +255,8 @@ namespace SimShift.Services
 
         #region Control mapping
 
+
+        private static bool ps4CtlActive = true;
         private static bool dskCtlActive = false ;
         public static bool VST = false ;// { get { return Main.DrivetrainCalibrator.Active? false:true; }}
 
@@ -251,70 +265,83 @@ namespace SimShift.Services
             switch (c)
             {
                 case JoyControls.Gear1:
-                    return !dskCtlActive && RawJoysticksIn[1].GetButton(8);
+                    return !ps4CtlActive && !dskCtlActive && RawJoysticksIn[1].GetButton(8);
                 case JoyControls.Gear2:
-                    return !dskCtlActive && RawJoysticksIn[1].GetButton(9);
+                    return !ps4CtlActive && !dskCtlActive && RawJoysticksIn[1].GetButton(9);
                 case JoyControls.Gear3:
-                    return !dskCtlActive && RawJoysticksIn[1].GetButton(10);
+                    return !ps4CtlActive && !dskCtlActive && RawJoysticksIn[1].GetButton(10);
                 case JoyControls.Gear4:
-                    return !dskCtlActive && RawJoysticksIn[1].GetButton(11);
+                    return !ps4CtlActive && !dskCtlActive && RawJoysticksIn[1].GetButton(11);
                 case JoyControls.Gear5:
-                    return !dskCtlActive && RawJoysticksIn[1].GetButton(12);
+                    return !ps4CtlActive && !dskCtlActive && RawJoysticksIn[1].GetButton(12);
                 case JoyControls.Gear6:
-                    return !dskCtlActive && RawJoysticksIn[1].GetButton(13);
+                    return !ps4CtlActive && !dskCtlActive && RawJoysticksIn[1].GetButton(13);
                 case JoyControls.Gear7:
                     return false;
                 case JoyControls.Gear8:
                     return false;
                 case JoyControls.GearR:
-                    return !dskCtlActive && RawJoysticksIn[1].GetButton(14);
+                    return !ps4CtlActive && !dskCtlActive && RawJoysticksIn[1].GetButton(14);
 
                 case JoyControls.GearRange1:
-                    return !dskCtlActive && RawJoysticksIn[1].GetButton(6);
+                    return !ps4CtlActive && !dskCtlActive && RawJoysticksIn[1].GetButton(6);
 
                 case JoyControls.GearRange2:
-                    return !dskCtlActive && RawJoysticksIn[1].GetButton(17);
+                    return !ps4CtlActive && !dskCtlActive && RawJoysticksIn[1].GetButton(17);
 
                     /*** NOT FUNCTIONAL ***/
                 case JoyControls.LaneAssistance:
-                    if (dskCtlActive)
+                    if (ps4CtlActive) return false;
+                   else if (dskCtlActive)
                         return RawJoysticksIn[0].GetButton(7);
                     else
                         return RawJoysticksIn[0].GetButton(7);
 
+                case JoyControls.VstChange:
+                   return !ps4CtlActive && !dskCtlActive && RawJoysticksIn[1].GetButton(10);
+                case JoyControls.MeasurePower:
+                   return !ps4CtlActive && !dskCtlActive && RawJoysticksIn[1].GetButton(11);
+
                 // PS3 (via DS3 tool) L1/R1
                 case JoyControls.GearDown:
-                    if (dskCtlActive)
+
+                    if (ps4CtlActive)
+                        return RawJoysticksIn[0].GetButton(4);
+                    else if (dskCtlActive)
                         return RawJoysticksIn[0].GetButton(8);
                     else if (Transmission.Enabled)
                         return RawJoysticksIn[1].GetButton(8);
                     else return false;
-                case JoyControls.VstChange:
-                    return !dskCtlActive && RawJoysticksIn[1].GetButton(10);
-                case JoyControls.MeasurePower:
-                    return !dskCtlActive && RawJoysticksIn[1].GetButton(11);
                 case JoyControls.GearUp:
-                    if (dskCtlActive)
+
+                    if (ps4CtlActive)
+                        return RawJoysticksIn[0].GetButton(5);
+                    else if (dskCtlActive)
                         return RawJoysticksIn[0].GetButton(4);
                     else if (Transmission.Enabled)
                         return RawJoysticksIn[1].GetButton(9);
                     else return false;
                 case JoyControls.CruiseControlMaintain:
-                    if (dskCtlActive)
+                    
+                    if (ps4CtlActive)
+                        return RawJoysticksIn[0].GetButton(3);
+                    else if (dskCtlActive)
                         return RawJoysticksIn[0].GetButton(9);
                     else
                         return RawJoysticksIn[1].GetButton(15);
 
                 case JoyControls.CruiseControlUp:
-                    return !dskCtlActive && RawJoysticksIn[1].GetPov(2);
+                    return !ps4CtlActive && !dskCtlActive && RawJoysticksIn[1].GetPov(2);
                 case JoyControls.CruiseControlDown:
-                    return !dskCtlActive && RawJoysticksIn[1].GetPov(0);
+                    return !ps4CtlActive && !dskCtlActive && RawJoysticksIn[1].GetPov(0);
                 case JoyControls.CruiseControlOnOff:
-                    return !dskCtlActive && RawJoysticksIn[1].GetPov(1);
+                    return !ps4CtlActive && !dskCtlActive && RawJoysticksIn[1].GetPov(1);
                 
                 
                 case JoyControls.LaunchControl:
-                    if (dskCtlActive)
+                    if (ps4CtlActive)
+                        return false;
+                    else if (dskCtlActive)
                         return RawJoysticksIn[0].GetButton(6);
                     else
                         return RawJoysticksIn[1].GetButton(18);
@@ -340,7 +367,19 @@ namespace SimShift.Services
 
                 case JoyControls.Steering:
 
-                    if (dskCtlActive)
+                    if (ps4CtlActive)
+                    {
+                        var s = RawJoysticksIn[0].GetAxis(0) / Math.Pow(2, 16)-0.5;
+
+                        s *= 2;
+                        var wasn = s < 0;
+                        s = s * s;
+                        s /= 2;
+                        if (wasn) s *= -1;
+                        s += 0.5;
+                        return s;
+                    }
+                    else if (dskCtlActive)
                     {
                         var steer1 = Controller.GetAxis(3)/Math.Pow(2, 15) - 1;
                         var steer2 = Controller.GetAxis(0)/Math.Pow(2, 15) - 1;
@@ -357,7 +396,14 @@ namespace SimShift.Services
                 case JoyControls.Throttle:
 
                     double t = 0;
-                    if (dskCtlActive)
+
+                    if (ps4CtlActive)
+                    {
+                        t = RawJoysticksIn[0].GetAxis(4) / Math.Pow(2, 16);
+                        t = t*t;
+                        return t;
+                    }
+                    else if (dskCtlActive)
                     {
                         if (VST)
                         {
@@ -379,7 +425,14 @@ namespace SimShift.Services
                     return t;
 
                 case JoyControls.Brake:
-                    if (dskCtlActive)
+
+                    if (ps4CtlActive)
+                    {
+                        var b = RawJoysticksIn[0].GetAxis(5)/Math.Pow(2,16);
+                        b = b*b;
+                        return b;
+                    }
+                    else if (dskCtlActive)
                     {
                         if (VST)
                         {
@@ -402,7 +455,10 @@ namespace SimShift.Services
                         return b * b;
                     }
                 case JoyControls.Clutch:
-                    if (dskCtlActive)
+                    
+                    if (ps4CtlActive)
+                        return 0;
+                    else if (dskCtlActive)
                         return 0;
                     else
                     return 1 - RawJoysticksIn[1].GetAxis(4) / Math.Pow(2, 16);
