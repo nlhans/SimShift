@@ -45,9 +45,9 @@ namespace SimShift.Data
 
         private void OnDataReceived(object sender, EventArgs args)
         {
-            var x = source.MyTelemetry.coordinateX;
-            var y = source.MyTelemetry.coordinateY;
-            var z = source.MyTelemetry.coordinateZ;
+            var x = source.MyTelemetry.Physics.CoordinateX;
+            var y = source.MyTelemetry.Physics.CoordinateY;
+            var z = source.MyTelemetry.Physics.CoordinateZ;
 
             var activeCell = LookupCell(x,z);
 

@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Sockets;
 using System.Text;
 using System.Windows.Forms;
 using SimShift.Controllers;
 using SimShift.Data;
 using SimShift.Entities;
+using SimShift.MapTool;
 using SimShift.Models;
 using SimShift.Utils;
 
@@ -27,12 +26,14 @@ namespace SimShift.Services
 
 
         public static DataArbiter Data;
-        public static WorldMapper Map;
 
         public static Profiles CarProfile;
 
+        public static Ets2Mapper LoadedMap { get; set; }
+
         // Modules
         public static Antistall Antistall;
+        public static ACC ACC;
         public static CruiseControl CruiseControl;
         public static IDrivetrain Drivetrain;
         public static Speedlimiter Speedlimiter;
@@ -41,6 +42,7 @@ namespace SimShift.Services
         public static LaunchControl LaunchControl;
         public static LaneAssistance LaneAssistance;
         public static VariableSpeedTransmission VariableSpeedControl;
+        public static TransmissionCalibrator TransmissionCalibrator;
         
         public static ProfileSwitcher ProfileSwitcher;
         public static CameraHorizon CameraHorizon;
@@ -56,14 +58,7 @@ namespace SimShift.Services
         }
 
 
-
         public static DrivetrainCalibrator DrivetrainCalibrator;
-
-        public static void Save()
-        {
-            if(Map!=null)
-            Map.Export();
-        }
 
         public static bool Setup()
         {
@@ -71,34 +66,27 @@ namespace SimShift.Services
             {
                 requiresSetup = false;
 
-                JoystickInput dskCtllr, g25Cont, ps4Cont;
+                JoystickInput deskCtrl, g25Wheel, ps4Ctrl;
 
                 // Joysticks
-                var dskCtl = JoystickInputDevice.Search("Hotas").FirstOrDefault();
-                if (dskCtl == null)
-                    dskCtllr = default(JoystickInput);
-                else
-                    dskCtllr = new JoystickInput(dskCtl);
+                var dskObj = JoystickInputDevice.Search("Hotas").FirstOrDefault();
+                deskCtrl = dskObj == null ? default(JoystickInput) : new JoystickInput(dskObj);
                 
-                var ps4Ctl = JoystickInputDevice.Search("Wireless Controller").FirstOrDefault();
-                if (ps4Ctl== null)
-                    ps4Cont = default(JoystickInput);
-                else
-                    ps4Cont = new JoystickInput(ps4Ctl);
+                var ps4Obj = JoystickInputDevice.Search("Wireless Controller").FirstOrDefault();
+                ps4Ctrl = ps4Obj== null ? default(JoystickInput) : new JoystickInput(ps4Obj);
 
-                var g25 = JoystickInputDevice.Search("G25").FirstOrDefault();
-                if (g25 == null)
-                    g25Cont = default(JoystickInput);
-                else
-                    g25Cont = new JoystickInput(g25);
+                var g25Obj = JoystickInputDevice.Search("G25").FirstOrDefault();
+                g25Wheel = g25Obj == null ? default(JoystickInput) : new JoystickInput(g25Obj);
                 var vJoy = new JoystickOutput();
 
+                // add main controller:
                 if (dskCtlActive)
-                RawJoysticksIn.Add(dskCtllr);
+                    RawJoysticksIn.Add(deskCtrl);
                 else if (ps4CtlActive)
-                    RawJoysticksIn.Add(ps4Cont);
-                else RawJoysticksIn.Add(default(JoystickInput));
-                RawJoysticksIn.Add(g25Cont);
+                    RawJoysticksIn.Add(ps4Ctrl);
+                else 
+                    RawJoysticksIn.Add(default(JoystickInput));
+                RawJoysticksIn.Add(g25Wheel);
                 RawJoysticksOut.Add(vJoy);
 
                 // Data source
@@ -123,31 +111,22 @@ namespace SimShift.Services
                                            LoadNextProfile(10000);
                                        };
 
-                Data.AppActive += (s, e) => { Map = new WorldMapper(Data.Active); };
-                Data.AppInactive += (s, e) => { Map = null; };
-
                 // TODO: Temporary..
                 Data.AppActive += (s, e) =>
                                       {
-                                          if (Data.Active.Application == "TestDrive2")
-                                          {
-                                              CameraHorizon.CameraHackEnabled = true;
-                                          }
-                                          else
-                                          {
-                                              CameraHorizon.CameraHackEnabled = false;
-                                          }
+                                          CameraHorizon.CameraHackEnabled = Data.Active.Application == "TestDrive2";
                                       };
 
 
-                if (dskCtllr == null && g25Cont == null && ps4Cont == null)
+                if (deskCtrl == null && g25Wheel == null && ps4Ctrl == null)
                 {
-                    MessageBox.Show("No controllers found");
+                    //MessageBox.Show("No controllers found");
                     return false;
                 }
 
                 // Modules
                 Antistall = new Antistall();
+                ACC = new ACC();
                 CruiseControl = new CruiseControl();
                 Drivetrain = new GenericDrivetrain();
                 Transmission = new Transmission();
@@ -156,9 +135,9 @@ namespace SimShift.Services
                 Speedlimiter = new Speedlimiter();
                 LaunchControl = new LaunchControl();
                 DrivetrainCalibrator = new DrivetrainCalibrator();
+                TransmissionCalibrator = new TransmissionCalibrator();
                 LaneAssistance = new LaneAssistance();
                 VariableSpeedControl = new VariableSpeedTransmission();
-
                 CameraHorizon = new CameraHorizon();
 
                 // Controls
@@ -208,17 +187,18 @@ namespace SimShift.Services
                 using (var ini = new IniReader(iniFile, true))
                 {
                     ini.AddHandler((x) =>
-                                       {
-                                           if (target.AcceptsConfigs.Any(y => y == x.Group))
-                                           {
-                                               target.ApplyParameter(x);
-                                           }
+                    {
+                        if (target.AcceptsConfigs.Any(y => y == x.Group))
+                        {
+                            target.ApplyParameter(x);
+                        }
 
-                                       });
+                    });
                     ini.Parse();
                 }
                 return true;
-            }catch
+            }
+            catch
             {
                 Debug.WriteLine("Failed to load configuration from " + iniFile);
             }
@@ -234,7 +214,7 @@ namespace SimShift.Services
             //
             if (!Running)
             {
-                Data.DataReceived += tick;
+                Data.DataReceived += Tick;
                 Running = isNowRunning;
             }
         }
@@ -243,20 +223,19 @@ namespace SimShift.Services
         {
             if (Running)
             {
-                Data.DataReceived -= tick;
+                Data.DataReceived -= Tick;
                 Running = false;
             }
         }
 
-        public static void tick(object sender, EventArgs e)
+        public static void Tick(object sender, EventArgs e)
         {
             Controls.Tick(Data.Active);
         }
 
         #region Control mapping
 
-
-        private static bool ps4CtlActive = true;
+        private static bool ps4CtlActive = false;
         private static bool dskCtlActive = false ;
         public static bool VST = false ;// { get { return Main.DrivetrainCalibrator.Active? false:true; }}
 
@@ -295,7 +274,7 @@ namespace SimShift.Services
                    else if (dskCtlActive)
                         return RawJoysticksIn[0].GetButton(7);
                     else
-                        return RawJoysticksIn[0].GetButton(7);
+                        return RawJoysticksIn[1].GetButton(7);
 
                 case JoyControls.VstChange:
                    return !ps4CtlActive && !dskCtlActive && RawJoysticksIn[1].GetButton(10);
@@ -351,6 +330,8 @@ namespace SimShift.Services
             }
             // Map user config -> controller
         }
+
+        private static float lastThrottle=0.0f;
 
         public static double GetAxisIn(JoyControls c)
         {
@@ -421,7 +402,10 @@ namespace SimShift.Services
                     }
 
                     if (t < 0) t = 0;
-                   
+
+                    t = t*0.05 + lastThrottle*0.95;
+                    lastThrottle = (float)t;
+
                     return t;
 
                 case JoyControls.Brake:
@@ -580,6 +564,7 @@ namespace SimShift.Services
         }
 
         private static int profileIndexLoaded = 0;
+
         public static void LoadNextProfile(float staticMass)
         {
             if (profileIndexLoaded >= CarProfile.Loaded.Count) profileIndexLoaded = 0;
@@ -594,11 +579,17 @@ namespace SimShift.Services
 
         public static void ReloadProfile(float staticMass)
         {
+            if (CarProfile == null) return;
             if (CarProfile.Loaded.Count == 0) return;
             var pr = profileIndexLoaded - 1;
             if (pr < 0) pr = CarProfile.Loaded.Count - 1;
 
             CarProfile.Load(CarProfile.Loaded.Skip(pr).FirstOrDefault().Name, staticMass);
+        }
+
+        public static void SetMap(Ets2Mapper ets2Map)
+        {
+            LoadedMap = ets2Map;
         }
     }
 }

@@ -1,0 +1,1375 @@
+SiiNunit
+{
+# For modders: Please do not modify this file if you want to add a new entry. Create in
+# this directory a new file "<base_name>.<idofyourmod>.sii" where <base_name> is name of
+# base file without the extension (e.g. "city" for "/def/city.sii") and <idofyourmod> is
+# some string which is unlikely to conflict with other mod.
+#
+# Warning: Even if the units are specified in more than one source file, they share the
+# same namespace so suffixes or prefixes should be used to avoid conflicts.
+
+road_look : road.look0 {
+	name: 			"Road 1 lane double"
+
+	road_size_left: 	4.5
+	road_size_right: 	4.5
+
+	road_offset:		0.0
+
+
+	tex1_left:		0.752
+	tex0_left:		0.5
+	tex0_right:		0.5
+	tex1_right:		0.752
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+
+	shoulder_size_right:		1.0
+	shoulder_tex0_right:		0.88
+	shoulder_tex1_right:		0.944
+
+	shoulder_size_left:		1.0
+	shoulder_tex0_left:		0.88
+	shoulder_tex1_left:		0.944
+
+	center_line_left_offset:	0.02
+	center_line_right_offset:	0.02
+
+	center_line_left_width:		0.2
+	center_line_right_width:	0.2
+
+	center_line_left_style:		3
+	center_line_right_style:	3
+	inner_line_style:		0
+	outer_line_style:		1
+
+	lanes_left[]:		traffic_lane.road.local
+	lanes_right[]:		traffic_lane.road.local
+
+	road_trans_style:	0
+}
+
+road_look : road.look5 {
+	name: 			"Road 1 lane single"
+
+	road_size_left: 	4.5
+	road_size_right: 	4.5
+
+	road_offset:		0.0
+
+
+	tex1_left:		0.752
+	tex0_left:		0.5
+	tex0_right:		0.5
+	tex1_right:		0.752
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+
+	shoulder_size_right:		1.0
+	shoulder_tex0_right:		0.88
+	shoulder_tex1_right:		0.944
+
+	shoulder_size_left:		1.0
+	shoulder_tex0_left:		0.88
+	shoulder_tex1_left:		0.944
+
+	center_line_left_offset:	0.00
+	center_line_right_offset:	-0.1
+
+	center_line_left_width:		0.2
+	center_line_right_width:	0.2
+
+	center_line_left_style:		0
+	center_line_right_style:	3
+	inner_line_style:		0
+	outer_line_style:		1
+
+	lanes_left[]:		traffic_lane.road.local
+	lanes_right[]:		traffic_lane.road.local
+
+	road_trans_style:	0
+}
+
+
+road_look : road.look6 {
+	name: 			"Road 1 lane broken"
+
+	road_size_left: 	4.5
+	road_size_right: 	4.5
+
+	road_offset:		0.0
+
+
+	tex1_left:		0.752
+	tex0_left:		0.5
+	tex0_right:		0.5
+	tex1_right:		0.752
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+
+	shoulder_size_right:		1.0
+	shoulder_tex0_right:		0.88
+	shoulder_tex1_right:		0.944
+
+	shoulder_size_left:		1.0
+	shoulder_tex0_left:		0.88
+	shoulder_tex1_left:		0.944
+
+	center_line_left_offset:	0.00
+	center_line_right_offset:	-0.1
+
+	center_line_left_width:		0.2
+	center_line_right_width:	0.2
+
+	center_line_left_style:		0
+	center_line_right_style:	2
+	inner_line_style:		0
+	outer_line_style:		1
+
+	lanes_left[]:		traffic_lane.road.local
+	lanes_right[]:		traffic_lane.road.local
+
+	allow_wrong_way[]:	""
+	road_trans_style:	0
+}
+
+road_look : road.look7 {
+	name: 			"Road no center lane"
+
+	road_size_left: 	4.5
+	road_size_right: 	4.5
+
+	road_offset:		0.0
+
+
+	tex1_left:		0.752
+	tex0_left:		0.5
+	tex0_right:		0.5
+	tex1_right:		0.752
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+
+	shoulder_size_right:		1.0
+	shoulder_tex0_right:		0.88
+	shoulder_tex1_right:		0.944
+
+	shoulder_size_left:		1.0
+	shoulder_tex0_left:		0.88
+	shoulder_tex1_left:		0.944
+
+	center_line_left_offset:	0.00
+	center_line_right_offset:	-0.1
+
+	center_line_left_width:		0.2
+	center_line_right_width:	0.2
+
+	center_line_left_style:		0
+	center_line_right_style:	0
+	inner_line_style:		0
+	outer_line_style:		1
+
+	lanes_left[]:		traffic_lane.road.local
+	lanes_right[]:		traffic_lane.road.local
+
+	allow_wrong_way[]:	""
+	road_trans_style:	0
+}
+
+road_look : road.look1 {
+	name: 			"Highway 2 lanes 2m offset"
+
+	road_size_left: 	12.5
+	road_size_right: 	12.5
+
+	road_offset:		2.0
+
+
+	tex1_left:		0.944
+	tex0_left:		0.25
+	tex0_right:		0.25
+	tex1_right:		0.944
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+	trans_tex0_center:	0.944
+	trans_tex1_center:	1.0
+
+	center_line_left_offset:	0.0
+	center_line_right_offset:	0.0
+
+	center_line_left_width:		0.32
+	center_line_right_width:	0.32
+
+	center_line_left_style:		3
+	center_line_right_style:	3
+	inner_line_style:		1
+	outer_line_style:		1
+
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+
+	road_trans_style:	1
+}
+
+
+
+road_look : road.look2 {
+	name: 			"Highway 2 lanes 5m offset"
+
+	road_size_left: 	12.5
+	road_size_right: 	12.5
+
+	road_offset:		5.0
+
+
+	tex1_left:		0.944
+	tex0_left:		0.25
+	tex0_right:		0.25
+	tex1_right:		0.944
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+	trans_tex0_center:	0.944
+	trans_tex1_center:	1.0
+
+	center_line_left_offset:	0.0
+	center_line_right_offset:	0.0
+
+	center_line_left_width:		0.32
+	center_line_right_width:	0.32
+
+	center_line_left_style:		3
+	center_line_right_style:	3
+	inner_line_style:		1
+	outer_line_style:		1
+
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+
+	road_trans_style:	1
+}
+
+
+road_look : road.look3 {
+	name: 			"Highway 3 lanes 2m offset"
+
+	road_size_left: 	17
+	road_size_right: 	17
+
+	road_offset:		2.0
+
+
+	tex1_left:		0.944
+	tex0_left:		0.0
+	tex0_right:		0.0
+	tex1_right:		0.944
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+	trans_tex0_center:	0.944
+	trans_tex1_center:	1.0
+
+	center_line_left_offset:	0.0
+	center_line_right_offset:	0.0
+
+	center_line_left_width:		0.32
+	center_line_right_width:	0.32
+
+	center_line_left_style:		3
+	center_line_right_style:	3
+	inner_line_style:		2
+	outer_line_style:		1
+
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+
+	road_trans_style:	2
+}
+
+road_look : road.look4 {
+	name: 			"Highway 3 lanes 5m offset"
+
+	road_size_left: 	17
+	road_size_right: 	17
+
+	road_offset:		5.0
+
+
+	tex1_left:		0.944
+	tex0_left:		0.0
+	tex0_right:		0.0
+	tex1_right:		0.944
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+	trans_tex0_center:	0.944
+	trans_tex1_center:	1.0
+
+	center_line_left_offset:	0.0
+	center_line_right_offset:	0.0
+
+	center_line_left_width:		0.32
+	center_line_right_width:	0.32
+
+	center_line_left_style:		3
+	center_line_right_style:	3
+	inner_line_style:		2
+	outer_line_style:		1
+
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+
+	road_trans_style:	2
+}
+
+road_look : road.look8 {
+	name: 			"City 2 lanes 1m offset"
+
+	road_size_left: 	8.0
+	road_size_right: 	8.0
+
+	road_offset:		1.0
+
+
+	tex1_left:		0.88
+	tex0_left:		0.25
+	tex0_right:		0.25
+	tex1_right:		0.88
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+	trans_tex0_center:	0.944
+	trans_tex1_center:	1.0
+
+	shoulder_size_right:		1.0
+	shoulder_tex0_right:		0.88
+	shoulder_tex1_right:		0.944
+
+	shoulder_size_left:		1.0
+	shoulder_tex0_left:		0.88
+	shoulder_tex1_left:		0.944
+
+	center_line_left_offset:	0.0
+	center_line_right_offset:	0.0
+
+	center_line_left_width:		0.32
+	center_line_right_width:	0.32
+
+	center_line_left_style:		3
+	center_line_right_style:	3
+	inner_line_style:		1
+	outer_line_style:		0
+
+	lanes_left[]:		traffic_lane.road.expressway
+	lanes_left[]:		traffic_lane.road.expressway
+	lanes_right[]:		traffic_lane.road.expressway
+	lanes_right[]:		traffic_lane.road.expressway
+
+	road_trans_style:	1
+}
+
+road_look : road.look9 {
+	name: 			"Exit road"
+
+	road_size_left: 	4.5
+	road_size_right: 	4.5
+
+	road_offset:		0.0
+
+
+	tex1_left:		0.944
+	tex0_left:		0.75
+	tex0_right:		0.75
+	tex1_right:		0.5
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+
+	center_line_left_offset:	0.0
+	center_line_right_offset:	4.0
+
+	center_line_left_width:		0.32
+	center_line_right_width:	0.32
+
+	center_line_left_style:		0
+	center_line_right_style:	3
+	inner_line_style:		0
+	outer_line_style:		0
+
+	lanes_left[]:		traffic_lane.road.local
+
+	allow_wrong_way[]:	""
+	road_trans_style:	0
+	slow_time:		true
+}
+
+road_look : road.look10 {
+	name: 			"Road no lanes small"
+
+	road_size_left: 	4.5
+	road_size_right: 	4.5
+
+	road_offset:		0.0
+
+
+	tex1_left:		0.752
+	tex0_left:		0.5
+	tex0_right:		0.5
+	tex1_right:		0.752
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+
+	shoulder_size_right:		1.0
+	shoulder_tex0_right:		0.88
+	shoulder_tex1_right:		0.944
+
+	shoulder_size_left:		1.0
+	shoulder_tex0_left:		0.88
+	shoulder_tex1_left:		0.944
+
+	center_line_left_offset:	0.00
+	center_line_right_offset:	-0.1
+
+	center_line_left_width:		0.2
+	center_line_right_width:	0.2
+
+	center_line_left_style:		0
+	center_line_right_style:	0
+	inner_line_style:		0
+	outer_line_style:		0
+
+	lanes_left[]:		traffic_lane.road.local
+	lanes_right[]:		traffic_lane.road.local
+
+	allow_wrong_way[]:	""
+	road_trans_style:	0
+}
+
+road_look : road.look11 {
+	name: 			"Highway 2 lanes 1m offset"
+
+	road_size_left: 	8.0
+	road_size_right: 	8.0
+
+	road_offset:		1.0
+
+
+	tex1_left:		0.88
+	tex0_left:		0.25
+	tex0_right:		0.25
+	tex1_right:		0.88
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+	trans_tex0_center:	0.944
+	trans_tex1_center:	1.0
+
+	shoulder_size_right:		1.0
+	shoulder_tex0_right:		0.88
+	shoulder_tex1_right:		0.944
+
+	shoulder_size_left:		1.0
+	shoulder_tex0_left:		0.88
+	shoulder_tex1_left:		0.944
+
+	center_line_left_offset:	0.0
+	center_line_right_offset:	0.0
+
+	center_line_left_width:		0.32
+	center_line_right_width:	0.32
+
+	center_line_left_style:		3
+	center_line_right_style:	3
+	inner_line_style:		1
+	outer_line_style:		0
+
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+
+	road_trans_style:	1
+}
+
+road_look : road.look12 {
+	name: 			"Ground road (ground texture only)"
+
+	road_size_left: 	4.5
+	road_size_right: 	4.5
+
+	road_offset:		0.0
+
+
+	tex1_left:		0.12
+	tex0_left:		0.5
+	tex0_right:		0.5
+	tex1_right:		0.88
+
+	trans_tex0_left:	0.056
+	trans_tex1_left:	0.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+
+	shoulder_size_right:		1.0
+	shoulder_tex0_right:		0.88
+	shoulder_tex1_right:		0.944
+
+	shoulder_size_left:		1.0
+	shoulder_tex0_left:		0.12
+	shoulder_tex1_left:		0.056
+
+	center_line_left_offset:	0.00
+	center_line_right_offset:	-0.1
+
+	center_line_left_width:		0.2
+	center_line_right_width:	0.2
+
+	center_line_left_style:		0
+	center_line_right_style:	0
+	inner_line_style:		0
+	outer_line_style:		0
+
+	lanes_left[]:		traffic_lane.road.local
+	lanes_right[]:		traffic_lane.road.local
+	allow_wrong_way[]:	""
+	road_trans_style:	0
+}
+
+road_look : road.look13 {
+	name: 			"Highway 3 lanes 15m offset"
+
+	road_size_left: 	17
+	road_size_right: 	17
+
+	road_offset:		15.0
+
+
+	tex1_left:		0.944
+	tex0_left:		0.0
+	tex0_right:		0.0
+	tex1_right:		0.944
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+	trans_tex0_center:	0.944
+	trans_tex1_center:	1.0
+
+	center_line_left_offset:	0.0
+	center_line_right_offset:	0.0
+
+	center_line_left_width:		0.32
+	center_line_right_width:	0.32
+
+	center_line_left_style:		3
+	center_line_right_style:	3
+	inner_line_style:		2
+	outer_line_style:		1
+
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+
+	road_trans_style:	2
+}
+
+road_look : road.look14 {
+	name: 			"Highway 3 lanes 25m offset"
+
+	road_size_left: 	17
+	road_size_right: 	17
+
+	road_offset:		25.0
+
+
+	tex1_left:		0.944
+	tex0_left:		0.0
+	tex0_right:		0.0
+	tex1_right:		0.944
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+	trans_tex0_center:	0.944
+	trans_tex1_center:	1.0
+
+	center_line_left_offset:	0.0
+	center_line_right_offset:	0.0
+
+	center_line_left_width:		0.32
+	center_line_right_width:	0.32
+
+	center_line_left_style:		3
+	center_line_right_style:	3
+	inner_line_style:		2
+	outer_line_style:		1
+
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+
+	road_trans_style:	2
+}
+
+road_look : road.look15 {
+	name: 			"Highway 3 lanes 10m offset"
+
+	road_size_left: 	17
+	road_size_right: 	17
+
+	road_offset:		10.0
+
+
+	tex1_left:		0.944
+	tex0_left:		0.0
+	tex0_right:		0.0
+	tex1_right:		0.944
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+	trans_tex0_center:	0.944
+	trans_tex1_center:	1.0
+
+	center_line_left_offset:	0.0
+	center_line_right_offset:	0.0
+
+	center_line_left_width:		0.32
+	center_line_right_width:	0.32
+
+	center_line_left_style:		3
+	center_line_right_style:	3
+	inner_line_style:		2
+	outer_line_style:		1
+
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+
+	road_trans_style:	2
+}
+
+road_look : road.look16 {
+	name: 			"Highway 3 lanes one way"
+
+	road_size_left: 	9.0
+	road_size_right: 	8.0
+
+	road_offset:		0.0
+
+
+	tex1_left:		0.0
+	tex0_left:		0.5
+	tex0_right:		0.5
+	tex1_right:		0.944
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+	trans_tex0_center:	0.944
+	trans_tex1_center:	1.0
+
+	center_line_left_offset:	8.68
+	center_line_right_offset:	-0.1
+
+	center_line_left_width:		0.32
+	center_line_right_width:	0.2
+
+	center_line_left_style:		3
+	center_line_right_style:	2
+	inner_line_style:		0
+	outer_line_style:		3
+
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+
+	road_trans_style:	2
+}
+
+road_look : road.look17 {
+	name: 			"Highway 3 lanes one way UK"
+
+	road_size_left: 	8.0
+	road_size_right: 	9.0
+
+	road_offset:		0.0
+
+
+	tex1_left:		0.944
+	tex0_left:		0.5
+	tex0_right:		0.5
+	tex1_right:		0.0
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+	trans_tex0_center:	0.944
+	trans_tex1_center:	1.0
+
+	center_line_left_offset:	-0.1
+	center_line_right_offset:	8.68
+
+	center_line_left_width:		0.2
+	center_line_right_width:	0.32
+
+	center_line_left_style:		2
+	center_line_right_style:	3
+	inner_line_style:		0
+	outer_line_style:		4
+
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+
+	allow_wrong_way[]:	""
+
+	road_trans_style:	2
+}
+
+road_look : road.look18 {
+	name: 			"Road broken no outer lanes"
+
+	road_size_left: 	4.5
+	road_size_right: 	4.5
+
+	road_offset:		0.0
+
+
+	tex1_left:		0.752
+	tex0_left:		0.5
+	tex0_right:		0.5
+	tex1_right:		0.752
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+
+	shoulder_size_right:		1.0
+	shoulder_tex0_right:		0.88
+	shoulder_tex1_right:		0.944
+
+	shoulder_size_left:		1.0
+	shoulder_tex0_left:		0.88
+	shoulder_tex1_left:		0.944
+
+	center_line_left_offset:	0.00
+	center_line_right_offset:	-0.1
+
+	center_line_left_width:		0.2
+	center_line_right_width:	0.2
+
+	center_line_left_style:		0
+	center_line_right_style:	2
+	inner_line_style:		0
+	outer_line_style:		0
+
+	lanes_left[]:		traffic_lane.road.local
+	lanes_right[]:		traffic_lane.road.local
+
+	allow_wrong_way[]:	""
+	road_trans_style:	0
+}
+
+road_look : road.look19 {
+	name: 			"Road single no outer lanes"
+
+	road_size_left: 	4.5
+	road_size_right: 	4.5
+
+	road_offset:		0.0
+
+
+	tex1_left:		0.752
+	tex0_left:		0.5
+	tex0_right:		0.5
+	tex1_right:		0.752
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+
+	shoulder_size_right:		1.0
+	shoulder_tex0_right:		0.88
+	shoulder_tex1_right:		0.944
+
+	shoulder_size_left:		1.0
+	shoulder_tex0_left:		0.88
+	shoulder_tex1_left:		0.944
+
+	center_line_left_offset:	0.00
+	center_line_right_offset:	-0.1
+
+	center_line_left_width:		0.2
+	center_line_right_width:	0.2
+
+	center_line_left_style:		0
+	center_line_right_style:	3
+	inner_line_style:		0
+	outer_line_style:		0
+
+	lanes_left[]:		traffic_lane.road.local
+	lanes_right[]:		traffic_lane.road.local
+
+	road_trans_style:	0
+}
+road_look : road.look20 {
+	name: 			"City 2 lanes 5m offset"
+
+	road_size_left: 	8.0
+	road_size_right: 	8.0
+
+	road_offset:		5.0
+
+
+	tex1_left:		0.88
+	tex0_left:		0.25
+	tex0_right:		0.25
+	tex1_right:		0.88
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+	trans_tex0_center:	0.944
+	trans_tex1_center:	1.0
+
+	shoulder_size_right:		1.0
+	shoulder_tex0_right:		0.88
+	shoulder_tex1_right:		0.944
+
+	shoulder_size_left:		1.0
+	shoulder_tex0_left:		0.88
+	shoulder_tex1_left:		0.944
+
+	center_line_left_offset:	0.0
+	center_line_right_offset:	0.0
+
+	center_line_left_width:		0.32
+	center_line_right_width:	0.32
+
+	center_line_left_style:		3
+	center_line_right_style:	3
+	inner_line_style:		1
+	outer_line_style:		0
+
+	lanes_left[]:		traffic_lane.road.expressway
+	lanes_left[]:		traffic_lane.road.expressway
+	lanes_right[]:		traffic_lane.road.expressway
+	lanes_right[]:		traffic_lane.road.expressway
+
+	road_trans_style:	1
+}
+
+road_look : road.look21 {
+	name: 			"Highway 2 lanes 15m offset"
+
+	road_size_left: 	12.5
+	road_size_right: 	12.5
+
+	road_offset:		15
+
+
+	tex1_left:		0.944
+	tex0_left:		0.25
+	tex0_right:		0.25
+	tex1_right:		0.944
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+	trans_tex0_center:	0.944
+	trans_tex1_center:	1.0
+
+	center_line_left_offset:	0.0
+	center_line_right_offset:	0.0
+
+	center_line_left_width:		0.32
+	center_line_right_width:	0.32
+
+	center_line_left_style:		3
+	center_line_right_style:	3
+	inner_line_style:		1
+	outer_line_style:		1
+
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+
+	road_trans_style:	1
+}
+
+road_look : road.look22 {
+	name: 			"Highway 2 lanes 2m offset no lanes"
+
+	road_size_left: 	12.5
+	road_size_right: 	12.5
+
+	road_offset:		2.0
+
+
+	tex1_left:		0.944
+	tex0_left:		0.25
+	tex0_right:		0.25
+	tex1_right:		0.944
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+	trans_tex0_center:	0.944
+	trans_tex1_center:	1.0
+
+	center_line_left_offset:	0.0
+	center_line_right_offset:	0.0
+
+	center_line_left_width:		0.32
+	center_line_right_width:	0.32
+
+	center_line_left_style:		0
+	center_line_right_style:	0
+	inner_line_style:		0
+	outer_line_style:		0
+
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+
+	road_trans_style:	1
+}
+
+road_look : road.look23 {
+	name: 			"Highway 2 lanes 10m offset"
+
+	road_size_left: 	12.5
+	road_size_right: 	12.5
+
+	road_offset:		10.0
+
+
+	tex1_left:		0.944
+	tex0_left:		0.25
+	tex0_right:		0.25
+	tex1_right:		0.944
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+	trans_tex0_center:	0.944
+	trans_tex1_center:	1.0
+
+	center_line_left_offset:	0.0
+	center_line_right_offset:	0.0
+
+	center_line_left_width:		0.32
+	center_line_right_width:	0.32
+
+	center_line_left_style:		3
+	center_line_right_style:	3
+	inner_line_style:		1
+	outer_line_style:		1
+
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+
+	road_trans_style:	1
+}
+
+//need to fix lines here
+
+road_look : road.look24 {
+	name: 			"Highway 2 lanes one way"
+
+	road_size_left: 	4.5
+	road_size_right: 	8.0
+
+	road_offset:		0.0
+
+
+	tex1_left:		0.0
+	tex0_left:		0.5
+	tex0_right:		0.5
+	tex1_right:		0.944
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+	trans_tex0_center:	0.944
+	trans_tex1_center:	1.0
+
+	center_line_left_offset:	4.24
+	center_line_right_offset:	-0.1
+
+	center_line_left_width:		0.32
+	center_line_right_width:	0.2
+
+	center_line_left_style:		0
+	center_line_right_style:	2
+	inner_line_style:		0
+	outer_line_style:		1
+
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+
+	road_trans_style:	1
+}
+road_look : road.look25 {
+	name: 			"narrow way no lanes no traffic"
+
+	road_size_left: 	1.6
+	road_size_right: 	1.6
+
+	road_offset:		0.0
+
+
+	tex1_left:		0.9
+	tex0_left:		0.75
+	tex0_right:		0.75
+	tex1_right:		0.9
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+
+	shoulder_size_right:		0.8
+	shoulder_tex0_right:		0.88
+	shoulder_tex1_right:		0.944
+
+	shoulder_size_left:		0.8
+	shoulder_tex0_left:		0.88
+	shoulder_tex1_left:		0.944
+
+	center_line_left_offset:	0.00
+	center_line_right_offset:	-0.1
+
+	center_line_left_width:		0.2
+	center_line_right_width:	0.2
+
+	center_line_left_style:		0
+	center_line_right_style:	0
+	inner_line_style:		0
+	outer_line_style:		0
+
+	allow_wrong_way[]:	""
+	road_trans_style:	0
+}
+
+road_look : road.look26 {
+	name: 			"Highway 2 lanes 2.5m offset"
+
+	road_size_left: 	12.5
+	road_size_right: 	12.5
+
+	road_offset:		2.5
+
+
+	tex1_left:		0.944
+	tex0_left:		0.25
+	tex0_right:		0.25
+	tex1_right:		0.944
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+	trans_tex0_center:	0.944
+	trans_tex1_center:	1.0
+
+	center_line_left_offset:	0.0
+	center_line_right_offset:	0.0
+
+	center_line_left_width:		0.32
+	center_line_right_width:	0.32
+
+	center_line_left_style:		3
+	center_line_right_style:	3
+	inner_line_style:		1
+	outer_line_style:		1
+
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_left[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+	lanes_right[]:		traffic_lane.road.motorway
+
+	road_trans_style:	1
+}
+
+road_look : road.look27 {
+	name: 			"Exit road UK"
+
+	road_size_left: 	4.5
+	road_size_right: 	4.5
+
+	road_offset:		0.0
+
+
+	tex1_left:		0.944
+	tex0_left:		0.75
+	tex0_right:		0.75
+	tex1_right:		0.5
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+
+	center_line_left_offset:	0.0
+	center_line_right_offset:	4.0
+
+	center_line_left_width:		0.32
+	center_line_right_width:	0.32
+
+	center_line_left_style:		0
+	center_line_right_style:	3
+	inner_line_style:		0
+	outer_line_style:		0
+
+	lanes_right[]:		traffic_lane.road.local
+
+	allow_wrong_way[]:	""
+	road_trans_style:	0
+}
+
+road_look : road.look28 {
+	name: 			"Road double no outer lanes"
+
+	road_size_left: 	4.5
+	road_size_right: 	4.5
+
+	road_offset:		0.0
+
+
+	tex1_left:		0.752
+	tex0_left:		0.5
+	tex0_right:		0.5
+	tex1_right:		0.752
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+
+	shoulder_size_right:		1.0
+	shoulder_tex0_right:		0.88
+	shoulder_tex1_right:		0.944
+
+	shoulder_size_left:		1.0
+	shoulder_tex0_left:		0.88
+	shoulder_tex1_left:		0.944
+
+	center_line_left_offset:	0.02
+	center_line_right_offset:	0.02
+
+	center_line_left_width:		0.2
+	center_line_right_width:	0.2
+
+	center_line_left_style:		3
+	center_line_right_style:	3
+	inner_line_style:		0
+	outer_line_style:		0
+
+	lanes_left[]:		traffic_lane.road.local
+	lanes_right[]:		traffic_lane.road.local
+
+	road_trans_style:	0
+}
+
+road_look : road.look29 {
+	name: 			"narrow way walkers"
+	
+	road_size_left: 	0.4
+	road_size_right: 	0.4
+	
+	road_offset:		0.0
+
+	
+	tex1_left:		0.09
+	tex0_left:		0.12
+	tex0_right:		0.12
+	tex1_right:		0.15
+
+	trans_tex0_left:	0.075
+	trans_tex1_left:	0
+	trans_tex0_right:	0.165
+	trans_tex1_right:	0.24
+
+	shoulder_size_right:		0.2
+	shoulder_tex0_right:		0.15
+	shoulder_tex1_right:		0.165
+
+	shoulder_size_left:		0.2
+	shoulder_tex0_left:		0.09
+	shoulder_tex1_left:		0.075
+
+	center_line_left_offset:	0.00
+	center_line_right_offset:	-0.1
+
+	center_line_left_width:		0.2
+	center_line_right_width:	0.2
+
+	center_line_left_style:		0
+	center_line_right_style:	0
+	inner_line_style:		0
+	outer_line_style:		0
+
+	allow_wrong_way[]:	""
+	road_trans_style:	0
+}
+road_look : road.look30 {
+	name: 			"Road 2+1"
+
+	road_size_left: 	9
+	road_size_right: 	4.5
+
+	road_offset:		0.0
+
+
+	tex1_left:		0.944
+	tex0_left:		0.25
+	tex0_right:		0.25
+	tex1_right:		0.944
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+	trans_tex0_center:	0.944
+	trans_tex1_center:	1.0
+	
+	shoulder_size_right:		1.0
+	shoulder_tex0_right:		0.88
+	shoulder_tex1_right:		0.944
+
+	shoulder_size_left:		1.0
+	shoulder_tex0_left:		0.88
+	shoulder_tex1_left:		0.944
+
+	center_line_left_offset:	0.0
+	center_line_right_offset:	0.0
+
+	center_line_left_width:		0.32
+	center_line_right_width:	0.32
+
+	center_line_left_style:		3
+	center_line_right_style:	3
+	inner_line_style:		1
+	outer_line_style:		1
+
+	lanes_left[]:		traffic_lane.road.local
+	lanes_left[]:		traffic_lane.road.local
+	lanes_right[]:		traffic_lane.road.local
+
+	road_trans_style:	1
+}
+road_look : road.look31 {
+	name: 			"Road 1+2"
+
+	road_size_left: 	4.5
+	road_size_right: 	9
+
+	road_offset:		0.0
+
+
+	tex1_left:		0.944
+	tex0_left:		0.25
+	tex0_right:		0.25
+	tex1_right:		0.944
+
+	trans_tex0_left:	0.944
+	trans_tex1_left:	1.0
+	trans_tex0_right:	0.944
+	trans_tex1_right:	1.0
+	trans_tex0_center:	0.944
+	trans_tex1_center:	1.0
+	
+	shoulder_size_right:		1.0
+	shoulder_tex0_right:		0.88
+	shoulder_tex1_right:		0.944
+
+	shoulder_size_left:		1.0
+	shoulder_tex0_left:		0.88
+	shoulder_tex1_left:		0.944
+
+	center_line_left_offset:	0.0
+	center_line_right_offset:	0.0
+
+	center_line_left_width:		0.32
+	center_line_right_width:	0.32
+
+	center_line_left_style:		3
+	center_line_right_style:	3
+	inner_line_style:		1
+	outer_line_style:		1
+
+	lanes_left[]:		traffic_lane.road.local
+	lanes_right[]:		traffic_lane.road.local
+	lanes_right[]:		traffic_lane.road.local
+
+	road_trans_style:	1
+}
+}

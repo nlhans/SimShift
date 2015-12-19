@@ -71,6 +71,8 @@ namespace SimShift.Services
                     {
                         return 0;
                     }
+                    _throttle = val;
+                    return val;
                     if (EngineRpm > AntiStallRpm)
                         val /= 5*(EngineRpm-AntiStallRpm)/AntiStallRpm;
 

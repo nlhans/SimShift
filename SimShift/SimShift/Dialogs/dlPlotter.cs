@@ -29,7 +29,7 @@ namespace SimShift.Dialogs
                                             1,
                                             2500,
                                             150,
-                                            2000
+                                            5
                                         });
             plot.Dock = DockStyle.Fill;
             Controls.Add(plot);
@@ -48,6 +48,10 @@ namespace SimShift.Dialogs
 
         private double prevSpeed;
         private double prevTime;
+        private double prevAcc;
+
+        private double dj;
+        private double prevAccT;
 
         private double acc;
         private int hz = 0;
@@ -55,8 +59,19 @@ namespace SimShift.Dialogs
         {
             var miner = Main.Data.Active as Ets2DataMiner;
             var tel = Main.Data.Telemetry; // miner.MyTelemetry;
+            var dt = tel.Time - prevTime;
+            var dv = tel.Speed - prevSpeed;
 
-            if (tel.Time - prevTime > 0.0001)
+            var dt2 = tel.Time - prevAccT;
+            if (dt2 > 0.05)
+            {
+                var acc = dv / dt;
+                var da = acc - prevAcc;
+                dj = Math.Abs(da) >= 0.001f ? da / dt2 / 10.0f : 0;
+                prevAcc = acc;
+                prevAccT = tel.Time;
+            }
+            if (dt > 0.0001)
             {
                 hz++;
                 var data = new double[]
@@ -65,8 +80,7 @@ namespace SimShift.Dialogs
                                Main.GetAxisOut(JoyControls.Clutch),
                                tel.EngineRpm - 2500,
                                tel.Speed*3.6,
-                               Main.Drivetrain.CalculatePower(tel.EngineRpm, tel.Throttle)
-                           };
+                               prevAcc           };
 
                 plot.Add(data.ToList());
             }

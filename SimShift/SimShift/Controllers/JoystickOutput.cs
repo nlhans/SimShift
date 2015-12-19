@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Windows.Forms;
 using vJoyInterfaceWrap;
 
 namespace SimShift.Controllers
@@ -25,26 +26,27 @@ namespace SimShift.Controllers
 
             // Get the state of the requested device
             VjdStat status = joystick.GetVJDStatus(id);
-            switch (status)
+            /*switch (status)
             {
                 case VjdStat.VJD_STAT_OWN:
-                    Console.WriteLine("vJoy Device {0} is already owned by this feeder\n", id);
+                    MessageBox.Show(string.Format("vJoy Device {0} is already owned by this feeder\n", id));
                     break;
                 case VjdStat.VJD_STAT_FREE:
-                    Console.WriteLine("vJoy Device {0} is free\n", id);
+                    MessageBox.Show(string.Format("vJoy Device {0} is free\n", id));
                     break;
                 case VjdStat.VJD_STAT_BUSY:
-                    Console.WriteLine("vJoy Device {0} is already owned by another feeder\nCannot continue\n", id);
+                    MessageBox.Show(string.Format("vJoy Device {0} is already owned by another feeder\nCannot continue\n", id));
                     return joystick;
                 case VjdStat.VJD_STAT_MISS:
-                    Console.WriteLine("vJoy Device {0} is not installed or disabled\nCannot continue\n", id);
+                    MessageBox.Show(string.Format("vJoy Device {0} is not installed or disabled\nCannot continue\n", id));
                     return joystick;
                 default:
-                    Console.WriteLine("vJoy Device {0} general error\nCannot continue\n", id);
+                    MessageBox.Show(string.Format("vJoy Device {0} general error\nCannot continue\n", id));
                     return joystick;
-            };
+            }*/
             bool AxisX = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_X);
-            joystick.AcquireVJD(id);
+            if (joystick.AcquireVJD(id) == false)
+                MessageBox.Show("Could not acquire vJoy " + id);
             Console.WriteLine(AxisX);
             return joystick;
         }

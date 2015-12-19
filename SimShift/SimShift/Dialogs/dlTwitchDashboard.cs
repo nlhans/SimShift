@@ -9,11 +9,11 @@ using System.Windows.Forms;
 
 namespace SimShift.Dialogs
 {
-    public partial class dlDashboard : Form
+    public partial class dlTwitchDashboard : Form
     {
         private ucDashboard dsh;
 
-        public dlDashboard()
+        public dlTwitchDashboard()
         {
             InitializeComponent();
             SetStyle(ControlStyles.UserPaint, true);

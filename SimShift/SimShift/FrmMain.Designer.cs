@@ -34,13 +34,16 @@
             this.modulesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shifterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generalSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.laneAssistanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.joystickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dashboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.twitchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.teslaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gamesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.euroTruckSimulator2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.plotterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btServiceStartStop = new System.Windows.Forms.Button();
             this.btTransmission = new System.Windows.Forms.Button();
             this.btClutch = new System.Windows.Forms.Button();
@@ -57,7 +60,7 @@
             this.lbProfiles = new System.Windows.Forms.ListBox();
             this.gbModules = new System.Windows.Forms.GroupBox();
             this.gbModulesPane = new System.Windows.Forms.Panel();
-            this.plotterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmInnerBeings = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.gpSim.SuspendLayout();
             this.gbCarSelect.SuspendLayout();
@@ -73,7 +76,8 @@
             this.settingsToolStripMenuItem,
             this.dashboardToolStripMenuItem,
             this.gamesToolStripMenuItem1,
-            this.plotterToolStripMenuItem});
+            this.plotterToolStripMenuItem,
+            this.tsmInnerBeings});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(824, 24);
@@ -97,8 +101,7 @@
             // modulesToolStripMenuItem
             // 
             this.modulesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.shifterToolStripMenuItem,
-            this.laneAssistanceToolStripMenuItem});
+            this.shifterToolStripMenuItem});
             this.modulesToolStripMenuItem.Name = "modulesToolStripMenuItem";
             this.modulesToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.modulesToolStripMenuItem.Text = "Modules";
@@ -108,7 +111,7 @@
             this.shifterToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.generalSetupToolStripMenuItem});
             this.shifterToolStripMenuItem.Name = "shifterToolStripMenuItem";
-            this.shifterToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.shifterToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.shifterToolStripMenuItem.Text = "Shifter";
             // 
             // generalSetupToolStripMenuItem
@@ -117,13 +120,6 @@
             this.generalSetupToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.generalSetupToolStripMenuItem.Text = "General Setup";
             this.generalSetupToolStripMenuItem.Click += new System.EventHandler(this.generalSetupToolStripMenuItem_Click);
-            // 
-            // laneAssistanceToolStripMenuItem
-            // 
-            this.laneAssistanceToolStripMenuItem.Name = "laneAssistanceToolStripMenuItem";
-            this.laneAssistanceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.laneAssistanceToolStripMenuItem.Text = "Lane Assistance";
-            this.laneAssistanceToolStripMenuItem.Click += new System.EventHandler(this.laneAssistanceToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
@@ -150,10 +146,34 @@
             // 
             // dashboardToolStripMenuItem
             // 
+            this.dashboardToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.twitchToolStripMenuItem,
+            this.teslaToolStripMenuItem,
+            this.mapToolStripMenuItem});
             this.dashboardToolStripMenuItem.Name = "dashboardToolStripMenuItem";
             this.dashboardToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
             this.dashboardToolStripMenuItem.Text = "Dashboard";
-            this.dashboardToolStripMenuItem.Click += new System.EventHandler(this.dashboardToolStripMenuItem_Click);
+            // 
+            // twitchToolStripMenuItem
+            // 
+            this.twitchToolStripMenuItem.Name = "twitchToolStripMenuItem";
+            this.twitchToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.twitchToolStripMenuItem.Text = "Twitch";
+            this.twitchToolStripMenuItem.Click += new System.EventHandler(this.twitchToolStripMenuItem_Click);
+            // 
+            // teslaToolStripMenuItem
+            // 
+            this.teslaToolStripMenuItem.Name = "teslaToolStripMenuItem";
+            this.teslaToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.teslaToolStripMenuItem.Text = "Tesla";
+            this.teslaToolStripMenuItem.Click += new System.EventHandler(this.teslaToolStripMenuItem_Click);
+            // 
+            // mapToolStripMenuItem
+            // 
+            this.mapToolStripMenuItem.Name = "mapToolStripMenuItem";
+            this.mapToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.mapToolStripMenuItem.Text = "Map";
+            this.mapToolStripMenuItem.Click += new System.EventHandler(this.mapToolStripMenuItem_Click);
             // 
             // gamesToolStripMenuItem1
             // 
@@ -169,6 +189,13 @@
             this.euroTruckSimulator2ToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.euroTruckSimulator2ToolStripMenuItem.Text = "Euro Truck Simulator 2";
             this.euroTruckSimulator2ToolStripMenuItem.Click += new System.EventHandler(this.euroTruckSimulator2ToolStripMenuItem_Click);
+            // 
+            // plotterToolStripMenuItem
+            // 
+            this.plotterToolStripMenuItem.Name = "plotterToolStripMenuItem";
+            this.plotterToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.plotterToolStripMenuItem.Text = "Plotter";
+            this.plotterToolStripMenuItem.Click += new System.EventHandler(this.plotterToolStripMenuItem_Click);
             // 
             // btServiceStartStop
             // 
@@ -328,12 +355,12 @@
             this.gbModulesPane.Size = new System.Drawing.Size(467, 299);
             this.gbModulesPane.TabIndex = 0;
             // 
-            // plotterToolStripMenuItem
+            // tsmInnerBeings
             // 
-            this.plotterToolStripMenuItem.Name = "plotterToolStripMenuItem";
-            this.plotterToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
-            this.plotterToolStripMenuItem.Text = "Plotter";
-            this.plotterToolStripMenuItem.Click += new System.EventHandler(this.plotterToolStripMenuItem_Click);
+            this.tsmInnerBeings.Name = "tsmInnerBeings";
+            this.tsmInnerBeings.Size = new System.Drawing.Size(84, 20);
+            this.tsmInnerBeings.Text = "Inner beings";
+            this.tsmInnerBeings.Click += new System.EventHandler(this.tsmInnerBeings_Click);
             // 
             // FrmMain
             // 
@@ -377,7 +404,6 @@
         private System.Windows.Forms.ToolStripMenuItem generalSetupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem joystickToolStripMenuItem;
         private System.Windows.Forms.Button btServiceStartStop;
-        private System.Windows.Forms.ToolStripMenuItem laneAssistanceToolStripMenuItem;
         private System.Windows.Forms.Button btTransmission;
         private System.Windows.Forms.ToolStripMenuItem dashboardToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gamesToolStripMenuItem1;
@@ -397,6 +423,10 @@
         private System.Windows.Forms.GroupBox gbModules;
         private System.Windows.Forms.Panel gbModulesPane;
         private System.Windows.Forms.ToolStripMenuItem plotterToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem twitchToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem teslaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mapToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmInnerBeings;
     }
 }
 

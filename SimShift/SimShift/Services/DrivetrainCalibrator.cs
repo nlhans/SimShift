@@ -354,7 +354,7 @@ namespace SimShift.Services
                             throttle /= 3;
 
                             var ratio = data.Telemetry.EngineRpm / (3.6 * data.Telemetry.Speed);
-                            if (ratio > 400 || ratio < 1)
+                            if (ratio > 1000 || ratio < 1)
                             {
                                 stage = DrivetrainCalibrationStage.StartGearRatios;
                                 break;
@@ -416,8 +416,13 @@ namespace SimShift.Services
 
                         var GearsCalibrated = true;
                         for (int i = 0; i < Main.Drivetrain.Gears; i++)
-                            if (Main.Drivetrain.GearRatios[i] < 1)
+                        {    if (Main.Drivetrain.GearRatios[i] < 1)
+                            {
+                                UncalibratedGear = i;
+
                                 GearsCalibrated = false;
+                            }
+                        }
 
                         if (GearsCalibrated)
                         {
@@ -443,6 +448,8 @@ namespace SimShift.Services
                     break;
             }
         }
+
+        public static int UncalibratedGear { get; set; }
 
         #endregion
     }

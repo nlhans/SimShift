@@ -23,8 +23,8 @@ namespace SimShift.Controllers
 
         public Dictionary<int, string> AxisNames { get { return dev.AxisNames; } }
 
-        private readonly List<bool> _buttonState = new List<bool>();
-        private readonly List<double> _axisState = new List<double>();
+        private readonly bool[] _buttonState = new bool[0];
+        private readonly double[] _axisState = new double[0];
         private int pov;
 
         public JoystickInput(JoystickInputDevice dev)
@@ -36,8 +36,13 @@ namespace SimShift.Controllers
             joystickUpdate.Elapsed += JoystickUpdateTick;
             joystickUpdate.Start();
 
+            _axisState = new double[6];
             for (int i = 0; i < 6; i++)
-                _axisState.Add(0);
+                _axisState[i] = 0;
+
+            _buttonState = new bool[32];
+            for (int i = 0; i < 32; i++)
+                _buttonState[i] =false;
 
             _joyInfo.dwSize = Marshal.SizeOf(_joyInfo);
             _joyInfo.dwFlags = JoystickFlags.JOY_RETURNALL;
@@ -47,10 +52,6 @@ namespace SimShift.Controllers
         {
             JoystickMethods.joyGetPosEx(dev.id, out _joyInfo);
 
-            //for (int i = 0; i < 6; i++)
-            //    Debug.WriteLine(i + ": " + _axisState[i]);
-            //Debug.WriteLine(" :) ");
-                // Take all axis inputs.
             _axisState[0] = _joyInfo.dwXpos;
             _axisState[1] = _joyInfo.dwYpos;
             _axisState[2] = _joyInfo.dwZpos;
@@ -64,38 +65,31 @@ namespace SimShift.Controllers
             for (int i = 0; i < 32; i++)
             {
                 var bitmask = _joyInfo.dwButtons & ((int)Math.Pow(2, i));
-                if (_buttonState.Count <= i)
+                if (bitmask != 0)
                 {
-                    _buttonState.Add(bitmask != 0);
+                    // Pressed
+                    if (!_buttonState[i])
+                    {
+                        // EVENT press
+                        if (State != null)
+                            State(this, i, true);
+                        if (Press != null)
+                            Press(this, i);
+
+                    }
+                    _buttonState[i] = true;
                 }
                 else
                 {
-                    if (bitmask != 0)
+                    if (_buttonState[i])
                     {
-                        // Pressed
-                        if (!_buttonState[i])
-                        {
-                            // EVENT press
-                            if (State != null)
-                                State(this, i, true);
-                            if (Press != null)
-                                Press(this, i);
-
-                        }
-                        _buttonState[i] = true;
+                        // EVENT release
+                        if (State != null)
+                            State(this, i, false);
+                        if (Release != null)
+                            Release(this, i);
                     }
-                    else
-                    {
-                        if (_buttonState[i])
-                        {
-                            // EVENT release
-                            if (State != null)
-                                State(this, i, false);
-                            if (Release != null)
-                                Release(this, i);
-                        }
-                        _buttonState[i] = false;
-                    }
+                    _buttonState[i] = false;
                 }
             }
         }
@@ -152,12 +146,12 @@ namespace SimShift.Controllers
 
         public double GetAxis(int id)
         {
-            return id < _axisState.Count ? _axisState[id] : 0;
+            return id < _axisState.Length ? _axisState[id] : 0;
         }
 
         public bool GetButton(int id)
         {
-            return id < _buttonState.Count && _buttonState[id];
+            return id < _buttonState.Length && _buttonState[id];
         }
     }
 }

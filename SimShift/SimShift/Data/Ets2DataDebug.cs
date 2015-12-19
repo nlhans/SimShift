@@ -34,7 +34,7 @@ namespace SimShift.Data
                 var ets2Miner = Main.Data.Active as Ets2DataMiner;
                 var ets2Tel = ets2Miner.MyTelemetry;
 
-                if  (Math.Abs(ets2Tel.time - lastTimestamp) < 100)
+                if  (Math.Abs(ets2Tel.Time - lastTimestamp) < 100)
                 {
                     timeoutTicker++;
                 }
@@ -51,52 +51,50 @@ namespace SimShift.Data
                 {
                     inftext.AppendLine("Data stream updating");
                 }
-                inftext.AppendLine("Game paused flag:" + (ets2Tel.paused == 1 ? "Yes" : "No"));
-                inftext.AppendLine("Time: " + ets2Tel.time);
-                inftext.AppendLine("Engine: " + (ets2Tel.flags[0] == 1 ? "Running" : "Stalled"));
-                inftext.AppendLine("Trailer: " + (ets2Tel.flags[1] == 1 ? "Attached" : "Distached"));
-                inftext.AppendLine("Truck ID: " + ets2Miner.Truck);
-                inftext.AppendLine("Trailer ID: " + ets2Miner.Trailer);
+                inftext.AppendLine("Game paused flag:" + (ets2Tel.Paused ? "Yes" : "No"));
+                inftext.AppendLine("Time: " + ets2Tel.Time);
+                inftext.AppendLine("Engine: " + (ets2Tel.Drivetrain.EngineEnabled ? "Running" : "Stalled"));
+                inftext.AppendLine("Trailer: " + (ets2Tel.Job.TrailerAttached ? "Attached" : "Distached"));
+                inftext.AppendLine("Truck ID: " + ets2Tel.TruckId);
+                inftext.AppendLine("Trailer ID: " + ets2Tel.Job.TrailerId);
                 inftext.AppendLine("");
                 inftext.AppendLine("Interpreted Trailer Information");
                 inftext.AppendLine("");
-                inftext.AppendLine("Trailer Name: " + ets2Miner.TrailerName);
-                inftext.AppendLine("Trailer Tonnage: " + ets2Miner.TrailerTonnage);
-                inftext.AppendLine("Plug-in reported truck weight: " + ets2Tel.truckWeight);
-                inftext.AppendLine("Plug-in reported trailer weight: " + ets2Tel.trailerWeight);
+                inftext.AppendLine("Trailer Name: " + ets2Tel.Job.TrailerName);
+                inftext.AppendLine("Trailer Tonnage: " + ets2Tel.Job.Mass);
                 inftext.AppendLine("");
                 inftext.AppendLine("Vehicle Dynamics");
                 inftext.AppendLine("");
                 inftext.AppendLine(string.Format("Acceleration: X{0:00.0000} / Y{1:00.0000} / Z{2:00.0000}",
-                                                 ets2Tel.accelerationX, ets2Tel.accelerationY, ets2Tel.accelerationZ));
+                                                 ets2Tel.Physics.AccelerationX, ets2Tel.Physics.AccelerationY, ets2Tel.Physics.AccelerationZ));
                 inftext.AppendLine(string.Format("Coordinate: X{0:00.0000} / Y{1:00.0000} / Z{2:00.0000}",
-                                                 ets2Tel.coordinateX, ets2Tel.coordinateY, ets2Tel.coordinateZ));
+                                                 ets2Tel.Physics.CoordinateX, ets2Tel.Physics.CoordinateY, ets2Tel.Physics.CoordinateZ));
                 inftext.AppendLine(string.Format("Rotation: X{0:00.0000} / Y{1:00.0000} / Z{2:00.0000}",
-                                                 ets2Tel.rotationX, ets2Tel.rotationY, ets2Tel.rotationZ));
-                inftext.AppendLine(string.Format("Speed: {0:00.00}m/s ({1:000.0}km/h / {2:000.0}mph)", ets2Tel.speed,ets2Tel.speed*3.6, ets2Tel.speed*3.6/1.6));
+                                                 ets2Tel.Physics.RotationX, ets2Tel.Physics.RotationY, ets2Tel.Physics.RotationZ ));
+                inftext.AppendLine(string.Format("Speed: {0:00.00}m/s ({1:000.0}km/h / {2:000.0}mph)", ets2Tel.Drivetrain.Speed,ets2Tel.Drivetrain.SpeedKmh, ets2Tel.Drivetrain.SpeedMph));
 
 
                 inftext.AppendLine("");
                 inftext.AppendLine("Vehicle Drivetrain");
                 inftext.AppendLine("");
-                inftext.AppendLine(string.Format("Engine RPM: {0:0000} / MAX {1:0000}", ets2Tel.engineRpm, ets2Tel.engineRpmMax));
-                inftext.AppendLine(string.Format("Gear: {0:00} / MAX {1:00}", ets2Tel.gear, ets2Tel.gears));
-                inftext.AppendLine(string.Format("Gear Range: {0:0} / MAX {1:0}", ets2Tel.gearRangeActive, ets2Tel.gearRanges));
-                inftext.AppendLine(string.Format("Fuel: {0:0000.00}L / MAX {1:0000}", ets2Tel.fuel, ets2Tel.fuelCapacity));
-                inftext.AppendLine(string.Format("Fuel Usage: {0:000.00}L/h / {1:000.00} km/l", ets2Tel.fuelCapacity, ets2Tel.fuelAvgConsumption));
+                inftext.AppendLine(string.Format("Engine RPM: {0:0000} / MAX {1:0000}", ets2Tel.Drivetrain.EngineRpm, ets2Tel.Drivetrain.EngineRpmMax));
+                inftext.AppendLine(string.Format("Gear: {0:00} / MAX {1:00}", ets2Tel.Drivetrain.Gear, ets2Tel.Drivetrain.GearsForward));
+                inftext.AppendLine(string.Format("Gear Range: {0:0} / MAX {1:0}", ets2Tel.Drivetrain.GearRange, ets2Tel.Drivetrain.GearRange));
+                inftext.AppendLine(string.Format("Fuel: {0:0000.00}L / MAX {1:0000}", ets2Tel.Drivetrain.Fuel, ets2Tel.Drivetrain.FuelMax));
+                inftext.AppendLine(string.Format("Fuel Usage: {0:000.00}L/h / {1:000.00} km/l", ets2Tel.Drivetrain.FuelRate, ets2Tel.Drivetrain.FuelAvgConsumption));
 
 
                 inftext.AppendLine("");
                 inftext.AppendLine("Controls");
                 inftext.AppendLine("");
-                inftext.AppendLine(string.Format("User: {0:000.0}% T / {1:000.0}% B / {2:000.0}% C", ets2Tel.userThrottle * 100, ets2Tel.userBrake * 100, ets2Tel.userClutch * 100));
-                inftext.AppendLine(string.Format("Game: {0:000.0}% T / {1:000.0}% B / {2:000.0}% C", ets2Tel.gameThrottle * 100, ets2Tel.gameBrake * 100, ets2Tel.gameClutch * 100));
+                inftext.AppendLine(string.Format("User: {0:000.0}% T / {1:000.0}% B / {2:000.0}% C", ets2Tel.Controls.UserThrottle * 100, ets2Tel.Controls.UserBrake * 100, ets2Tel.Controls.UserClutch* 100));
+                inftext.AppendLine(string.Format("Game: {0:000.0}% T / {1:000.0}% B / {2:000.0}% C", ets2Tel.Controls.GameThrottle * 100, ets2Tel.Controls.GameBrake * 100, ets2Tel.Controls.GameClutch * 100));
                 
                 
                 
                 label1.Text = inftext.ToString();
 
-                lastTimestamp = ets2Tel.time;
+                lastTimestamp = ets2Tel.Time;
             }
             else
             {

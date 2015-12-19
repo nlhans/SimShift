@@ -1,4 +1,5 @@
 ﻿using System;
+using SimShift.Data.Memory;
 
 namespace SimTelemetry.Domain.Memory
 {

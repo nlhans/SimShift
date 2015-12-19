@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
+using AForge.Imaging.Filters;
 using SimShift.Data;
 using SimShift.Data.Common;
 using SimShift.Entities;
@@ -22,9 +24,11 @@ namespace SimShift.Services
         public IEnumerable<string> SimulatorsBan { get { return new String[0]; } }
 
         //
+        public bool Adaptive { get; private set; }
         public int SpeedLimit { get; private set; }
         public float SpeedSlope { get; private set; }
 
+        private double brakeFactor;
         private double limiterFactor;
 
         public bool Requires(JoyControls c)
@@ -33,7 +37,8 @@ namespace SimShift.Services
             {
                 case JoyControls.Throttle:
                     return true;
-
+                    case JoyControls.Brake:
+                    return brakeFactor > 0.005;
                 default:
                     return false;
             }
@@ -45,6 +50,8 @@ namespace SimShift.Services
             {
                 case JoyControls.Throttle:
                     return val*this.limiterFactor;
+                case JoyControls.Brake:
+                    return brakeFactor;
 
                 default:
                     return val;
@@ -62,10 +69,18 @@ namespace SimShift.Services
 
         public void TickTelemetry(IDataMiner data)
         {
-            SpeedLimit = 125;
+            if (Adaptive && Main.Data.Active.Application == "eurotrucks2")
+            {
+                var ets2data = (Ets2DataMiner) Main.Data.Active;
+                var ets2limit = ets2data.MyTelemetry.Job.SpeedLimit*3.6-4;
+                if (ets2limit < 0)
+                    ets2limit = 120;
 
+                SpeedLimit = (int)ets2limit;
+            }
             if (!Enabled)
             {
+                brakeFactor = 0;
                 limiterFactor = 1;
             }
             else
@@ -74,7 +89,29 @@ namespace SimShift.Services
 
                 if (limiterFactor < 0) limiterFactor = 0;
                 if (limiterFactor > 1) limiterFactor = 1;
+
+
+                if (data.Telemetry.Speed*3.6 - 5 >= SpeedLimit)
+                {
+                    var err = (data.Telemetry.Speed*3.6 - SpeedLimit)/25.0*0.25f;
+                    brakeFactor = err;
+                }
+                else
+                {
+                    brakeFactor = 0;
+                }
             }
+            if (data.Telemetry.EngineRpm > 21750)
+            {
+                Enabled = true;
+                limiterFactor *= Math.Max(0, 1 - (data.Telemetry.EngineRpm - 1750)/350.0f);
+            }
+            var pwrLimiter = Main.Drivetrain.CalculateThrottleByPower(data.Telemetry.EngineRpm, 800);
+
+            if (pwrLimiter > 1) pwrLimiter = 1;
+            if (pwrLimiter < 0.2) pwrLimiter = 0.2;
+
+            limiterFactor *= pwrLimiter;
         }
 
         #region Implementation of IConfigurable
@@ -86,12 +123,17 @@ namespace SimShift.Services
             SpeedLimit = 255;
             SpeedSlope = 10;
             Enabled = true;
+            Adaptive = false;
         }
 
         public void ApplyParameter(IniValueObject obj)
         {
             switch(obj.Key)
             {
+                case "Adaptive":
+                    Adaptive = obj.ReadAsInteger() == 1;
+                    break;
+
                 case "Limit":
                     SpeedLimit = obj.ReadAsInteger();
                     break;

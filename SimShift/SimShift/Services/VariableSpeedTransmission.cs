@@ -293,7 +293,7 @@ namespace SimShift.Services
             if (Main.Data.Active.Application == "eurotrucks2")
             {
                 var ets2 = (Ets2DataMiner) Main.Data.Active;
-                if (ets2.MyTelemetry.flags[1] == 0 && !fast)
+                if (ets2.MyTelemetry.Job.TrailerAttached == false && !fast)
                     Efficiency = true;
                 else
                 {

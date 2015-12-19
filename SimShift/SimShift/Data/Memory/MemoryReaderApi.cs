@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace SimTelemetry.Domain.Memory
+namespace SimShift.Data.Memory
 {
-    internal class MemoryReaderApi
+    internal partial class MemoryReaderApi
     {
         [DllImport("kernel32.dll")]
         public static extern IntPtr OpenProcess(UInt32 dwDesiredAccess, Int32 bInheritHandle, UInt32 dwProcessId);

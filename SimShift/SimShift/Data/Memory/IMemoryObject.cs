@@ -1,6 +1,7 @@
 ﻿using System;
+using SimTelemetry.Domain.Memory;
 
-namespace SimTelemetry.Domain.Memory
+namespace SimShift.Data.Memory
 {
     public interface IMemoryObject : IDataField, ICloneable
     {

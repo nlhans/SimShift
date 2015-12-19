@@ -1,26 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using SimShift.Data;
 using SimShift.Data.Common;
 using SimShift.Dialogs;
+using SimShift.Dialogs.Tesla;
 using SimShift.Entities;
+using SimShift.MapTool;
 using SimShift.Services;
 using SimShift.Simulation;
+using Timer = System.Windows.Forms.Timer;
 
 namespace SimShift
 {
+
     public partial class FrmMain : Form
     {
         private Timer updateModules;
 
+        public static Ets2Mapper Ets2Map;
+
         public FrmMain()
         {
-            SimulationEnvironment sim = new SimulationEnvironment();
+            var map = "europe.ets2";
+            var universalFolder = Directory.Exists(@"E:\map\" + map + "\\")
+                ? @"E:\map\" + map + "\\"
+                : Directory.Exists(@"E:\Games\Steam\steamapps\common\Euro Truck Simulator 2\base\map")
+                    ? @"E:\Games\Steam\steamapps\common\Euro Truck Simulator 2\base\map\" + map + "\\"
+                    : @"./europe/";
+
+            var prefabs = @"E:\Mods\ETS2\data 1.19\base\prefab\";
+
+            Ets2Map = new Ets2Mapper(universalFolder, prefabs, @"C:\Projects\Software\SimShift\Resources\LUT1.19");
+            Ets2Map.Parse();
+            Main.SetMap(Ets2Map);
+
+            //SimulationEnvironment sim = new SimulationEnvironment();
             InitializeComponent();
-            FormClosing += FrmMain_FormClosing;
 
             this.StartPosition = FormStartPosition.Manual;
             this.Location = new Point(0,0);
@@ -33,9 +55,6 @@ namespace SimShift
             updateModules.Interval = 25;
             updateModules.Tick += updateModules_Tick;
             updateModules.Start();
-
-            laneAssistanceToolStripMenuItem_Click(null, null);
-
         }
 
         private Dictionary<string, string> loadedIcon = new Dictionary<string, string>(); 
@@ -56,6 +75,7 @@ namespace SimShift
 
             foreach(var mod in mods)
             {
+                if (mod == null) continue;
                 var name = mod.GetType().Name;
                 if (mod.Enabled == false)
                 {
@@ -163,7 +183,16 @@ namespace SimShift
                 }
 
                 var l = pane.Controls["name" + name];
-
+                if (mod.Active)
+                    l.ForeColor = Color.Aqua;
+                else
+                    l.ForeColor = Color.White;
+                if (typeof(TransmissionCalibrator) == mod.GetType())
+                    l.Text = "TC " + Math.Round(Main.TransmissionCalibrator.err, 1) + "|"+(Main.TransmissionCalibrator.State.ToString());
+                if (typeof(Speedlimiter) == mod.GetType())
+                    l.Text = "SpeedLimit " + (Main.Speedlimiter.SpeedLimit);
+                if (typeof(ACC) == mod.GetType())
+                    l.Text = "ACC " + Math.Round(3.6 * Main.ACC.SpeedCruise);
                 if (typeof(CruiseControl) == mod.GetType())
                     l.Text = "CruiseControl " + Math.Round(3.6 * Main.CruiseControl.SpeedCruise);
                 if (typeof(VariableSpeedTransmission) == mod.GetType())
@@ -187,18 +216,17 @@ namespace SimShift
                         pb.Location = new Point(5, y);
                         lbl.Location = new Point(35, y + 4);
                         thrAbs.Location = new Point(200, y);
-                        thrRel0.Location = new Point(200, y + 10);
+                        thrRel0.Location = new Point(200, y +10);
                         thrRel1.Location = new Point(250, y + 10);
                         cltAbs.Location = new Point(310, y);
+                        if (name == "DrivetrainCalibrator")
+                        {
+                            lbl.Text = name + "(" + DrivetrainCalibrator.UncalibratedGear.ToString() + ")";
+                        }
                         y += 26;
                     }
                 }
             }
-        }
-
-        void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Main.Save();
         }
 
         private void gamesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -407,11 +435,6 @@ namespace SimShift
             foreach (var c in myCars) cbCars.Items.Add(c);
         }
 
-        private void laneAssistanceToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            dlLaneAssistance la = new dlLaneAssistance();
-            la.Show();
-        }
 
         private void btTransmission_Click(object sender, EventArgs e)
         {
@@ -443,11 +466,6 @@ namespace SimShift
             }
         }
 
-        private void dashboardToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            dlDashboard dsh = new dlDashboard();
-            dsh.Show();
-        }
 
         private void euroTruckSimulator2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -475,6 +493,30 @@ namespace SimShift
         {
             var plotter = new dlPlotter();
             plotter.Show();
+        }
+
+        private void twitchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            dlTwitchDashboard dsh = new dlTwitchDashboard();
+            dsh.Show();
+        }
+
+        private void teslaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            dlTeslaDashboard dsh = new dlTeslaDashboard();
+            dsh.Show();
+        }
+
+        private void mapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            dlMap mp = new dlMap();
+            mp.Show();
+        }
+
+        private void tsmInnerBeings_Click(object sender, EventArgs e)
+        {
+            dlDebugInfo di = new dlDebugInfo();
+            di.Show();
         }
     }
 }

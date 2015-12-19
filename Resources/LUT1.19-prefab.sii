@@ -1,0 +1,2660 @@
+SiiNunit
+{
+# For modders: Please do not modify this file if you want to add a new entry. Create in
+# this directory a new file "<base_name>.<idofyourmod>.sii" where <base_name> is name of
+# base file without the extension (e.g. "city" for "/def/city.sii") and <idofyourmod> is
+# some string which is unlikely to conflict with other mod.
+#
+# Warning: Even if the units are specified in more than one source file, they share the
+# same namespace so suffixes or prefixes should be used to avoid conflicts.
+
+prefab_model : prefab.0 {
+	model_desc: "/prefab/cross/hw3-2_x_city2-1.pmd"
+	prefab_desc: "/prefab/cross/hw3-2_x_city2-1.ppd"
+}
+
+prefab_model : prefab.1 {
+	model_desc: "/prefab/fork/hw3-2_x_hw2-2.pmd"
+	prefab_desc: "/prefab/fork/hw3-2_x_hw2-2.ppd"
+}
+
+prefab_model : prefab.3 {
+	model_desc: "/prefab/fork/hw3_joint.pmd"
+	prefab_desc: "/prefab/fork/hw3_joint.ppd"
+}
+
+prefab_model : prefab.4 {
+	model_desc: "/prefab/cross/road2_x_road2.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road2.ppd"
+}
+
+prefab_model : prefab.5 {
+	model_desc: "/prefab/cross/road2_x_road1.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road1.ppd"
+}
+
+prefab_model : prefab.6 {
+	model_desc: "/prefab/cross/hw3-2_x_hw3-2.pmd"
+	prefab_desc: "/prefab/cross/hw3-2_x_hw3-2.ppd"
+	detail_veg_max_distance: 17
+}
+
+prefab_model : prefab.7 {
+	model_desc: "/prefab/cross/road2_x_road2_t.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road2_t.ppd"
+}
+
+prefab_model : prefab.8 {
+	model_desc: "/prefab/cross/road1_x_road1_t_sidewalk_all.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_sidewalk_all.ppd"
+}
+
+prefab_model : prefab.9 {
+	model_desc: "/prefab/cross/road1_x_road1_sidewalk_all.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_sidewalk_all.ppd"
+}
+
+prefab_model : prefab.10 {
+	model_desc: "/prefab/cross/hw3-2_x_hw3-2_t.pmd"
+	prefab_desc: "/prefab/cross/hw3-2_x_hw3-2_t.ppd"
+	detail_veg_max_distance: 25
+}
+
+prefab_model : prefab.11 {
+	model_desc: "/prefab/cross/road2_x_road1_t_sidewalk_all.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road1_t_sidewalk_all.ppd"
+}
+
+prefab_model : prefab.12 {
+	model_desc: "/prefab/cross/road2_x_road1_t.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road1_t.ppd"
+}
+
+prefab_model : prefab.13 {
+	model_desc: "/prefab/quarry/quarry.pmd"
+	prefab_desc: "/prefab/quarry/quarry.ppd"
+	use_perlin: false
+	slow_time: true
+	
+}
+
+prefab_model : prefab.14 {
+	model_desc: "/prefab/gas_small/gasstation_small_2_2.pmd"
+	prefab_desc: "/prefab/gas_small/gasstation_small_2_2.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	slow_time: true
+}
+
+prefab_model : prefab.15 {
+	model_desc: "/prefab/cross/road2_x_road2_sidewalk.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road2_sidewalk.ppd"
+}
+
+prefab_model : prefab.16 {
+	model_desc: "/prefab/cross/road2_x_road1_sidewalk_all.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road1_sidewalk_all.ppd"
+}
+
+prefab_model : prefab.17 {
+	model_desc: "/prefab/cross/road2_x_road2_t_sidewalk.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road2_t_sidewalk.ppd"
+}
+
+prefab_model : prefab.18 {
+	model_desc: "/prefab/cross/road2_x_road2_t_sidewalk_l.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road2_t_sidewalk_l.ppd"
+}
+
+prefab_model : prefab.19 {
+	model_desc: "/prefab/cross/road2_x_road2_t_sidewalk_lr.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road2_t_sidewalk_lr.ppd"
+}
+
+prefab_model : prefab.20 {
+	model_desc: "/prefab/cross/road2_x_road2_t_sidewalk_r.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road2_t_sidewalk_r.ppd"
+}
+
+prefab_model : prefab.21 {
+	model_desc: "/prefab/cross/road2_x_road1_t_sidewalk.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road1_t_sidewalk.ppd"
+}
+
+prefab_model : prefab.22 {
+	model_desc: "/prefab/cross/road2_x_road2_t_sidewalk_all.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road2_t_sidewalk_all.ppd"
+}
+
+
+prefab_model : prefab.23 {
+	model_desc: "/prefab/cross/road1_x_road1_t_sidewalk_lr.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_sidewalk_lr.ppd"
+}
+
+prefab_model : prefab.24 {
+	model_desc: "/prefab/cross/road1_x_road1_t_nt.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_nt.ppd"
+}
+prefab_model : prefab.25 {
+	model_desc: "/prefab/gas/gas_station.pmd"
+	prefab_desc: "/prefab/gas/gas_station.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	slow_time: true
+}
+prefab_model : prefab.25uk {
+	model_desc: "/prefab/gas/gas_station_uk.pmd"
+	prefab_desc: "/prefab/gas/gas_station_uk.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	slow_time: true
+}
+
+prefab_model : prefab.26 {
+	model_desc: "/prefab/fork/gasstation_fork.pmd"
+	prefab_desc: "/prefab/fork/gasstation_fork.ppd"
+}
+prefab_model : prefab.27 {
+	model_desc: "/prefab/fork/gasstation_fork_mirror.pmd"
+	prefab_desc: "/prefab/fork/gasstation_fork_mirror.ppd"
+	
+}
+
+prefab_model : prefab.28 {
+	model_desc: "/prefab/cross/dock_entrance.pmd"
+	prefab_desc: "/prefab/cross/dock_entrance.ppd"
+	
+}
+
+prefab_model : prefab.29 {
+	model_desc: "/prefab/sellplan/sellplan.pmd"
+	prefab_desc: "/prefab/sellplan/sellplan.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	
+}
+
+prefab_model : prefab.30 {
+	model_desc: "/prefab/fork/road_sidewalk_end.pmd"
+	prefab_desc: "/prefab/fork/road_sidewalk_end.ppd"
+	
+}
+
+prefab_model : prefab.31 {
+	model_desc: "/prefab/tradeaux_warehouse/tradeaux.pmd"
+	prefab_desc: "/prefab/tradeaux_warehouse/tradeaux.ppd"
+	use_perlin: false
+	
+}
+
+prefab_model : prefab.32 {
+	model_desc: "/prefab/warehouse_orange/warehouse_orange.pmd"
+	prefab_desc: "/prefab/warehouse_orange/warehouse_orange.ppd"
+	use_perlin: false
+	
+}
+
+prefab_model : prefab.33 {
+	model_desc: "/prefab/warehouse_small/warehouse_small.pmd"
+	prefab_desc: "/prefab/warehouse_small/warehouse_small.ppd"
+	use_perlin: false
+	
+}
+
+prefab_model : prefab.34 {
+	model_desc: "/prefab/warehouse_grey/warehouse_large_grey.pmd"
+	prefab_desc: "/prefab/warehouse_grey/warehouse_large_grey.ppd"
+	use_perlin: false
+	
+}
+
+prefab_model : prefab.35 {
+	model_desc: "/prefab/administration/white_red.pmd"
+	prefab_desc: "/prefab/administration/white_red.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	
+}
+
+prefab_model : prefab.36 {
+	model_desc: "/prefab/warehouse_grey/warehouse_large_grey_v2.pmd"
+	prefab_desc: "/prefab/warehouse_grey/warehouse_large_grey_v2.ppd"
+	use_perlin: false
+	
+}
+
+prefab_model : prefab.38 {
+	model_desc: "/prefab/cross/road2_entrance_kerb.pmd"
+	prefab_desc: "/prefab/cross/road2_entrance_kerb.ppd"
+}
+
+prefab_model : prefab.39 {
+	model_desc: "/prefab/service/service.pmd"
+	prefab_desc: "/prefab/service/service.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	
+}
+
+prefab_model : prefab.40 {
+	model_desc: "/prefab/cross/road2_x_road2_sidewalk_all.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road2_sidewalk_all.ppd"
+}
+
+prefab_model : prefab.41 {
+	model_desc: "/prefab/farm/farm.pmd"
+	prefab_desc: "/prefab/farm/farm.ppd"
+	use_perlin: false
+	
+}
+
+prefab_model : prefab.42 {
+	model_desc: "/prefab/construction/ground.pmd"
+	prefab_desc: "/prefab/construction/ground.ppd"
+	use_perlin: false
+	
+}
+
+prefab_model : prefab.43 {
+	model_desc: "/prefab/truck_dealer/truck_dealer_02.pmd"
+	prefab_desc: "/prefab/truck_dealer/truck_dealer_02.ppd"
+	use_perlin: false
+	
+}
+
+prefab_model : prefab.44 {
+	model_desc: "/prefab/nbfc/nbfc.pmd"
+	prefab_desc: "/prefab/nbfc/nbfc.ppd"
+	use_perlin: false
+	
+}
+prefab_model : prefab.46 {
+	model_desc: "/prefab/gas_small/gasstation_small.pmd"
+	prefab_desc: "/prefab/gas_small/gasstation_small.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	slow_time: true
+	
+}
+
+prefab_model : prefab.47 {
+	model_desc: "/prefab/fork/gasstation_fork_2lines.pmd"
+	prefab_desc: "/prefab/fork/gasstation_fork_2lines.ppd"
+}
+
+prefab_model : prefab.48 {
+	model_desc: "/prefab/fork/gasstation_fork_2lines_mirror.pmd"
+	prefab_desc: "/prefab/fork/gasstation_fork_2lines_mirror.ppd"
+	
+}
+
+prefab_model : prefab.49 {
+	model_desc: "/prefab/construction/block_of_flats.pmd"
+	prefab_desc: "/prefab/construction/block_of_flats.ppd"
+	
+}
+
+prefab_model : prefab.50 {
+	model_desc: "/prefab/fork/road_1x_sidewalk_end.pmd"
+	prefab_desc: "/prefab/fork/road_1x_sidewalk_end.ppd"
+	use_perlin: true
+	
+}
+
+prefab_model : prefab.51 {
+	model_desc: "/prefab/cross/road1_x_road2_t_sidewalk_all.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road2_t_sidewalk_all.ppd"
+	use_perlin: true
+}
+
+prefab_model : prefab.52 {
+	model_desc: "/prefab/cross/road1_x_road1_t_entrance.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_entrance.ppd"
+	use_perlin: true
+}
+
+prefab_model : prefab.53 {
+	model_desc: "/prefab/bridge/bridge_short.pmd"
+	prefab_desc: "/prefab/bridge/bridge_short.ppd"
+	use_perlin: false
+}
+
+prefab_model : prefab.54 {
+	model_desc: "/prefab/cross/road1_x_road1_t_sidewalk.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_sidewalk.ppd"
+	use_perlin: true
+}
+prefab_model : prefab.55 {
+	model_desc: "/prefab/cross/road1_x_road1_t.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t.ppd"
+	use_perlin: true
+}
+
+prefab_model : prefab.56 {
+	model_desc: "/prefab/cross/road1_x_road1_sidewalk.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_sidewalk.ppd"
+	use_perlin: true
+}
+
+prefab_model : prefab.57 {
+	model_desc: "/prefab/cross/road1_x_road1.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1.ppd"
+	use_perlin: true
+}
+
+prefab_model : prefab.58 {
+	model_desc: "/prefab/cross/road2_x_road1_t_lights.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road1_t_lights.ppd"
+}
+
+prefab_model : prefab.59 {
+	model_desc: "/prefab/gas_small_road/gasstation_small_road.pmd"
+	prefab_desc: "/prefab/gas_small_road/gasstation_small_road.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	slow_time: true
+	
+}
+
+prefab_model : prefab.60 {
+	model_desc: "/prefab/fork/hw3-2_x_hw2-2_full.pmd"
+	prefab_desc: "/prefab/fork/hw3-2_x_hw2-2_full.ppd"
+
+}
+
+prefab_model : prefab.61 {
+	model_desc: "/prefab/fork/highway_fork.pmd"
+	prefab_desc: "/prefab/fork/highway_fork.ppd"
+	
+}
+
+prefab_model : prefab.62 {
+	model_desc: "/prefab/bridge/drackensteiner_bridge.pmd"
+	prefab_desc: "/prefab/bridge/drackensteiner_bridge.ppd"
+	
+}
+
+prefab_model : prefab.63 {
+	model_desc: "/prefab/ground/asphalt.pmd"
+	prefab_desc: "/prefab/ground/asphalt.ppd"
+	use_perlin: false
+	
+}
+
+prefab_model : prefab.64 {
+	model_desc: "/prefab/ground/asphalt_sq.pmd"
+	prefab_desc: "/prefab/ground/asphalt_sq.ppd"
+	use_perlin: false
+	
+}
+
+prefab_model : prefab.65 {
+	model_desc: "/prefab/bridge/highway_bridge.pmd"
+	prefab_desc: "/prefab/bridge/highway_bridge.ppd"
+	use_perlin: false
+	
+}
+
+prefab_model : prefab.66 {
+	model_desc: "/prefab/cross/hw3-2_x_road1.pmd"
+	prefab_desc: "/prefab/cross/hw3-2_x_road1.ppd"
+	use_perlin: true
+	
+}
+prefab_model : prefab.67 {
+	model_desc: "/prefab/heavy_factory/heavy_factory.pmd"
+	prefab_desc: "/prefab/heavy_factory/heavy_factory.ppd"
+	use_perlin: false
+	
+}
+prefab_model : prefab.68 {
+	model_desc: "/prefab/light_factory/light_factory.pmd"
+	prefab_desc: "/prefab/light_factory/light_factory.ppd"
+	use_perlin: false
+	
+}
+prefab_model : prefab.69 {
+	model_desc: "/prefab/hotel/hotel_a.pmd"
+	prefab_desc: "/prefab/hotel/hotel_a.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	
+}
+prefab_model : prefab.70 {
+	model_desc: "/prefab/hotel/hotel_b.pmd"
+	prefab_desc: "/prefab/hotel/hotel_b.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	
+}
+prefab_model : prefab.71 {
+	model_desc: "/prefab/construction/mall.pmd"
+	prefab_desc: "/prefab/construction/mall.ppd"
+	
+}
+prefab_model : prefab.72 {
+	model_desc: "/prefab/construction/hotel.pmd"
+	prefab_desc: "/prefab/construction/hotel.ppd"
+	
+}
+prefab_model : prefab.73 {
+	model_desc: "/prefab/construction/university.pmd"
+	prefab_desc: "/prefab/construction/university.ppd"
+	
+}
+prefab_model : prefab.74 {
+	model_desc: "/prefab/cross/road2_x_road1_t_sidewalk_all_nt.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road1_t_sidewalk_all_nt.ppd"
+}
+prefab_model : prefab.75 {
+	model_desc: "/prefab/cross/road1_x_road1_t_sidewalk_all_nt.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_sidewalk_all_nt.ppd"
+}
+prefab_model : prefab.76 {
+	model_desc: "/prefab/cross/road1_x_road1_t_sidewalk_lr_nt.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_sidewalk_lr_nt.ppd"
+}
+prefab_model : prefab.77 {
+	model_desc: "/prefab/construction/warehouseframe.pmd"
+	prefab_desc: "/prefab/construction/warehouseframe.ppd"
+	
+}
+prefab_model : prefab.78 {
+	model_desc: "/prefab/cross/road1_x_road2_t_np.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road2_t_np.ppd"
+}
+prefab_model : prefab.79 {
+	model_desc: "/prefab/recruitment_agency/recruitment_agency.pmd"
+	prefab_desc: "/prefab/recruitment_agency/recruitment_agency.ppd"
+	use_perlin: false
+	
+}
+prefab_model : prefab.80 {
+	model_desc: "/prefab/car_factory/car_factory.pmd"
+	prefab_desc: "/prefab/car_factory/car_factory.ppd"
+	use_perlin: false
+	
+}
+prefab_model : prefab.81 {
+	model_desc: "/prefab/garage/garage.pmd"
+	prefab_desc: "/prefab/garage/garage.ppd"
+	use_perlin: false
+	
+}
+prefab_model : prefab.82 {
+	model_desc: "/prefab/garage/garage_expensive.pmd"
+	prefab_desc: "/prefab/garage/garage_expensive.ppd"
+	use_perlin: false
+	
+}
+prefab_model : prefab.poor_garage {
+	model_desc: "/prefab/garage/garage_poor.pmd"
+	prefab_desc: "/prefab/garage/garage_poor.ppd"
+	use_perlin: false
+	
+}
+prefab_model : prefab.83 {
+	model_desc: "/prefab/truck_dealer_small/truck_dealer_small_02.pmd"
+	prefab_desc: "/prefab/truck_dealer_small/truck_dealer_small_02.ppd"
+	use_perlin: false
+	
+}
+prefab_model : prefab.84 {
+	model_desc: "/prefab/bridge/koln_bridge.pmd"
+	prefab_desc: "/prefab/bridge/koln_bridge.ppd"
+	use_perlin: false
+	
+}
+
+prefab_model : prefab.85 {
+	model_desc: "/prefab/cross/hw2-2_x_city2-2_t.pmd"
+	prefab_desc: "/prefab/cross/hw2-2_x_city2-2_t.ppd"
+}
+
+prefab_model : prefab.86 {
+	model_desc: "/prefab/cross/hw2-2_x_road1_t.pmd"
+	prefab_desc: "/prefab/cross/hw2-2_x_road1_t.ppd"
+}
+prefab_model : prefab.87 {
+	model_desc: "/prefab/bridge/highway_bridge_2_2.pmd"
+	prefab_desc: "/prefab/bridge/highway_bridge_2_2.ppd"
+	use_perlin: false
+}
+prefab_model : prefab.88 {
+	model_desc: "/prefab/cross/r2xr2_sw_roundabout.pmd"
+	prefab_desc: "/prefab/cross/r2xr2_sw_roundabout.ppd"
+	use_perlin: true
+	tweak_detail_vegetation: true
+}
+prefab_model : prefab.89 {
+	model_desc: "/prefab/cross/hw2-2_x_hw2-2_t.pmd"
+	prefab_desc: "/prefab/cross/hw2-2_x_hw2-2_t.ppd"
+	use_perlin: true
+	detail_veg_max_distance: 25
+}
+prefab_model : prefab.90 {
+	model_desc: "/prefab/border/de_at_1/de_at_01.pmd"
+	prefab_desc: "/prefab/border/de_at_1/de_at_01.ppd"
+	use_perlin: false
+}
+prefab_model : prefab.91 {
+	model_desc: "/prefab/fork/city_x_2lane_highway.pmd"
+	prefab_desc: "/prefab/fork/city_x_2lane_highway.ppd"
+	
+}
+prefab_model : prefab.92 {
+	model_desc: "/prefab/bridge/highway_landmark_bridge.pmd"
+	prefab_desc: "/prefab/bridge/highway_landmark_bridge.ppd"
+	use_perlin: false
+}
+prefab_model : prefab.93 {
+	model_desc: "/prefab/border/de_at_2/de_at_02.pmd"
+	prefab_desc: "/prefab/border/de_at_2/de_at_02.ppd"
+	use_perlin: false
+}
+
+prefab_model : prefab.94 {
+	model_desc: "/prefab/border/de_at_3/de_at_03.pmd"
+	prefab_desc: "/prefab/border/de_at_3/de_at_03.ppd"
+	use_perlin: false
+}
+prefab_model : prefab.95 {
+	model_desc: "/prefab/cross/r2xr2_t_sw_roundabout.pmd"
+	prefab_desc: "/prefab/cross/r2xr2_t_sw_roundabout.ppd"
+	use_perlin: true
+	tweak_detail_vegetation: true
+}
+prefab_model : prefab.96 {
+	model_desc: "/prefab/cross/r2xr2xr1_sw_roundabout.pmd"
+	prefab_desc: "/prefab/cross/r2xr2xr1_sw_roundabout.ppd"
+	use_perlin: true
+	tweak_detail_vegetation: true
+}
+prefab_model : prefab.97 {
+	model_desc: "/prefab/cross/dock_entrance_4m.pmd"
+	prefab_desc: "/prefab/cross/dock_entrance_4m.ppd"
+}
+
+prefab_model : prefab.98 {
+	model_desc: "/prefab/cross/road2_x_road1_t_sidewalk_all_4m.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road1_t_sidewalk_all_4m.ppd"
+}
+prefab_model : prefab.99 {
+	model_desc: "/prefab/cross/road1_x_road1_sidewalk_all_4m.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_sidewalk_all_4m.ppd"
+}
+prefab_model : prefab.100 {
+	model_desc: "/prefab/cross/road1_x_road1_t_entrance_4m.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_entrance_4m.ppd"
+}
+prefab_model : prefab.101 {
+	model_desc: "/prefab/cross/road2_x_road1_sidewalk_all_4m.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road1_sidewalk_all_4m.ppd"
+}
+prefab_model : prefab.102 {
+	model_desc: "/prefab/cross/road1_x_road2_t_sidewalk_all_4m.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road2_t_sidewalk_all_4m.ppd"
+}
+prefab_model : prefab.103 {
+	model_desc: "/prefab/fork/road_1x_sidewalk_end_4m.pmd"
+	prefab_desc: "/prefab/fork/road_1x_sidewalk_end_4m.ppd"
+}
+prefab_model : prefab.104 {
+	model_desc: "/prefab/tollgate/tollgate_a2_poland/tollgate.pmd"
+	prefab_desc: "/prefab/tollgate/tollgate_a2_poland/tollgate.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	slow_time: true
+}
+prefab_model : prefab.105 {
+	model_desc: "/prefab/cross/r2xr2_sw_roundabout_4m.pmd"
+	prefab_desc: "/prefab/cross/r2xr2_sw_roundabout_4m.ppd"
+	use_perlin: true
+	tweak_detail_vegetation: true
+}
+prefab_model : prefab.106 {
+	model_desc: "/prefab/border/ge_pl_1/ge_pl_1.pmd"
+	prefab_desc: "/prefab/border/ge_pl_1/ge_pl_1.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+}
+prefab_model : prefab.107 {
+	model_desc: "/prefab/fork/hw2-2_x_road_1x.pmd"
+	prefab_desc: "/prefab/fork/hw2-2_x_road_1x.ppd"
+	use_perlin: true
+}
+prefab_model : prefab.108 {
+	model_desc: "/prefab/cross/road2_x_road2_t_sidewalk_all_4m.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road2_t_sidewalk_all_4m.ppd"
+	
+}
+prefab_model : prefab.109 {
+	model_desc: "/prefab/cross/road1_x_road1_t_sidewalk_all_4m.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_sidewalk_all_4m.ppd"
+	
+}
+prefab_model : prefab.110 {
+	model_desc: "/prefab/cross/road1_x_road1_t_sidewalk_all_nt_4m.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_sidewalk_all_nt_4m.ppd"
+
+}
+prefab_model : prefab.111 {
+	model_desc: "/prefab/fork/road_sidewalk_end_4m.pmd"
+	prefab_desc: "/prefab/fork/road_sidewalk_end_4m.ppd"
+	tweak_detail_vegetation: true
+}
+prefab_model : prefab.112 {
+	model_desc: "/prefab/cross/r2xr2xr1_sw_roundabout_4m.pmd"
+	prefab_desc: "/prefab/cross/r2xr2xr1_sw_roundabout_4m.ppd"
+	use_perlin: true
+	tweak_detail_vegetation: true
+}
+
+prefab_model : prefab.113 {
+	model_desc: "/prefab/bridge/gen_bridge_tirolachen.pmd"
+	prefab_desc: "/prefab/bridge/gen_bridge_tirolachen.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+}
+
+prefab_model : prefab.114 {
+	model_desc: "/prefab/cross/road2_x_road2_sidewalk_all_4m.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road2_sidewalk_all_4m.ppd"
+}
+
+prefab_model : prefab.115 {
+	model_desc: "/prefab/cross/r2xr2_t_sw_roundabout_4m.pmd"
+	prefab_desc: "/prefab/cross/r2xr2_t_sw_roundabout_4m.ppd"
+	tweak_detail_vegetation: true
+}
+
+prefab_model : prefab.116 {
+	model_desc: "/prefab/cross/road1_xroad1_t_sidewalk_angle.pmd"
+	prefab_desc: "/prefab/cross/road1_xroad1_t_sidewalk_angle.ppd"
+}
+
+prefab_model : prefab.117 {
+	model_desc: "/prefab/cross/road2_x_road1_t_sidewalk_4m.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road1_t_sidewalk_4m.ppd"
+}
+
+prefab_model : prefab.118 {
+	model_desc: "/prefab/electro_distribution_points/el_distrib_small.pmd"
+	prefab_desc: "/prefab/electro_distribution_points/el_distrib_small.ppd"
+
+}
+
+prefab_model : prefab.119 {
+	model_desc: "/prefab/electro_distribution_points/el_distrib_small_variant.pmd"
+	prefab_desc: "/prefab/electro_distribution_points/el_distrib_small_variant.ppd"
+
+}
+
+prefab_model : prefab.120 {
+	model_desc: "/prefab/electro_distribution_points/el_distrib_big.pmd"
+	prefab_desc: "/prefab/electro_distribution_points/el_distrib_big.ppd"
+
+}
+
+prefab_model : prefab.121 {
+	model_desc: "/prefab/electro_distribution_points/el_distrib_big_variant.pmd"
+	prefab_desc: "/prefab/electro_distribution_points/el_distrib_big_variant.ppd"
+}
+
+prefab_model : prefab.122 {
+	model_desc: "/prefab/rest_places/rest_place_03.pmd"
+	prefab_desc: "/prefab/rest_places/rest_place_03.ppd"
+        tweak_detail_vegetation: true
+	slow_time: true
+}
+
+prefab_model : prefab.123 {
+	model_desc: "/prefab/rest_places/rest_place_02.pmd"
+	prefab_desc: "/prefab/rest_places/rest_place_02.ppd"
+        tweak_detail_vegetation: true
+	slow_time: true
+}
+
+prefab_model : prefab.124 {
+	model_desc: "/prefab/fork/gasstation_fork_2lines_bothsides.pmd"
+	prefab_desc: "/prefab/fork/gasstation_fork_2lines_bothsides.ppd"
+}
+
+prefab_model : prefab.125 {
+	model_desc: "/prefab/rest_places/rest_place_01.pmd"
+	prefab_desc: "/prefab/rest_places/rest_place_01.ppd"
+        tweak_detail_vegetation: true
+	slow_time: true
+}
+
+prefab_model : prefab.126 {
+	model_desc: "/prefab/bridge/bridge_pl_de_border.pmd"
+	prefab_desc: "/prefab/bridge/bridge_pl_de_border.ppd"
+        
+}
+
+prefab_model : prefab.127 {
+	model_desc: "/prefab/level_crossing/level_cross_de.pmd"
+	prefab_desc: "/prefab/level_crossing/level_cross_de.ppd"
+        tweak_detail_vegetation: true
+}
+
+prefab_model : prefab.128 {
+	model_desc: "/prefab/level_crossing/level_cross_pl.pmd"
+	prefab_desc: "/prefab/level_crossing/level_cross_pl.ppd"
+        tweak_detail_vegetation: true
+}
+
+prefab_model : prefab.129 {
+	model_desc: "/prefab/level_crossing/level_cross_cz.pmd"
+	prefab_desc: "/prefab/level_crossing/level_cross_cz.ppd"
+        tweak_detail_vegetation: true
+}
+
+prefab_model : prefab.130 {
+	model_desc: "/prefab/fork/hw2-2_x_hw2-2_full.pmd"
+	prefab_desc: "/prefab/fork/hw2-2_x_hw2-2_full.ppd"
+}
+
+prefab_model : prefab.131 {
+	model_desc: "/prefab/fork/hw3-2_x_hw2-2_thru.pmd"
+	prefab_desc: "/prefab/fork/hw3-2_x_hw2-2_thru.ppd"
+}
+
+prefab_model : prefab.132 {
+	model_desc: "/prefab/level_crossing/level_cross_fr.pmd"
+	prefab_desc: "/prefab/level_crossing/level_cross_fr.ppd"
+        tweak_detail_vegetation: true
+}
+
+prefab_model : prefab.133 {
+	model_desc: "/prefab/level_crossing/level_cross_be.pmd"
+	prefab_desc: "/prefab/level_crossing/level_cross_be.ppd"
+        tweak_detail_vegetation: true
+}
+prefab_model : prefab.134 {
+	model_desc: "/prefab/cross/hw2-2_x_city2-2.pmd"
+	prefab_desc: "/prefab/cross/hw2-2_x_city2-2.ppd"
+        tweak_detail_vegetation: true
+}
+
+prefab_model : prefab.135 {
+	model_desc: "/prefab/fork/hw3-3_x_hw2-2.pmd"
+	prefab_desc: "/prefab/fork/hw3-3_x_hw2-2.ppd"
+}
+
+prefab_model : prefab.136 {
+	model_desc: "/prefab/level_crossing/level_cross_uk.pmd"
+	prefab_desc: "/prefab/level_crossing/level_cross_uk.ppd"
+        tweak_detail_vegetation: true
+}
+
+prefab_model : prefab.137 {
+	model_desc: "/prefab/aquaducts_netherlands/aquaducts_netherlands.pmd"
+	prefab_desc: "/prefab/aquaducts_netherlands/aquaducts_netherlands.ppd"
+        use_perlin: false
+}
+
+prefab_model : prefab.138 {
+	model_desc: "/prefab/roadwork/roadwork_small.pmd"
+	prefab_desc: "/prefab/roadwork/roadwork_small.ppd"
+        tweak_detail_vegetation: true
+}
+
+prefab_model : prefab.139 {
+	model_desc: "/prefab/roadwork/roadwork_small_2.pmd"
+	prefab_desc: "/prefab/roadwork/roadwork_small_2.ppd"
+        tweak_detail_vegetation: true
+}
+prefab_model : prefab.140 {
+	model_desc: "/prefab/roadwork/roadwork_highway.pmd"
+	prefab_desc: "/prefab/roadwork/roadwork_highway.ppd"
+        tweak_detail_vegetation: true
+}
+prefab_model : prefab.141 {
+	model_desc: "/prefab/construction/basement.pmd"
+	prefab_desc: "/prefab/construction/basement.ppd"
+}
+prefab_model : prefab.142 {
+	model_desc: "/prefab/construction/small_blocks_of_flats.pmd"
+	prefab_desc: "/prefab/construction/small_blocks_of_flats.ppd"
+}
+prefab_model : prefab.143 {
+	model_desc: "/prefab/roadwork/roadwork_hw_new.pmd"
+	prefab_desc: "/prefab/roadwork/roadwork_hw_new.ppd"
+        tweak_detail_vegetation: true
+}
+prefab_model : prefab.144 {
+	model_desc: "/prefab/construction/stadium.pmd"
+	prefab_desc: "/prefab/construction/stadium.ppd"
+}
+prefab_model : prefab.145 {
+	model_desc: "/prefab/fork/city_x_road_1.pmd"
+	prefab_desc: "/prefab/fork/city_x_road_1.ppd"
+	use_perlin: true
+}
+prefab_model : prefab.146 {
+	model_desc: "/prefab/cross/hw3-2_x_hw2-2_t.pmd"
+	prefab_desc: "/prefab/cross/hw3-2_x_hw2-2_t.ppd"
+}
+prefab_model : prefab.147 {
+	model_desc: "/prefab/cross/hw2-2_x_city2-1_t_small.pmd"
+	prefab_desc: "/prefab/cross/hw2-2_x_city2-1_t_small.ppd"
+}
+
+prefab_model : prefab.148 {
+	model_desc: "/prefab/cross/road1_x_road1_tshape.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_tshape.ppd"
+}
+
+prefab_model : prefab.149 {
+	model_desc: "/prefab/roadwork/roadwork_hw_hole.pmd"
+	prefab_desc: "/prefab/roadwork/roadwork_hw_hole.ppd"
+        tweak_detail_vegetation: true
+}
+
+prefab_model : prefab.150 {
+	model_desc: "/prefab/cross/hw2-2_x_hw2-2_t_small.pmd"
+	prefab_desc: "/prefab/cross/hw2-2_x_hw2-2_t_small.ppd"
+}
+
+prefab_model : prefab.151 {
+	model_desc: "/prefab/construction/ground_basement.pmd"
+	prefab_desc: "/prefab/construction/ground_basement.ppd"
+	use_perlin: false
+}
+
+prefab_model : prefab.152 {
+	model_desc: "/prefab/cross/hw2-2_x_road1_t_small.pmd"
+	prefab_desc: "/prefab/cross/hw2-2_x_road1_t_small.ppd"
+}
+
+prefab_model : prefab.153 {
+	model_desc: "/prefab/bridge/a96_bridge_landmark.pmd"
+	prefab_desc: "/prefab/bridge/a96_bridge_landmark.ppd"
+}
+prefab_model : prefab.154 {
+	model_desc: "/prefab/tollgate/large_it_fr_tollgate/tolgate_big.pmd"
+	prefab_desc: "/prefab/tollgate/large_it_fr_tollgate/tolgate_big.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	slow_time: true
+}
+prefab_model : prefab.155 {
+	model_desc: "/prefab/cross/road1_x_road1_t_sidewalk_lr_4m.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_sidewalk_lr_4m.ppd"
+}
+prefab_model : prefab.156 {
+	model_desc: "/prefab/fork/hw2_joint.pmd"
+	prefab_desc: "/prefab/fork/hw2_joint.ppd"
+}
+
+prefab_model : prefab.157 {
+	model_desc: "/prefab/cross/hw2-2_x_city2-1_small.pmd"
+	prefab_desc: "/prefab/cross/hw2-2_x_city2-1_small.ppd"
+}
+
+prefab_model : prefab.0uk {
+	model_desc: "/prefab/gas_small_road/gasstation_small_road_uk.pmd"
+	prefab_desc: "/prefab/gas_small_road/gasstation_small_road_uk.ppd"
+	use_perlin: false
+	slow_time: true
+}
+
+prefab_model : prefab.1uk {
+	model_desc: "/prefab/cross/hw3-2_x_road1_uk.pmd"
+	prefab_desc: "/prefab/cross/hw3-2_x_road1_uk.ppd"
+}
+
+
+prefab_model : prefab.3uk {
+	model_desc: "/prefab/fork/gasstation_fork_2lines_uk.pmd"
+	prefab_desc: "/prefab/fork/gasstation_fork_2lines_uk.ppd"
+}
+
+prefab_model : prefab.4uk {
+	model_desc: "/prefab/cross/hw3-2_x_city2-1_uk.pmd"
+	prefab_desc: "/prefab/cross/hw3-2_x_city2-1_uk.ppd"
+}
+
+prefab_model : prefab.5uk {
+	model_desc: "/prefab/cross/dock_entrance_uk.pmd"
+	prefab_desc: "/prefab/cross/dock_entrance_uk.ppd"
+}
+
+prefab_model : prefab.6uk {
+	model_desc: "/prefab/cross/hw3-2_x_hw3-2_uk.pmd"
+	prefab_desc: "/prefab/cross/hw3-2_x_hw3-2_uk.ppd"
+	detail_veg_max_distance: 17
+}
+
+prefab_model : prefab.7uk {
+	model_desc: "/prefab/cross/road1_x_road1_t_nt_uk.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_nt_uk.ppd"
+}
+
+prefab_model : prefab.8uk {
+	model_desc: "/prefab/cross/road2_entrance_kerb_uk.pmd"
+	prefab_desc: "/prefab/cross/road2_entrance_kerb_uk.ppd"
+}
+
+prefab_model : prefab.9uk {
+	model_desc: "/prefab/cross/hw3-2_x_hw3-2_t_uk.pmd"
+	prefab_desc: "/prefab/cross/hw3-2_x_hw3-2_t_uk.ppd"
+	detail_veg_max_distance: 20
+}
+
+prefab_model : prefab.10uk {
+	model_desc: "/prefab/fork/gasstation_fork_2lines_mirror_uk.pmd"
+	prefab_desc: "/prefab/fork/gasstation_fork_2lines_mirror_uk.ppd"
+}
+
+
+prefab_model : prefab.12uk {
+	model_desc: "/prefab/fork/highway_fork_uk.pmd"
+	prefab_desc: "/prefab/fork/highway_fork_uk.ppd"
+}
+
+prefab_model : prefab.18uk {
+	model_desc: "/prefab/cross/road1_x_road1_t_entrance_uk.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_entrance_uk.ppd"
+}
+
+prefab_model : prefab.19uk {
+	model_desc: "/prefab/cross/road1_x_road1_t_sidewalk_all_uk.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_sidewalk_all_uk.ppd"
+}
+
+
+prefab_model : prefab.22uk {
+	model_desc: "/prefab/cross/road1_x_road1_t_uk.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_uk.ppd"
+}
+
+
+prefab_model : prefab.24uk {
+	model_desc: "/prefab/cross/road1_x_road1_uk.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_uk.ppd"
+}
+
+prefab_model : prefab.26uk {
+	model_desc: "/prefab/cross/road1_x_road2_t_sidewalk_all_uk.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road2_t_sidewalk_all_uk.ppd"
+}
+prefab_model : prefab.27uk {
+	model_desc: "/prefab/cross/road2_x_road1_sidewalk_all_uk.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road1_sidewalk_all_uk.ppd"
+}
+
+prefab_model : prefab.28uk {
+	model_desc: "/prefab/cross/road2_x_road1_t_lights_uk.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road1_t_lights_uk.ppd"
+}
+
+
+prefab_model : prefab.30uk {
+	model_desc: "/prefab/cross/road2_x_road1_t_sidewalk_all_uk.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road1_t_sidewalk_all_uk.ppd"
+}
+
+
+prefab_model : prefab.38uk {
+	model_desc: "/prefab/cross/road2_x_road1_t_sidewalk_nt_uk.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road1_t_sidewalk_nt_uk.ppd"
+}
+
+
+prefab_model : prefab.47uk {
+	model_desc: "/prefab/cross/road2_x_road1_t_uk.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road1_t_uk.ppd"
+}
+
+
+prefab_model : prefab.49uk {
+	model_desc: "/prefab/cross/road2_x_road2_t_sidewalk_all_uk.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road2_t_sidewalk_all_uk.ppd"
+}
+
+prefab_model : prefab.50uk {
+	model_desc: "/prefab/cross/road2_x_road2_t_sidewalk_r_uk.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road2_t_sidewalk_r_uk.ppd"
+}
+
+prefab_model : prefab.51uk {
+	model_desc: "/prefab/fork/gasstation_fork_uk.pmd"
+	prefab_desc: "/prefab/fork/gasstation_fork_uk.ppd"
+}
+
+prefab_model : prefab.52uk {
+	model_desc: "/prefab/fork/gasstation_fork_mirror_uk.pmd"
+	prefab_desc: "/prefab/fork/gasstation_fork_mirror_uk.ppd"
+}
+
+prefab_model : prefab.53uk {
+	model_desc: "/prefab/fork/hw3-2_x_hw2-2_uk.pmd"
+	prefab_desc: "/prefab/fork/hw3-2_x_hw2-2_uk.ppd"
+}
+
+prefab_model : prefab.54uk {
+	model_desc: "/prefab/fork/hw3_joint_uk.pmd"
+	prefab_desc: "/prefab/fork/hw3_joint_uk.ppd"
+}
+
+prefab_model : prefab.55uk {
+	model_desc: "/prefab/fork/road_sidewalk_end_uk.pmd"
+	prefab_desc: "/prefab/fork/road_sidewalk_end_uk.ppd"
+}
+
+
+prefab_model : prefab.57uk {
+	model_desc: "/prefab/gas_small/gasstation_small_uk.pmd"
+	prefab_desc: "/prefab/gas_small/gasstation_small_uk.ppd"
+	use_perlin: false
+	slow_time: true
+}
+
+
+prefab_model : prefab.60uk {
+	model_desc: "/prefab/fork/hw3-2_x_hw2-2_full_uk.pmd"
+	prefab_desc: "/prefab/fork/hw3-2_x_hw2-2_full_uk.ppd"
+}
+
+prefab_model : prefab.61uk {
+	model_desc: "/prefab/bridge/bridge_small_uk.pmd"
+	prefab_desc: "/prefab/bridge/bridge_small_uk.ppd"
+}
+
+prefab_model : prefab.62uk {
+	model_desc: "/prefab/bridge/bridge_small2_uk.pmd"
+	prefab_desc: "/prefab/bridge/bridge_small2_uk.ppd"
+	use_perlin: false
+}
+
+
+prefab_model : prefab.65uk {
+	model_desc: "/prefab/bridge/highway_bridge_uk.pmd"
+	prefab_desc: "/prefab/bridge/highway_bridge_uk.ppd"
+	use_perlin: false
+}
+
+prefab_model : prefab.66uk {
+	model_desc: "/prefab/bridge/bridge_short_uk.pmd"
+	prefab_desc: "/prefab/bridge/bridge_short_uk.ppd"
+	use_perlin: false
+}
+prefab_model : prefab.71uk {
+	model_desc: "/prefab/cross/road2_x_road1_t_sidewalk_all_nt_uk.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road1_t_sidewalk_all_nt_uk.ppd"
+}
+prefab_model : prefab.72uk {
+	model_desc: "/prefab/cross/road1_x_road1_t_sidewalk_all_nt_uk.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_sidewalk_all_nt_uk.ppd"
+}
+prefab_model : prefab.73uk {
+	model_desc: "/prefab/cross/road1_x_road1_t_sidewalk_lr_nt_uk.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_sidewalk_lr_nt_uk.ppd"
+}
+prefab_model : prefab.79uk {
+	model_desc: "/prefab/bridge/cardiff_bridge.pmd"
+	prefab_desc: "/prefab/bridge/cardiff_bridge.ppd"
+	use_perlin: false
+}
+prefab_model : prefab.80uk { 
+	model_desc: "/prefab/bridge/steel_bridge_m90.pmd"
+	prefab_desc: "/prefab/bridge/steel_bridge_m90.ppd"
+	use_perlin: true
+}
+prefab_model : prefab.81uk {
+	model_desc: "/prefab/cross/road1_x_road2_t_np_uk.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road2_t_np_uk.ppd"
+}
+prefab_model : prefab.87uk {
+	model_desc: "/prefab/fork/road_1x_sidewalk_end_uk.pmd"
+	prefab_desc: "/prefab/fork/road_1x_sidewalk_end_uk.ppd"
+}
+prefab_model : prefab.88uk {
+	model_desc: "/prefab/bridge/stone_bridge_uk.pmd"
+	prefab_desc: "/prefab/bridge/stone_bridge_uk.ppd"
+}
+prefab_model : prefab.90uk {
+	model_desc: "/prefab/bridge/aberdeen_bridge.pmd"
+	prefab_desc: "/prefab/bridge/aberdeen_bridge.ppd"
+	use_perlin: true
+}
+prefab_model : prefab.92uk {
+	model_desc: "/prefab/bridge/grimsby_bridge.pmd"
+	prefab_desc: "/prefab/bridge/grimsby_bridge.ppd"
+	use_perlin: true
+}
+prefab_model : prefab.93uk {
+	model_desc: "/prefab/cross/road2_x_road1_t_nt_uk.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road1_t_nt_uk.ppd"
+}
+prefab_model : prefab.94uk {
+	model_desc: "/prefab/port/port_uk.pmd"
+	prefab_desc: "/prefab/port/port_uk.ppd"
+	use_perlin: false
+}
+
+prefab_model : prefab.158 {
+	model_desc: "/prefab/bridge/bridge_linz_landmark.pmd"
+	prefab_desc: "/prefab/bridge/bridge_linz_landmark.ppd"
+}
+
+prefab_model : prefab.159 {
+	model_desc: "/prefab/cross/road2_x_road1_t_sidewalk_all_4m_angle.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road1_t_sidewalk_all_4m_angle.ppd"
+}
+
+prefab_model : prefab.160 {
+	model_desc: "/prefab/cross/hw2-2_x_road1_small.pmd"
+	prefab_desc: "/prefab/cross/hw2-2_x_road1_small.ppd"
+}
+
+prefab_model : prefab.161 {
+	model_desc: "/prefab/cross/road2_x_road2_t_sidewalk_l_4m.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road2_t_sidewalk_l_4m.ppd"
+}
+
+prefab_model : prefab.162 {
+	model_desc: "/prefab/fork/hw2_fork.pmd"
+	prefab_desc: "/prefab/fork/hw2_fork.ppd"
+	
+}
+
+prefab_model : prefab.163 {
+	model_desc: "/prefab/cross/hw_2-2_x_road_1_t_large.pmd"
+	prefab_desc: "/prefab/cross/hw_2-2_x_road_1_t_large.ppd"
+}
+
+prefab_model : prefab.164 {
+	model_desc: "/prefab/cross/hw2-2_x_road1_small_2.pmd"
+	prefab_desc: "/prefab/cross/hw2-2_x_road1_small_2.ppd"
+}
+
+
+prefab_model : prefab.165 {
+	model_desc: "/prefab/cross/hw2-2_x_city2-1_small_2.pmd"
+	prefab_desc: "/prefab/cross/hw2-2_x_city2-1_small_2.ppd"
+}
+
+prefab_model : prefab.166 {
+	model_desc: "/prefab/cross/hw_2-2_x_road_1_large.pmd"
+	prefab_desc: "/prefab/cross/hw_2-2_x_road_1_large.ppd"
+}
+
+prefab_model : prefab.167 {
+	model_desc: "/prefab/fork/hw2_x_road1_10m.pmd"
+	prefab_desc: "/prefab/fork/hw2_x_road1_10m.ppd"
+}
+
+prefab_model : prefab.168 {
+	model_desc: "/prefab/bridge/bridge_podebrady_landmark.pmd"
+	prefab_desc: "/prefab/bridge/bridge_podebrady_landmark.ppd"
+}
+prefab_model : prefab.169 {
+	model_desc: "/prefab/tollgate/large_it_fr_tollgate/tolgate_small.pmd"
+	prefab_desc: "/prefab/tollgate/large_it_fr_tollgate/tolgate_small.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	slow_time: true
+}
+prefab_model : prefab.170 {
+	model_desc: "/prefab/tollgate/large_it_fr_tollgate/tolgate_big_3_line_hw.pmd"
+	prefab_desc: "/prefab/tollgate/large_it_fr_tollgate/tolgate_big_3_line_hw.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	slow_time: true
+}
+
+prefab_model : prefab.171 {
+	model_desc: "/prefab/fork/lochkov_cholupice_2lines.pmd"
+	prefab_desc: "/prefab/fork/lochkov_cholupice_2lines.ppd"
+}
+prefab_model : prefab.172 {
+	model_desc: "/prefab/bridge/a4_koln_bridge.pmd"
+	prefab_desc: "/prefab/bridge/a4_koln_bridge.ppd"
+}
+prefab_model : prefab.173 {
+	model_desc: "/prefab/port/port_calais.pmd"
+	prefab_desc: "/prefab/port/port_calais.ppd"
+}
+prefab_model : prefab.174 {
+	model_desc: "/prefab/bridge/bridge_landmark_bern_kornhaus.pmd"
+	prefab_desc: "/prefab/bridge/bridge_landmark_bern_kornhaus.ppd"
+	use_perlin: false
+}
+prefab_model : prefab.175 {
+	model_desc: "/prefab/bridge/bridge_landmark_bern_lorrain.pmd"
+	prefab_desc: "/prefab/bridge/bridge_landmark_bern_lorrain.ppd"
+	use_perlin: false
+}
+prefab_model : prefab.176 {
+	model_desc: "/prefab/gas_big/gas_big.pmd"
+	prefab_desc: "/prefab/gas_big/gas_big.ppd"
+	slow_time: true
+	
+}
+prefab_model : prefab.177 {
+	model_desc: "/prefab/ecoduct/ecoduct_hw2_onearc.pmd"
+	prefab_desc: "/prefab/ecoduct/ecoduct_hw2_onearc.ppd"
+	
+}
+prefab_model : prefab.178 {
+	model_desc: "/prefab/cross/hw2-2_x_city2-2_t_large.pmd"
+	prefab_desc: "/prefab/cross/hw2-2_x_city2-2_t_large.ppd"
+        tweak_detail_vegetation: true
+}
+prefab_model : prefab.179 { 
+	model_desc: "/prefab/cross/road1_x_road1_t_angle.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_angle.ppd"
+}
+
+prefab_model : prefab.180 {
+	model_desc: "/prefab/fork/road1_x_bikepath_nl.pmd"
+	prefab_desc: "/prefab/fork/road1_x_bikepath_nl.ppd"
+        tweak_detail_vegetation: true
+}
+
+prefab_model : prefab.181 {
+	model_desc: "/prefab/fork/road1_x_bikepath_nl_bothsides.pmd"
+	prefab_desc: "/prefab/fork/road1_x_bikepath_nl_bothsides.ppd"
+        tweak_detail_vegetation: true
+}
+
+prefab_model : prefab.183 {
+	model_desc: "/prefab/fork/gasstation_fork_3lines_bothsides.pmd"
+	prefab_desc: "/prefab/fork/gasstation_fork_3lines_bothsides.ppd"
+}
+
+prefab_model : prefab.184 {
+	model_desc: "/prefab/cross/hw_2-2_x_road_1_t_large_uk.pmd"
+	prefab_desc: "/prefab/cross/hw_2-2_x_road_1_t_large_uk.ppd"
+}
+prefab_model : prefab.185 {
+	model_desc: "/prefab/netherlands_molo/molo_02.pmd"
+	prefab_desc: "/prefab/netherlands_molo/molo_02.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+}
+prefab_model : prefab.186 {
+	model_desc: "/prefab/netherlands_molo/molo_01.pmd"
+	prefab_desc: "/prefab/netherlands_molo/molo_01.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+}
+prefab_model : prefab.187 {
+	model_desc: "/prefab/netherlands_molo/molo_03.pmd"
+	prefab_desc: "/prefab/netherlands_molo/molo_03.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+}
+prefab_model : prefab.188 {
+	model_desc: "/prefab/construction/ground_block_of_flats_1.pmd"
+	prefab_desc: "/prefab/construction/ground_block_of_flats_1.ppd"
+}
+prefab_model : prefab.189 {
+	model_desc: "/prefab/construction/ground_basement_lyon.pmd"
+	prefab_desc: "/prefab/construction/ground_basement_lyon.ppd"
+}
+
+prefab_model : prefab.190 {
+	model_desc: "/prefab/fork/hw2_x_road1_10m_mirr.pmd"
+	prefab_desc: "/prefab/fork/hw2_x_road1_10m_mirr.ppd"
+}
+
+prefab_model : prefab.191 {
+	model_desc: "/prefab/amsterdam_port/amsterdam_port.pmd"
+	prefab_desc: "/prefab/amsterdam_port/amsterdam_port.ppd"
+}
+
+prefab_model : prefab.192 {
+	model_desc: "/prefab/cross/road1_x_road1_t_sidewalk_lr_nt_4m.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_sidewalk_lr_nt_4m.ppd"
+}
+
+prefab_model : prefab.193 {
+	model_desc: "/prefab/gas_big/gas_big_3lane.pmd"
+	prefab_desc: "/prefab/gas_big/gas_big_3lane.ppd"
+	slow_time: true
+	
+}
+
+prefab_model : prefab.194 {
+	model_desc: "/prefab/gas_big/gas_big_uk.pmd"
+	prefab_desc: "/prefab/gas_big/gas_big_uk.ppd"
+	slow_time: true
+	
+
+}
+
+prefab_model : prefab.195 {
+	model_desc: "/prefab/bridge/humberbridge.pmd"
+	prefab_desc: "/prefab/bridge/humberbridge.ppd"
+	
+
+}
+
+prefab_model : prefab.196 {
+	model_desc: "/prefab/gas_big/gas_big_3lane_uk.pmd"
+	prefab_desc: "/prefab/gas_big/gas_big_3lane_uk.ppd"
+	slow_time: true
+	
+
+}
+
+prefab_model : prefab.197 {
+	model_desc: "/prefab/bridge/sikorskiego.pmd"
+	prefab_desc: "/prefab/bridge/sikorskiego.ppd"
+	use_perlin: false
+
+}
+prefab_model : prefab.198 {
+	model_desc: "/prefab/port/port_tyne.pmd"
+	prefab_desc: "/prefab/port/port_tyne.ppd"
+	use_perlin: false
+}
+
+prefab_model : prefab.199 {
+	model_desc: "/prefab/eurotunnel/platform.pmd"
+	prefab_desc: "/prefab/eurotunnel/platform.ppd"
+	use_perlin: false
+	slow_time: true
+}
+
+prefab_model : prefab.200 {
+	model_desc: "/prefab/farm/farm_2.pmd"
+	prefab_desc: "/prefab/farm/farm_2.ppd"
+	use_perlin: false
+
+}
+prefab_model : prefab.201 {
+	model_desc: "/prefab/tollgate/tollgate_at/tollgate_at.pmd"
+	prefab_desc: "/prefab/tollgate/tollgate_at/tollgate_at.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	slow_time: true
+}
+
+prefab_model : prefab.202 {
+	model_desc: "/prefab/eurotunnel/platform_uk.pmd"
+	prefab_desc: "/prefab/eurotunnel/platform_uk.ppd"
+	use_perlin: false
+	slow_time: true
+}
+
+prefab_model : prefab.203 {
+	model_desc: "/prefab/sawmill/sawmill_02.pmd"
+	prefab_desc: "/prefab/sawmill/sawmill_02.ppd"
+	use_perlin: false
+
+}
+prefab_model : prefab.204 {
+	model_desc: "/prefab/roadwork/roadwork_highway_uk.pmd"
+	prefab_desc: "/prefab/roadwork/roadwork_highway_uk.ppd"
+        tweak_detail_vegetation: true
+}
+prefab_model : prefab.205 {
+	model_desc: "/prefab/roadwork/roadwork_hw_new_uk.pmd"
+	prefab_desc: "/prefab/roadwork/roadwork_hw_new_uk.ppd"
+        tweak_detail_vegetation: true
+}
+prefab_model : prefab.206 {
+	model_desc: "/prefab/bridge/highway_bridge_2_2-uk.pmd"
+	prefab_desc: "/prefab/bridge/highway_bridge_2_2-uk.ppd"
+	use_perlin: false
+}
+prefab_model : prefab.207 {
+	model_desc: "/prefab/fork/road_1x_sidewalk_end_4m_uk.pmd"
+	prefab_desc: "/prefab/fork/road_1x_sidewalk_end_4m_uk.ppd"
+	
+}
+prefab_model : prefab.208 {
+	model_desc: "/prefab/fork/road_sidewalk_end_4m_uk.pmd"
+	prefab_desc: "/prefab/fork/road_sidewalk_end_4m_uk.ppd"
+	
+}
+prefab_model : prefab.209 {
+	model_desc: "/prefab/fork/city_x_2lane_highway_uk.pmd"
+	prefab_desc: "/prefab/fork/city_x_2lane_highway_uk.ppd"
+	
+}
+prefab_model : prefab.210 {
+	model_desc: "/prefab/tollgate/tollgate_at/tollgate_at_arlberg.pmd"
+	prefab_desc: "/prefab/tollgate/tollgate_at/tollgate_at_arlberg.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	slow_time: true
+}
+prefab_model : prefab.211 {
+	model_desc: "/prefab/bridge/highway_generic.pmd"
+	prefab_desc: "/prefab/bridge/highway_generic.ppd"
+	use_perlin: false
+}
+prefab_model : prefab.212 {
+	model_desc: "/prefab/roadwork/roadwork_small_uk.pmd"
+	prefab_desc: "/prefab/roadwork/roadwork_small_uk.ppd"
+	use_perlin: false
+}
+prefab_model : prefab.213 {
+	model_desc: "/prefab/cross/hw2-2_x_hw2-2_t_uk.pmd"
+	prefab_desc: "/prefab/cross/hw2-2_x_hw2-2_t_uk.ppd"
+	use_perlin: true
+	detail_veg_max_distance: 25
+}
+prefab_model : prefab.214 {
+	model_desc: "/prefab/cross/r2xr2xr1_sw_roundabout_4m_uk.pmd"
+	prefab_desc: "/prefab/cross/r2xr2xr1_sw_roundabout_4m_uk.ppd"
+	use_perlin: true
+	tweak_detail_vegetation: true
+}
+prefab_model : prefab.215 {
+	model_desc: "/prefab/cross/r2xr2xr1_sw_roundabout_uk.pmd"
+	prefab_desc: "/prefab/cross/r2xr2xr1_sw_roundabout_uk.ppd"
+	use_perlin: true
+	tweak_detail_vegetation: true
+}
+prefab_model : prefab.216 {
+	model_desc: "/prefab/cross/r2xr2_t_sw_roundabout_uk.pmd"
+	prefab_desc: "/prefab/cross/r2xr2_t_sw_roundabout_uk.ppd"
+	use_perlin: true
+	tweak_detail_vegetation: true
+}
+prefab_model : prefab.217 {
+	model_desc: "/prefab/cross/r2xr2_sw_roundabout_uk.pmd"
+	prefab_desc: "/prefab/cross/r2xr2_sw_roundabout_uk.ppd"
+	use_perlin: true
+	tweak_detail_vegetation: true
+}
+prefab_model : prefab.218 {
+	model_desc: "/prefab/cross/hw2-2_x_road1_t_uk.pmd"
+	prefab_desc: "/prefab/cross/hw2-2_x_road1_t_uk.ppd"
+}
+prefab_model : prefab.219 {
+	model_desc: "/prefab/cross/road1_x_road2_t_sidewalk_all_4m_uk.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road2_t_sidewalk_all_4m_uk.ppd"
+}
+prefab_model : prefab.220 {
+	model_desc: "/prefab/cross/road1_x_road1_t_sidewalk_all_nt_4m_uk.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_sidewalk_all_nt_4m_uk.ppd"
+
+}
+prefab_model : prefab.221 {
+	model_desc: "/prefab/cross/road1_x_road1_t_sidewalk_all_4m_uk.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_sidewalk_all_4m_uk.ppd"
+	
+}
+prefab_model : prefab.222 {
+	model_desc: "/prefab/cross/road1_x_road1_t_entrance_4m_uk.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_t_entrance_4m_uk.ppd"
+}
+prefab_model : prefab.223 {
+	model_desc: "/prefab/cross/road1_x_road1_tshape_uk.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_tshape_uk.ppd"
+}
+prefab_model : prefab.224 {
+	model_desc: "/prefab/cross/hw2-2_x_hw2-2_t_small_uk.pmd"
+	prefab_desc: "/prefab/cross/hw2-2_x_hw2-2_t_small_uk.ppd"
+}
+prefab_model : prefab.225 {
+	model_desc: "/prefab/cross/hw_2-2_x_road_1_large_uk.pmd"
+	prefab_desc: "/prefab/cross/hw_2-2_x_road_1_large_uk.ppd"
+}
+prefab_model : prefab.226 {
+	model_desc: "/prefab/cross/hw2-2_x_city2-2_t_large_uk.pmd"
+	prefab_desc: "/prefab/cross/hw2-2_x_city2-2_t_large_uk.ppd"
+        tweak_detail_vegetation: true
+}
+prefab_model : prefab.227 {
+	model_desc: "/prefab/cross/road2_x_road1_t_sidewalk_all_4m_angle_uk.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road1_t_sidewalk_all_4m_angle_uk.ppd"
+}
+prefab_model : prefab.228 {
+	model_desc: "/prefab/cross/road2_x_road2_t_uk.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road2_t_uk.ppd"
+}
+prefab_model : prefab.229 {
+	model_desc: "/prefab/cross/road2_x_road2_t_sidewalk_all_4m_uk.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road2_t_sidewalk_all_4m_uk.ppd"
+}
+prefab_model : prefab.230 {
+	model_desc: "/prefab/fork/hw2-2_x_road_1x_uk.pmd"
+	prefab_desc: "/prefab/fork/hw2-2_x_road_1x_uk.ppd"
+	use_perlin: true
+}
+prefab_model : prefab.231 {
+	model_desc: "/prefab/fork/hw3-3_x_hw2-2_uk.pmd"
+	prefab_desc: "/prefab/fork/hw3-3_x_hw2-2_uk.ppd"
+	use_perlin: true
+}
+prefab_model : prefab.232 {
+	model_desc: "/prefab/fork/city_x_road_1_uk.pmd"
+	prefab_desc: "/prefab/fork/city_x_road_1_uk.ppd"
+	use_perlin: true
+}
+prefab_model : prefab.233 {
+	model_desc: "/prefab/fork/gasstation_fork_2lines_bothsides_uk.pmd"
+	prefab_desc: "/prefab/fork/gasstation_fork_2lines_bothsides_uk.ppd"
+	use_perlin: true
+}
+prefab_model : prefab.234 {
+	model_desc: "/prefab/bridge/bern_bridges/bridge_kornhouse.pmd"
+	prefab_desc: "/prefab/bridge/bern_bridges/bridge_kornhouse.ppd"
+}
+prefab_model : prefab.235 {
+	model_desc: "/prefab/bridge/bern_bridges/bridge_lorraine.pmd"
+	prefab_desc: "/prefab/bridge/bern_bridges/bridge_lorraine.ppd"
+}
+prefab_model : prefab.236 {
+	model_desc: "/prefab/construction/ground_paris.pmd"
+	prefab_desc: "/prefab/construction/ground_paris.ppd"
+	use_perlin: false
+	
+} 
+prefab_model : prefab.237 {
+	model_desc: "/prefab/gas_small/gasstation_small_2_2_uk.pmd"
+	prefab_desc: "/prefab/gas_small/gasstation_small_2_2_uk.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	slow_time: true
+}
+prefab_model : prefab.238 {
+	model_desc: "/prefab/cross/road1_xroad1_t_sidewalk_angle_uk.pmd"
+	prefab_desc: "/prefab/cross/road1_xroad1_t_sidewalk_angle_uk.ppd"
+}
+
+prefab_model : prefab.239 {
+	model_desc: "/prefab/parking/parking_trucks.pmd"
+	prefab_desc: "/prefab/parking/parking_trucks.ppd"
+	use_perlin: true
+	slow_time: true
+}
+
+prefab_model : prefab.240 {
+	model_desc: "/prefab/cross/r2xr2_t_sw_roundabout_4m_ai_straight.pmd"
+	prefab_desc: "/prefab/cross/r2xr2_t_sw_roundabout_4m_ai_straight.ppd"
+	tweak_detail_vegetation: true
+}
+
+prefab_model : prefab.241 {
+	model_desc: "/prefab/fork/road_1_joint.pmd"
+	prefab_desc: "/prefab/fork/road_1_joint.ppd"
+	tweak_detail_vegetation: true
+
+}
+
+prefab_model : prefab.1bus {
+	model_desc: "/prefab/bus_station/base_01/bus_station_01.pmd"
+	prefab_desc: "/prefab/bus_station/base_01/bus_station_01.ppd"
+}
+
+prefab_model : prefab.2bus {
+	model_desc: "/prefab/bus_station/base_01/bus_station_01_uk.pmd"
+	prefab_desc: "/prefab/bus_station/base_01/bus_station_01_uk.ppd"
+}
+
+prefab_model : prefab.3bus {
+	model_desc: "/prefab/bus_station/base_01/bus_station_01b.pmd"
+	prefab_desc: "/prefab/bus_station/base_01/bus_station_01b.ppd"
+}
+
+prefab_model : prefab.4bus {
+	model_desc: "/prefab/bus_station/base_01/bus_station_01b_uk.pmd"
+	prefab_desc: "/prefab/bus_station/base_01/bus_station_01b_uk.ppd"
+}
+
+prefab_model : prefab.5bus {
+	model_desc: "/prefab/bus_station/base_01/bus_station_01c.pmd"
+	prefab_desc: "/prefab/bus_station/base_01/bus_station_01c.ppd"
+
+}
+
+prefab_model : prefab.6bus {
+	model_desc: "/prefab/bus_station/base_02/bus_station_02b.pmd"
+	prefab_desc: "/prefab/bus_station/base_02/bus_station_02b.ppd"
+	tweak_detail_vegetation: true
+}
+
+prefab_model : prefab.7bus {
+	model_desc: "/prefab/bus_station/base_02/bus_station_02b_uk.pmd"
+	prefab_desc: "/prefab/bus_station/base_02/bus_station_02b_uk.ppd"
+	tweak_detail_vegetation: true
+}
+
+prefab_model : prefab.8bus {
+	model_desc: "/prefab/bus_station/base_02/bus_station_02a.pmd"
+	prefab_desc: "/prefab/bus_station/base_02/bus_station_02a.ppd"
+	tweak_detail_vegetation: true
+}
+
+prefab_model : prefab.9bus {
+	model_desc: "/prefab/bus_station/base_02/bus_station_02a_uk.pmd"
+	prefab_desc: "/prefab/bus_station/base_02/bus_station_02a_uk.ppd"
+	tweak_detail_vegetation: true
+}
+
+prefab_model : prefab.10bus {
+	model_desc: "/prefab/bus_station/base_02/bus_station_02c.pmd"
+	prefab_desc: "/prefab/bus_station/base_02/bus_station_02c.ppd"
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.11bus {
+	model_desc: "/prefab/bus_station/base_02/bus_station_02c_uk.pmd"
+	prefab_desc: "/prefab/bus_station/base_02/bus_station_02c_uk.ppd"
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.12bus {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03a1_big.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03a1_big.ppd"
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.13bus {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03b1_big.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03b1_big.ppd"
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.14bus {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03a1_small.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03a1_small.ppd"
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.15bus {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03b1_small.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03b1_small.ppd"
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.16bus {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03a2_big.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03a2_big.ppd"
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.17bus {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03b2_big.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03b2_big.ppd"
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.18bus {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03a2_small.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03a2_small.ppd"
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.19bus {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03b2_small.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03b2_small.ppd"
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.20bus {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03b1_big_8m.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03b1_big_8m.ppd"
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.21bus {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03b2_small_8m.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03b2_small_8m.ppd"
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.22bus {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03a1_small_8m.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03a1_small_8m.ppd"
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.23bus {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03a1_big_8m.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03a1_big_8m.ppd"
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.24bus {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03a2_big_8m.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03a2_big_8m.ppd"
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.25bus {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03b2_big_8m.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03b2_big_8m.ppd"
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.26bus {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03a2_small_8m.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03a2_small_8m.ppd"
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.27bus {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03a2_big_8m_uk.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03a2_big_8m_uk.ppd"
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.28bus {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03a1_small_8m_uk.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03a1_small_8m_uk.ppd"
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.29bus {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03b2_big_8m_uk.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03b2_big_8m_uk.ppd"
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.30bus {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03b1_big_8m_uk.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03b1_big_8m_uk.ppd"
+	tweak_detail_vegetation: true
+
+
+}
+prefab_model : prefab.242 {
+	model_desc: "/prefab/fork/road1_x_small_turn.pmd"
+	prefab_desc: "/prefab/fork/road1_x_small_turn.ppd"
+  tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.243 {
+	model_desc: "/prefab/fork/road1_x_small_turn_t.pmd"
+	prefab_desc: "/prefab/fork/road1_x_small_turn_t.ppd"
+  tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.244 {
+	model_desc: "/prefab/cross/hw_2-2_x_road_1_large_mergelines.pmd"
+	prefab_desc: "/prefab/cross/hw_2-2_x_road_1_large_mergelines.ppd"
+  tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.245 {
+	model_desc: "/prefab/tollgate/tollgate_a2_poland/tollgate_small.pmd"
+	prefab_desc: "/prefab/tollgate/tollgate_a2_poland/tollgate_small.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	slow_time: true
+
+}
+prefab_model : prefab.246 {
+	model_desc: "/prefab/tollgate/tollgate_a4_poland/tollgate.pmd"
+	prefab_desc: "/prefab/tollgate/tollgate_a4_poland/tollgate.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	slow_time: true
+}
+prefab_model : prefab.247 {
+	model_desc: "/prefab/tollgate/tollgate_a1_poland/tollgate.pmd"
+	prefab_desc: "/prefab/tollgate/tollgate_a1_poland/tollgate.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	slow_time: true
+}
+prefab_model : prefab.248 {
+	model_desc: "/prefab/tollgate/tollgate_a1_poland/tollgate_small.pmd"
+	prefab_desc: "/prefab/tollgate/tollgate_a1_poland/tollgate_small.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	slow_time: true
+}
+prefab_model : prefab.249 {
+	model_desc: "/prefab/ikea/ikea_sc.pmd"
+	prefab_desc: "/prefab/ikea/ikea_sc.ppd"
+	use_perlin: false
+	lod_desc:"/prefab/ikea/ikea_sc_lod1.pmd"
+	lod_dist: 200
+}
+prefab_model : prefab.251 {
+	model_desc: "/prefab/meat_processing_co/meat_processing_co_sc.pmd"
+	prefab_desc: "/prefab/meat_processing_co/meat_processing_co_sc.ppd"
+	use_perlin: false
+	lod_desc:"/prefab/meat_processing_co/meat_processing_co_sc_lod1.pmd"
+	lod_dist: 150
+}
+prefab_model : prefab.252 {
+	model_desc: "/prefab/oil_storage/oil_storage_sc_01.pmd"
+	prefab_desc: "/prefab/oil_storage/oil_storage_sc_01.ppd"
+	use_perlin: false
+	lod_desc:"/prefab/oil_storage/oil_storage_sc_01_lod1.pmd"
+	lod_dist: 150
+}
+prefab_model : prefab.254 {
+	model_desc: "/prefab/seafood_company/seafood_company_sc.pmd"
+	prefab_desc: "/prefab/seafood_company/seafood_company_sc.ppd"
+	use_perlin: false
+	lod_desc:"/prefab/seafood_company/seafood_company_sc_lod1.pmd"
+	lod_dist: 200
+}
+prefab_model : prefab.255 {
+	model_desc: "/prefab/supermarket/supermarket_sc.pmd"
+	prefab_desc: "/prefab/supermarket/supermarket_sc.ppd"
+	use_perlin: false
+	lod_desc:"/prefab/supermarket/supermarket_sc_lod1.pmd"
+	lod_dist: 250
+}
+prefab_model : prefab.256 {
+	model_desc: "/prefab/win_pow_part_storage/win_pow_part_storage_sc.pmd"
+	prefab_desc: "/prefab/win_pow_part_storage/win_pow_part_storage_sc.ppd"
+	use_perlin: false
+	lod_desc:"/prefab/win_pow_part_storage/win_pow_part_storage_sc_lod1.pmd"
+	lod_dist: 150
+}
+
+prefab_model : prefab.257 {
+	model_desc: "/prefab/cross/hw2-2_x_city2-2_uk.pmd"
+	prefab_desc: "/prefab/cross/hw2-2_x_city2-2_uk.ppd"
+}
+
+prefab_model : prefab.258 {
+	model_desc: "/prefab/cross/road2_x_road1_t_sidewalk_all_4m_uk.pmd"
+	prefab_desc: "/prefab/cross/road2_x_road1_t_sidewalk_all_4m_uk.ppd"
+}
+
+prefab_model : prefab.259 {
+	model_desc: "/prefab/cross/road1_x_road1_sidewalk_all_4m_uk.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road1_sidewalk_all_4m_uk.ppd"
+}
+
+prefab_model : prefab.260 {
+	model_desc: "/prefab/bridge/storebelt_bridge.pmd"
+	prefab_desc: "/prefab/bridge/storebelt_bridge.ppd"
+	use_perlin: false
+
+
+}
+prefab_model : prefab.261 {
+	model_desc: "/prefab/logistic_company/logistic_company_sc_01.pmd"
+	prefab_desc: "/prefab/logistic_company/logistic_company_sc_01.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	lod_desc:"/prefab/logistic_company/logistic_company_sc_01_lod1.pmd"
+	lod_dist: 150
+
+}
+prefab_model : prefab.262 {
+	model_desc: "/prefab/logistic_company/logistic_company_sc_02.pmd"
+	prefab_desc: "/prefab/logistic_company/logistic_company_sc_02.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	lod_desc:"/prefab/logistic_company/logistic_company_sc_02_lod1.pmd"
+	lod_dist: 150
+
+	
+}
+
+prefab_model : prefab.263 {
+	model_desc: "/prefab/cross/road1_x_road2_t_sidewalk_all_noarrow.pmd"
+	prefab_desc: "/prefab/cross/road1_x_road2_t_sidewalk_all_noarrow.ppd"
+	use_perlin: true
+
+}
+
+prefab_model : prefab.267 {
+	model_desc: "/prefab/fork_temp/sc/fork_road_1_x_2_plus_1_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/fork_road_1_x_2_plus_1_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.268 {
+	model_desc: "/prefab/fork_temp/sc/fork_road_1_x_1_plus_2_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/fork_road_1_x_1_plus_2_tmpl.ppd"
+	category: "dlc_north"
+
+}
+
+prefab_model : prefab.270 {
+	model_desc: "/prefab/fork_temp/sc/r_1x_sw_end_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/r_1x_sw_end_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.271 {
+	model_desc: "/prefab/cross_temp/sc/r1_x_r1_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_x_r1_narrow_tmpl.ppd"
+	category: "dlc_north"		
+}
+
+prefab_model : prefab.272 {
+	model_desc: "/prefab/quarry/quarry_sc.pmd"
+	prefab_desc: "/prefab/quarry/quarry_sc.ppd"
+	use_perlin: false
+	category: "dlc_north"
+	slow_time: true
+
+}
+
+prefab_model : prefab.273 {
+	model_desc: "/prefab/cross_temp/sc/r1_x_r1_t_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_x_r1_t_narrow_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.274 {
+	model_desc: "/prefab/cross_temp/sc/r2_x_r1_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r2_x_r1_narrow_tmpl.ppd"
+	category: "dlc_north"	
+}
+
+prefab_model : prefab.275 {
+	model_desc: "/prefab/cross_temp/sc/r1_x_r2_t_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_x_r2_t_narrow_tmpl.ppd"
+	category: "dlc_north"	
+}
+
+prefab_model : prefab.276 {
+	model_desc: "/prefab/cross_temp/sc/r2_x_r2_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r2_x_r2_narrow_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.277 {
+	model_desc: "/prefab/cross_temp/sc/r2_x_r1_t_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r2_x_r1_t_narrow_tmpl.ppd"
+	category: "dlc_north"	
+}
+
+prefab_model : prefab.278 {
+	model_desc: "/prefab/cross_temp/sc/r2_x_r2_t_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r2_x_r2_t_narrow_tmpl.ppd"
+	category: "dlc_north"	
+}
+prefab_model : prefab.279 {
+	model_desc: "/prefab/garage_scandinavia/garage_poor_sc.pmd"
+	prefab_desc: "/prefab/garage_scandinavia/garage_poor_sc.ppd"
+	use_perlin: false
+	lod_desc:"/prefab/garage_scandinavia/garage_poor_sc_lod1.pmd"
+	lod_dist: 150
+}
+prefab_model : prefab.280 {
+	model_desc: "/prefab/garage_scandinavia/garage_sc.pmd"
+	prefab_desc: "/prefab/garage_scandinavia/garage_sc.ppd"
+	use_perlin: false
+	lod_desc:"/prefab/garage_scandinavia/garage_sc_lod1.pmd"
+	lod_dist: 150
+}
+prefab_model : prefab.281 {
+	model_desc: "/prefab/garage_scandinavia/garage_expensive_sc.pmd"
+	prefab_desc: "/prefab/garage_scandinavia/garage_expensive_sc.ppd"
+	use_perlin: false
+	lod_desc:"/prefab/garage_scandinavia/garage_expensive_sc_lod1.pmd"
+	lod_dist: 150
+}
+prefab_model : prefab.282 {
+	model_desc: "/prefab/logistic_company/logistic_company_sc_03.pmd"
+	prefab_desc: "/prefab/logistic_company/logistic_company_sc_03.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	lod_desc:"/prefab/logistic_company/logistic_company_sc_03_lod1.pmd"
+	lod_dist: 150
+
+}
+prefab_model : prefab.283 {
+	model_desc: "/prefab/logistic_company/logistic_company_sc_04.pmd"
+	prefab_desc: "/prefab/logistic_company/logistic_company_sc_04.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	lod_desc:"/prefab/logistic_company/logistic_company_sc_04_lod1.pmd"
+	lod_dist: 150
+}
+prefab_model : prefab.284 {
+	model_desc: "/prefab/car_dealer/car_dealer_sc_01.pmd"
+	prefab_desc: "/prefab/car_dealer/car_dealer_sc_01.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+
+}
+prefab_model : prefab.286 {
+	model_desc: "/prefab/truck_dealer_small/truck_dealer_small_sc.pmd"
+	prefab_desc: "/prefab/truck_dealer_small/truck_dealer_small_sc.ppd"
+	use_perlin: false
+	lod_desc:"/prefab/truck_dealer_small/truck_dealer_small_sc_lod1.pmd"
+	lod_dist: 150	
+}
+
+prefab_model : prefab.287 {
+	model_desc: "/prefab/service/service_sc.pmd"
+	prefab_desc: "/prefab/service/service_sc.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	lod_desc:"/prefab/service/service_sc_lod1.pmd"
+	lod_dist: 150		
+}
+prefab_model : prefab.288 {
+	model_desc: "/prefab/recruitment_agency/recruitment_agency_sc.pmd"
+	prefab_desc: "/prefab/recruitment_agency/recruitment_agency_sc.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true
+	lod_desc:"/prefab/recruitment_agency/recruitment_agency_sc_lod1.pmd"
+	lod_dist: 150		
+}
+
+prefab_model : prefab.289 {
+	model_desc: "/prefab/supermarket/supermarket_small_sc.pmd"
+	prefab_desc: "/prefab/supermarket/supermarket_small_sc.ppd"
+	use_perlin: false
+	tweak_detail_vegetation: true	
+	lod_desc:"/prefab/supermarket/supermarket_small_sc_lod1.pmd"
+	lod_dist: 150		
+
+}
+
+prefab_model : prefab.292 {
+	model_desc: "/prefab/cross_temp/sc/r1_x_r1_t_enter_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_x_r1_t_enter_narrow_tmpl.ppd"
+	category: "dlc_north"	
+}
+
+prefab_model : prefab.293 {
+	model_desc: "/prefab/cross_temp/sc/r1_x_r1_enter_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_x_r1_enter_narrow_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.294 {
+	model_desc: "/prefab/cross_temp/sc/r2_x_r1_t_enter_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r2_x_r1_t_enter_narrow_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.295 {
+	model_desc: "/prefab/fork_temp/sc/r_sw_end_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/r_sw_end_tmpl.ppd"
+	category: "dlc_north"
+
+}
+
+prefab_model : prefab.297 {
+	model_desc: "/prefab/fork_temp/sc/r1_joint_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/r1_joint_narrow_tmpl.ppd"
+	category: "dlc_north"
+
+}
+
+prefab_model : prefab.298 {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03b1_big_tmpl.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03b1_big_tmpl.ppd"
+	use_perlin: true
+	category: "dlc_north"
+
+}
+prefab_model : prefab.299 {
+	model_desc: "/prefab/bus_station/base_03/bus_station_03b1_small_tmpl.pmd"
+	prefab_desc: "/prefab/bus_station/base_03/bus_station_03b1_small_tmpl.ppd"
+	use_perlin: true
+	category: "dlc_north"	
+}
+
+prefab_model : prefab.300 {
+	model_desc: "/prefab/gas_scandinavia/gas_small_road_sc.pmd"
+	prefab_desc: "/prefab/gas_scandinavia/gas_small_road_sc.ppd"
+	use_perlin: false
+	category: "dlc_north"
+	slow_time: true
+#	lod_desc:"/prefab/gas_scandinavia/gas_small_road_sc_lod1.pmd"
+#	lod_dist: 100
+
+}
+
+prefab_model : prefab.301 {
+	model_desc: "/prefab/gas_scandinavia/gas_corner_sc.pmd"
+	prefab_desc: "/prefab/gas_scandinavia/gas_corner_sc.ppd"
+	use_perlin: false
+	category: "dlc_north"
+	slow_time: true
+	lod_desc:"/prefab/gas_scandinavia/gas_corner_sc_lod1.pmd"
+	lod_dist: 100
+
+}
+
+prefab_model : prefab.302 {
+	model_desc: "/prefab/cross_temp/sc/r1_x_r1_y_sw_round_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_x_r1_y_sw_round_narrow_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.303 {
+	model_desc: "/prefab/cross_temp/sc/r1_x_r1_t_sw_round_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_x_r1_t_sw_round_narrow_tmpl.ppd"
+	category: "dlc_north"	
+}
+
+prefab_model : prefab.304 {
+	model_desc: "/prefab/cross_temp/sc/r1_x_r1_sw_round_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_x_r1_sw_round_narrow_tmpl.ppd"
+	category: "dlc_north"	
+}
+
+prefab_model : prefab.305 {
+	model_desc: "/prefab/cross_temp/sc/r2_x_r2_sw_round_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r2_x_r2_sw_round_narrow_tmpl.ppd"
+	category: "dlc_north"	
+}
+
+prefab_model : prefab.306 {
+	model_desc: "/prefab/cross_temp/sc/r2_x_r1_sw_round_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r2_x_r1_sw_round_narrow_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.307 {
+	model_desc: "/prefab/cross_temp/sc/r1_x_r1_r2_sw_round_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_x_r1_r2_sw_round_narrow_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.308 {
+	model_desc: "/prefab/cross_temp/sc/r1_x_r2_t_sw_round_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_x_r2_t_sw_round_narrow_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.309 {
+	model_desc: "/prefab/cross_temp/sc/r2_x_r1_t_sw_round_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r2_x_r1_t_sw_round_narrow_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.310 {
+	model_desc: "/prefab/cross_temp/sc/r2_x_r2_t_sw_round_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r2_x_r2_t_sw_round_narrow_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.311 {
+	model_desc: "/prefab/cross_temp/sc/r1_narrow_x_r1_minim_t_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_narrow_x_r1_minim_t_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.312 {
+	model_desc: "/prefab/cross_temp/sc/r2_narrow_x_r1_minim_t_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r2_narrow_x_r1_minim_t_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.313 {
+	model_desc: "/prefab/cross_temp/sc/r1_narrow_x_r1_minim_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_narrow_x_r1_minim_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.314 {
+	model_desc: "/prefab/fork_temp/sc/r_1x_sw_end_short_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/r_1x_sw_end_short_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.315 {
+	model_desc: "/prefab/fork_temp/sc/r_sw_end_short_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/r_sw_end_short_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.316 {
+	model_desc: "/prefab/cross_temp/sc/r1_x_r1_y_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_x_r1_y_narrow_tmpl.ppd"
+	category: "dlc_north"
+
+}
+
+prefab_model : prefab.317 {
+	model_desc: "/prefab/construction_dock/basement_sc.pmd"
+	prefab_desc: "/prefab/construction_dock/basement_sc.ppd"
+	use_perlin: false
+	lod_desc:"/prefab/construction_dock/basement_sc_lod1.pmd"
+	lod_dist: 200
+
+}
+
+prefab_model : prefab.318 {
+	model_desc: "/prefab/cross_temp/sc/r2_x_r1_y_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r2_x_r1_y_narrow_tmpl.ppd"
+	category: "dlc_north"
+
+}
+
+prefab_model : prefab.319 {
+	model_desc: "/prefab/construction_dock/small_blocks_of_flats_sc.pmd"
+	prefab_desc: "/prefab/construction_dock/small_blocks_of_flats_sc.ppd"
+	use_perlin: false
+	category: "dlc_north"
+	lod_desc:"/prefab/construction_dock/small_blocks_of_flats_sc_lod1.pmd"
+	lod_dist: 150
+}
+
+prefab_model : prefab.320 {
+	model_desc: "/prefab/truck_dealer/truck_dealer_sc.pmd"
+	prefab_desc: "/prefab/truck_dealer/truck_dealer_sc.ppd"
+	use_perlin: false
+	category: "dlc_north"
+
+}
+
+prefab_model : prefab.321 {
+	model_desc: "/prefab/construction_dock/bridge_sc.pmd"
+	prefab_desc: "/prefab/construction_dock/bridge_sc.ppd"
+	use_perlin: false
+	category: "dlc_north"
+	lod_desc:"/prefab/construction_dock/bridge_sc_lod1.pmd"
+	lod_dist: 150
+}
+
+prefab_model : prefab.322 {
+	model_desc: "/prefab/bridge/highway_bridge_short_sc.pmd"
+	prefab_desc: "/prefab/bridge/highway_bridge_short_sc.ppd"
+	use_perlin: false
+}
+
+prefab_model : prefab.323 {
+	model_desc: "/prefab/bridge/highway_bridge_sc.pmd"
+	prefab_desc: "/prefab/bridge/highway_bridge_sc.ppd"
+	use_perlin: false
+
+}
+
+prefab_model : prefab.324 {
+	model_desc: "/prefab/bridge/bridge_short_sc.pmd"
+	prefab_desc: "/prefab/bridge/bridge_short_sc.ppd"
+	use_perlin: false
+
+}
+
+prefab_model : prefab.325 {
+	model_desc: "/prefab/fork_temp/sc/hw2_one_way_joint_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/hw2_one_way_joint_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.326 {
+	model_desc: "/prefab/fork_temp/sc/road1_split_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/road1_split_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.327 {
+	model_desc: "/prefab/fork_temp/sc/exit_road_joint_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/exit_road_joint_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.328 {
+	model_desc: "/prefab/fork_temp/sc/hw2-hw2_exit_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/hw2-hw2_exit_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.329 {
+	model_desc: "/prefab/fork_temp/sc/hw2_exit_joint_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/hw2_exit_joint_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.330 {
+	model_desc: "/prefab/oil_storage/oil_storage_sc_02.pmd"
+	prefab_desc: "/prefab/oil_storage/oil_storage_sc_02.ppd"
+	use_perlin: false
+	lod_desc:"/prefab/oil_storage/oil_storage_sc_02_lod1.pmd"
+	lod_dist: 150
+}
+prefab_model : prefab.331 {
+	model_desc: "/prefab/oil_storage/oil_storage_sc_03.pmd"
+	prefab_desc: "/prefab/oil_storage/oil_storage_sc_03.ppd"
+	use_perlin: false
+	lod_desc:"/prefab/oil_storage/oil_storage_sc_03_lod1.pmd"
+	lod_dist: 150
+}
+
+prefab_model : prefab.332 {
+	model_desc: "/prefab/fork_temp/sc/hw2_one_way_joint_mirrored_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/hw2_one_way_joint_mirrored_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.333 {
+	model_desc: "/prefab/fork_temp/sc/exit_road_joint_mirrored_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/exit_road_joint_mirrored_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.334 {
+	model_desc: "/prefab/fork_temp/sc/hw2-hw2_exit_mirrored_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/hw2-hw2_exit_mirrored_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.335 {
+	model_desc: "/prefab/fork_temp/sc/hw2_exit_joint_mirrored_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/hw2_exit_joint_mirrored_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.336 {
+	model_desc: "/prefab/oil_storage/oil_storage_sc_04.pmd"
+	prefab_desc: "/prefab/oil_storage/oil_storage_sc_04.ppd"
+	use_perlin: false
+	lod_desc:"/prefab/oil_storage/oil_storage_sc_04_lod1.pmd"
+	lod_dist: 150
+}
+
+prefab_model : prefab.337 {
+	model_desc: "/prefab/quarry/quarry_sc_02.pmd"
+	prefab_desc: "/prefab/quarry/quarry_sc_02.ppd"
+	category: "dlc_north"
+	use_perlin: false
+	slow_time: true
+
+}
+
+prefab_model : prefab.338 {
+	model_desc: "/prefab/quarry/quarry_sc_03.pmd"
+	prefab_desc: "/prefab/quarry/quarry_sc_03.ppd"
+	category: "dlc_north"
+	use_perlin: false
+	slow_time: true
+
+}
+
+prefab_model : prefab.339 {
+	model_desc: "/prefab/fork_temp/sc/r1_narrow_end_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/r1_narrow_end_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.340 {
+	model_desc: "/prefab/fork_temp/sc/r_narrow_end_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/r_narrow_end_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.341 {
+	model_desc: "/prefab/fork_temp/sc/exit_road_joint_short_mirrored_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/exit_road_joint_short_mirrored_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.342 {
+	model_desc: "/prefab/fork_temp/sc/exit_road_joint_short_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/exit_road_joint_short_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.343 {
+	model_desc: "/prefab/cross_temp/sc/r1_x_r1_t_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_x_r1_t_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.344 {
+	model_desc: "/prefab/cross_temp/sc/r1_x_r1_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_x_r1_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.345 {
+	model_desc: "/prefab/cross_temp/sc/r1_x_r1_t_round_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_x_r1_t_round_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.346 {
+	model_desc: "/prefab/cross_temp/sc/r1_x_r1_round_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_x_r1_round_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.347 {
+	model_desc: "/prefab/fork_temp/sc/hw_exit_joint_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/hw_exit_joint_narrow_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.348 {
+	model_desc: "/prefab/roadwork/roadwork_small_sc_01.pmd"
+	prefab_desc: "/prefab/roadwork/roadwork_small_sc_01.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.349 {
+	model_desc: "/prefab/fork_temp/sc/switch_1_2_road_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/switch_1_2_road_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.350 {
+	model_desc: "/prefab/fork_temp/sc/switch_2_1_road_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/switch_2_1_road_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.351 {
+	model_desc: "/prefab/cross_temp/sc/r1_x_r1_t_minim_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_x_r1_t_minim_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.352 {
+	model_desc: "/prefab/cross_temp/sc/r1_minim_x_r1_t_minim_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_minim_x_r1_t_minim_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.353 {
+	model_desc: "/prefab/cross_temp/sc/r1_x_r1_y_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_x_r1_y_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.354 {
+	model_desc: "/prefab/cross_temp/sc/r1_x_r1_minim_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_x_r1_minim_tmpl.ppd"
+	category: "dlc_north"
+}
+ 
+prefab_model : prefab.355 {
+	model_desc: "/prefab/fork/hw_2lanes_1way_joint.pmd"
+	prefab_desc: "/prefab/fork/hw_2lanes_1way_joint.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.356 {
+	model_desc: "/prefab/cross_temp/sc/r1_x_r1_tshape_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_x_r1_tshape_tmpl.ppd"
+	category: "dlc_north"
+}
+ 
+prefab_model : prefab.357 {
+	model_desc: "/prefab/fork_temp/sc/r1_joint_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/r1_joint_tmpl.ppd"
+	category: "dlc_north"
+}
+ 
+prefab_model : prefab.358 {
+	model_desc: "/prefab/fork_temp/sc/fork_r2_x_r1_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/sc/fork_r2_x_r1_tmpl.ppd"
+	category: "dlc_north"
+  
+}
+
+prefab_model : prefab.360 {
+	model_desc: "/prefab/cross_temp/sc/r1_x_r1_t_minim_field_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_x_r1_t_minim_field_tmpl.ppd"
+	category: "dlc_north"
+}
+
+prefab_model : prefab.361 {
+	model_desc: "/prefab/cross_temp/sc/r1_narrow_x_r1_sidewalk_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/sc/r1_narrow_x_r1_sidewalk_tmpl.ppd"
+	category: "dlc_north"
+
+	
+}
+prefab_model : prefab.362 {
+	model_desc: "/prefab/truck_dealer/truck_dealer_sc.pmd"
+	prefab_desc: "/prefab/truck_dealer/truck_dealer_sc_company.ppd"
+	use_perlin: false
+	category: "dlc_north"
+}
+
+prefab_model : prefab.363 {
+	model_desc: "/prefab/truck_dealer/truck_dealer_02.pmd"
+	prefab_desc: "/prefab/truck_dealer/truck_dealer_02_company.ppd"
+	use_perlin: false
+}
+
+prefab_model : prefab.364 {
+	model_desc: "/prefab/fork_temp/fr/fr_exit_road_joint_mirrored_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_exit_road_joint_mirrored_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.365 {
+	model_desc: "/prefab/fork_temp/fr/fr_exit_road_joint_short_mirrored_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_exit_road_joint_short_mirrored_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.366 {
+	model_desc: "/prefab/fork_temp/fr/fr_exit_road_joint_short_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_exit_road_joint_short_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.367 {
+	model_desc: "/prefab/fork_temp/fr/fr_exit_road_joint_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_exit_road_joint_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.369 {
+	model_desc: "/prefab/fork_temp/fr/fr_hw2_exit_joint_mirrored_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_hw2_exit_joint_mirrored_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.370 {
+	model_desc: "/prefab/fork_temp/fr/fr_hw2_exit_joint_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_hw2_exit_joint_tmpl.ppd"
+	category: "dlc_fr"
+	}
+
+prefab_model : prefab.371 {
+	model_desc: "/prefab/fork_temp/fr/fr_hw2_one_way_joint_mirrored_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_hw2_one_way_joint_mirrored_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.372 {
+	model_desc: "/prefab/fork_temp/fr/fr_hw2_one_way_joint_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_hw2_one_way_joint_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.373 {
+	model_desc: "/prefab/fork_temp/fr/fr_hw2-hw2_exit_mirrored_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_hw2-hw2_exit_mirrored_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.374 {
+	model_desc: "/prefab/fork_temp/fr/fr_hw2-hw2_exit_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_hw2-hw2_exit_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.375 {
+	model_desc: "/prefab/fork_temp/fr/fr_road1_split_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_road1_split_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.376 {
+	model_desc: "/prefab/fork_temp/fr/fr_hw2_fork_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_hw2_fork_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.377 {
+	model_desc: "/prefab/fork_temp/fr/fr_hw3_fork_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_hw3_fork_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.378 {
+	model_desc: "/prefab/fork_temp/fr/fr_hw3_exit_joint_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_hw3_exit_joint_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.379 {
+	model_desc: "/prefab/fork_temp/fr/fr_hw3-hw3_exit_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_hw3-hw3_exit_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.380 {
+	model_desc: "/prefab/fork_temp/fr/fr_hw3_exit_joint_mirrored_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_hw3_exit_joint_mirrored_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.381 {
+	model_desc: "/prefab/fork_temp/fr/fr_hw3-hw3_exit_mirrored_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_hw3-hw3_exit_mirrored_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.382 {
+	model_desc: "/prefab/fork_temp/fr/fr_road1_hw_split_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_road1_hw_split_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.383 {
+	model_desc: "/prefab/fork_temp/fr/fr_hw2-hw1_joint_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_hw2-hw1_joint_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.384 {
+	model_desc: "/prefab/fork_temp/fr/fr_r1-r1_1m_joint_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_r1-r1_1m_joint_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.385 {
+	model_desc: "/prefab/fork_temp/fr/fr_hw3_split_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_hw3_split_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.386 {
+	model_desc: "/prefab/cross_temp/fr/fr_r1_x_r1_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/fr/fr_r1_x_r1_narrow_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.387 {
+	model_desc: "/prefab/cross_temp/fr/fr_r1_x_r1_t_narrow_tmpl.pmd"
+	prefab_desc: "/prefab/cross_temp/fr/fr_r1_x_r1_t_narrow_tmpl.ppd"
+	category: "dlc_fr"
+}
+
+prefab_model : prefab.388 {
+	model_desc: "/prefab/fork_temp/fr/fr_hw3_split_mirrored_tmpl.pmd"
+	prefab_desc: "/prefab/fork_temp/fr/fr_hw3_split_mirrored_tmpl.ppd"
+	category: "dlc_fr"
+	
+	
+}
+}

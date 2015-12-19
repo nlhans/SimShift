@@ -442,12 +442,12 @@ namespace SimShift.Dialogs
             var ets2 = ((Ets2DataMiner) Main.Data.Active);
             var ets2Data = ets2.MyTelemetry;
             
-            var citySrc = Encoding.UTF8.GetString(ets2Data.jobCitySource);
-            var cityDst = Encoding.UTF8.GetString(ets2Data.jobCityDestination);
-            var trailer = Encoding.UTF8.GetString(ets2Data.trailerName);
-            var trailerWeight = ets2Data.trailerMass/1000.0f;
+            var citySrc = ets2Data.Job.CitySource;
+            var cityDst = ets2Data.Job.CityDestination;
+            var trailer = ets2Data.Job.TrailerName;
+            var trailerWeight = ets2Data.Job.Mass/1000.0f;
 
-            var str = ets2.TrailerName.Length>2 ? string.Format("Transporting:\r\n{0} from {1} to {2}", trailer, citySrc, cityDst) : "Empty!";
+            var str = ets2Data.Job.TrailerName.Length>2 ? string.Format("Transporting:\r\n{0} from {1} to {2}", trailer, citySrc, cityDst) : "Empty!";
 
             g.DrawString(str, new Font("Verdana", 8.0f), Brushes.DarkOrange, 0, 170);
             return;

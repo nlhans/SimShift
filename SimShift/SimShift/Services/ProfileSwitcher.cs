@@ -61,7 +61,7 @@ namespace SimShift.Services
                             //
                             var ets2miner = (Ets2DataMiner) Main.Data.Active;
                             var ets2telemetry = ets2miner.MyTelemetry;
-                            Main.LoadNextProfile(ets2telemetry.trailerMass);
+                            Main.LoadNextProfile(ets2telemetry.Job.Mass);
                         }
                         else
                         {
@@ -98,11 +98,11 @@ namespace SimShift.Services
                 //
                 var ets2miner = (Ets2DataMiner) data;
                 var ets2telemetry = ets2miner.MyTelemetry;
-                var trailerAttached = ets2telemetry.flags[1] == 1;
+                var trailerAttached = ets2telemetry.Job.TrailerAttached;
                 if (trailerAttached != TrailerAttached)
                 {
                     TrailerAttached = trailerAttached;
-                    Main.ReloadProfile(trailerAttached ? ets2telemetry.trailerMass : 0);
+                    Main.ReloadProfile(trailerAttached ? ets2telemetry.Job.Mass : 0);
                 }
             }
         }

@@ -103,15 +103,23 @@ namespace SimShift.Data
             }
         }
 
+        private bool caBusy = false;
         void _checkApplications_Elapsed(object sender, ElapsedEventArgs e)
         {
+            if (caBusy) return;
+            caBusy = true;
+
             var prcsList = Process.GetProcesses();
 
             // Do it for the manual selected sim
             if (!AutoMode)
             {
                 var app = this.Active;
-                if (app == null) return;
+                if (app == null)
+                {
+                    caBusy = false;
+                    return;
+                }
                 // Search for the process
                 bool wasRuning = app.Running;
                 app.Running = prcsList.Any(x => x.ProcessName.ToLower() == app.Application.ToLower());
@@ -172,6 +180,7 @@ namespace SimShift.Data
                     }
                 }
             }
+            caBusy = false;
         }
 
         public void Run()

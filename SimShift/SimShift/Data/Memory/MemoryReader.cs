@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Timers;
+using SimShift.Data.Memory;
 
 namespace SimTelemetry.Domain.Memory
 {
@@ -89,6 +90,8 @@ namespace SimTelemetry.Domain.Memory
                 var regionInfo = new MemoryReaderApi.MEMORY_BASIC_INFORMATION();
                 if (MemoryReaderApi.VirtualQueryEx(_Process.Handle, memRegionAddr, out regionInfo, (uint)Marshal.SizeOf(regionInfo)) != 0)
                 {
+                    if (regionInfo.BaseAddress.ToInt64() + regionInfo.RegionSize >= 0x80000000)
+                        break;
                     memRegionAddr = new IntPtr(regionInfo.BaseAddress.ToInt32() + regionInfo.RegionSize);
                     if ((regionInfo.State & 0x10000) != 0) // MemoryReaderApi.PageFlags.Free)
                         continue;

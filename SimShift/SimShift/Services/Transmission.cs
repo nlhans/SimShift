@@ -262,7 +262,7 @@ namespace SimShift.Services
                 if (Main.Data.Active.Application == "eurotrucks2")
                 {
                     var ets2Miner = (Ets2DataMiner) (data);
-                    var maxGears = (int) Math.Round(Main.Drivetrain.Gears*(1-ets2Miner.MyTelemetry.wearTransmission));
+                    var maxGears = (int) Math.Round(Main.Drivetrain.Gears*(1-ets2Miner.MyTelemetry.Damage.WearTransmission));
 
                     if (idealGear >= maxGears)
                         idealGear = maxGears;

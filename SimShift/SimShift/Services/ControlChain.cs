@@ -26,22 +26,25 @@ namespace SimShift.Services
         public ControlChain()
         {
             chain.Add(new ThrottleMapping());
-            chain.Add(Main.CruiseControl);
+            chain.Add(Main.LaneAssistance);
             chain.Add(Main.Speedlimiter);
+            //chain.Add(Main.CruiseControl);
+            chain.Add(Main.ACC);
             if (Main.VST)
                 chain.Add(Main.VariableSpeedControl);
             else
                 chain.Add(Main.Transmission);
             chain.Add(Main.Antistall);
             chain.Add(Main.TractionControl);
-            chain.Add(Main.LaunchControl);
+            //chain.Add(Main.LaunchControl);
             chain.Add(Main.ProfileSwitcher);
             chain.Add(Main.DrivetrainCalibrator);
             chain.Add(Main.CameraHorizon);
-            chain.Add(Main.LaneAssistance);
             chain.Add(new EarlyClutch());
             chain.Add(new WheelTorqueLimiter());
-            chain.Add(new Ets2PowerMeter());
+            //chain.Add(new Ets2PowerMeter());
+            chain.Add(new Dashboard());
+            //chain.Add(Main.TransmissionCalibrator);
 
 
             Axis.Add(JoyControls.Steering);
@@ -72,7 +75,10 @@ namespace SimShift.Services
             {
                 axisProgression.Add(a, new Dictionary<string, double>());
                 foreach (var m in chain)
-                    axisProgression[a].Add(m.GetType().Name, 0);
+                {
+                    if (m != null)
+                        axisProgression[a].Add(m.GetType().Name, 0);
+                }
             }
 
         }
@@ -128,7 +134,7 @@ namespace SimShift.Services
                     return false;
             }
 
-            return true;
+            return arg.Enabled;
         }
     }
 }

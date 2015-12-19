@@ -4,14 +4,22 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Drawing.Text;
 using System.Linq;
 using System.Media;
 using System.Text;
 using System.Windows.Forms;
+using AForge;
 using AForge.Imaging;
 using AForge.Imaging.Filters;
+using Ets2SdkClient;
+using MathNet.Numerics;
+using Microsoft.Win32.SafeHandles;
+using SimShift.Data;
 using SimShift.Data.Common;
+using SimShift.Dialogs;
 using SimShift.Entities;
+using SimShift.MapTool;
 using SimShift.Utils;
 
 namespace SimShift.Services
@@ -32,17 +40,11 @@ namespace SimShift.Services
     {
         private float speed = 0.0f;
 
-        public bool Enabled { get { return Active; } }
+        public bool Enabled { get { return true; } }
         public bool Active { get; private set; }
 
         public IEnumerable<string> SimulatorsOnly { get { return new String[0]; } }
         public IEnumerable<string> SimulatorsBan { get { return new String[0]; } }
-
-        //
-        public const bool UseDirectXCapture = false;
-
-        public static Bitmap CameraInput;
-        public static Bitmap CameraOutput;
 
         public double SteerAngle { get; private set; }
         public double LockedSteerAngle { get; private set; }
@@ -51,46 +53,6 @@ namespace SimShift.Services
 
         private SoundPlayer beep = new SoundPlayer(@"C:\Projects\Software\SimShift\Resources\alert.wav");
         public DateTime ButtonCooldownPeriod = DateTime.Now;
-
-        public DateTime LastStripeDetect = DateTime.Now;
-        public bool LastStripeDetectInvalid { get { return DateTime.Now > LastStripeDetect; } }
-
-        private Timer ScanMirrorTimer = new Timer();
-        
-        public LaneAssistance()
-        {
-            Main.Data.AppActive += new EventHandler(Data_AppActive);
-            Main.Data.AppInactive += new EventHandler(Data_AppInactive);
-            ets2Handle = IntPtr.Zero;
-
-            ScanMirrorTimer.Interval = 100;
-            ScanMirrorTimer.Tick += new EventHandler(ScanMirrorTimer_Tick);
-            //ScanMirrorTimer.Start();
-
-            CameraInput = new Bitmap(mirrorWidth*2, mirrorHeight);
-            CameraOutput = new Bitmap(mirrorWidth * 2, mirrorHeight);
-        }
-
-        void ScanMirrorTimer_Tick(object sender, EventArgs e)
-        {
-            keepAlive++;
-            if(Active|| keepAlive % 5 == 0)
-            ScanMirrors();
-        }
-
-        void Data_AppInactive(object sender, EventArgs e)
-        {
-            ets2Handle = IntPtr.Zero;
-        }
-
-        void Data_AppActive(object sender, EventArgs e)
-        {
-            // euro truck simulator 2
-            if (Main.Data.Active.Application.Contains("ruck"))
-            {
-                ets2Handle = Main.Data.Active.ActiveProcess.MainWindowHandle;
-            }
-        }
 
         #region Implementation of IControlChainObj
 
@@ -132,30 +94,8 @@ namespace SimShift.Services
             {
                 Active = !Active;
                 ButtonCooldownPeriod = DateTime.Now.Add(new TimeSpan(0, 0, 0, 1));
-                LastStripeDetect = DateTime.Now.Add(new TimeSpan(0, 0, 0, 500));
-                driveOnRightMirror = false;
-                driveOnLeftMirror = false;
                 LockedSteerAngle = Main.GetAxisIn(JoyControls.Steering);
                 Debug.WriteLine("Setting lane assistance to: " + Active);
-            }
-
-            if (Active && LastStripeDetectInvalid)
-            {
-                Active = false;
-                Debug.WriteLine("[LA] Vision error");
-            }
-
-            if (Active && UseDirectXCapture && ets2Handle == IntPtr.Zero)
-            {
-                Active = false;
-                Debug.WriteLine("[LA] No ETS2 handle");
-            }
-
-            // We can't do speeding with this mod..
-            if (Active && Main.Data.Active.Telemetry.Speed > 110)
-            {
-                Active = false;
-                Debug.WriteLine("[LA] User speeding >110kmh");
             }
 
             var currentSteerAngle = Main.GetAxisIn(JoyControls.Steering);
@@ -174,403 +114,241 @@ namespace SimShift.Services
         }
 
         private int keepAlive = 0;
+
+        public static Ets2Item currentRoad { get; private set; }
+        public static Ets2Point hook { get; private set; }
+        public static PointF lookPoint { get; private set; }
+        public static double yawRoad { get; private set; }
+
+        private List<Ets2NavigationSegment> NearbySegments = new List<Ets2NavigationSegment>(); 
+
         public void TickTelemetry(IDataMiner data)
         {
             speed = data.Telemetry.Speed;
 
             if (true)
             {
-                if (validLeftMirror || validRightMirror)
+                var ets2Tel = (Ets2DataMiner) data;
+                var x = ets2Tel.MyTelemetry.Physics.CoordinateX;
+                var z = ets2Tel.MyTelemetry.Physics.CoordinateZ;
+                var yaw = 2*Math.PI*(ets2Tel.MyTelemetry.Physics.RotationX);
+                var lah = 1.5f + ets2Tel.MyTelemetry.Physics.SpeedKmh/100.0f*7.5f;
+                x += (float)Math.Sin(yaw)*-lah;
+                z += (float)Math.Cos(yaw) * -lah;
+                var me = new Ets2Point(x, 0, z, (float)yaw);
+                lookPoint = new PointF(x, z);
+                // Get map
+                var map = Main.LoadedMap;
+                var route = dlMap.Route;
+
+                if (map == null || route == null)
                 {
-                    LastStripeDetect = DateTime.Now.Add(new TimeSpan(0, 0, 0, 500));
+                    Active = false;
+                    return;
                 }
 
-                int inputValue = 0;
+                bool firstTry = true;
+                Ets2NavigationSegment activeSegment = default(Ets2NavigationSegment);
+                var activeSegmentOption = default(Ets2NavigationSegment.Ets2NavigationSegmentOption);
+                float dist = float.MaxValue;
 
-                if (validRightMirror && validLeftMirror)
+            rescanSegment:
+                // Find closest segment
+                for (int segI = 0; segI < NearbySegments.Count; segI++)
                 {
-                    // Go for right, as we drive mostly on the right in Europe
-                    inputValue = xRight;
-                    driveOnRightMirror = true;
-                    driveOnLeftMirror = false;
-                }
-                else if (validLeftMirror && !validRightMirror)
-                {
-                    inputValue = xLeft;
-                    driveOnRightMirror = false;
-                    driveOnLeftMirror = true;
-                }
-                else if (validRightMirror && !validLeftMirror)
-                {
-                    inputValue = xRight;
-
-                    driveOnRightMirror = true;
-                    driveOnLeftMirror = false;
-
-                }
-                else
-                {
-                    if (driveOnLeftMirror) inputValue = xLeft;
-                    else if (driveOnRightMirror) inputValue = xRight;
-                    else if (false)
+                    var seg = NearbySegments[segI];
+                    if (seg == null)
+                        continue;
+                    if (!seg.Solutions.Any())
                     {
-                        Debug.WriteLine("[LA] Vision error; no stripe found");
-                        Active = false;
-                        beep.Play();
+                        continue;
+                    }
+
+                    foreach (var sol in seg.Solutions)
+                    {
+                        if (sol.HiResPoints == null || !sol.HiResPoints.Any())
+                            NearbySegments[segI].GenerateHiRes(sol);
+
+                        var dst = sol.HiResPoints.Min(k => k.DistanceTo(me));
+                        if (dist > dst)
+                        {
+                            dist = dst;
+                            activeSegment = NearbySegments[segI];
+                            activeSegmentOption = sol;
+                        }
+                    }
+
+                }
+                if (!NearbySegments.Any(k => k != null) || dist > 5)
+                {
+                    FindNewSegments(route, me);
+                    if (firstTry)
+                    {
+                        firstTry = false;
+                        goto rescanSegment;
+                    }
+                    else
+                    {
+                        //beep.Play();
+                        //Active = false;
+                        //return;
                     }
                 }
 
-                double lineDistanceError = inputValue - mirrorWidth / 2;
-                //lineDistanceError *= -1;
-                if (driveOnLeftMirror) lineDistanceError = 0 - lineDistanceError;
-                var angleDistancError = aRight - 122;
+                if (activeSegmentOption == null)
+                    return;
 
-                //dead zone 2 pixels
-                if (Math.Abs(angleDistancError) > 30 && Active)
+                var lineDistanceError = 0.0;
+                var angleDistancError = 0.0;
+
+                Ets2Point bestPoint = default(Ets2Point);
+                Ets2Point bestPointP1 = default(Ets2Point);
+                double bestDistance = double.MaxValue;
+
+                for (var k = 0; k < activeSegmentOption.HiResPoints.Count; k++)
                 {
-                    beep.Play();
+                    var distance = me.DistanceTo(activeSegmentOption.HiResPoints[k]);
+                    if (bestDistance > Math.Abs(distance))
+                    {
+                        bestDistance = Math.Abs(distance);
+                        if (k + 1 == activeSegmentOption.HiResPoints.Count)
+                        {
+                            bestPoint = activeSegmentOption.HiResPoints[k - 1];
+                            bestPointP1 = activeSegmentOption.HiResPoints[k];
+                        }
+                        else
+                        {
+                            bestPoint = activeSegmentOption.HiResPoints[k];
+                            var m = k;
+                            do
+                            {
+                                m++;
+                                if (m >= activeSegmentOption.HiResPoints.Count)
+                                    break;
+                                bestPointP1 = activeSegmentOption.HiResPoints[m];
+                            } while (bestPoint.DistanceTo(bestPointP1) < 0.1f && m + 1 < activeSegmentOption.HiResPoints.Count);
+                        }
+                    }
                 }
+                var min = activeSegmentOption.HiResPoints.Min(k => k.DistanceTo(me));
+                if (bestPoint == null)
+                    return;
 
-                var totalSteerError = lineDistanceError/125 + angleDistancError/35;
-                var steerErrorGain = 0.5 - 0.5*(data.Telemetry.Speed*3.6/70);
-                if (steerErrorGain < 0.17) steerErrorGain = 0.17;
-                SteerAngle = SteerAngle*0.2 + 0.8*(0.5 + totalSteerError*steerErrorGain);
-                
-                var steerAngleScaler = 1 - speed *3.6/ 80.0f;
-                if (steerAngleScaler < 0.35) steerAngleScaler = 0.35f;
-                SteerAngle -= 0.5f;
-                SteerAngle *= steerAngleScaler;
-                SteerAngle += 0.5f;
+                var lx1 = bestPoint.X - Math.Sin(-bestPoint.Heading) * 5;
+                var lz1 = bestPoint.Z - Math.Cos(-bestPoint.Heading) * 5;
+                var lx2 = bestPoint.X + Math.Sin(-bestPoint.Heading) * 5;
+                var lz2 = bestPoint.Z + Math.Cos(-bestPoint.Heading) * 5;
+
+                lx2 = bestPoint.X;
+                lx1 = bestPointP1.X;
+                lz2 = bestPoint.Z;
+                lz1 = bestPointP1.Z;
+
+                var px1 = me.X - lx1;
+                var pz1 = me.Z - lz1;
+                var px2 = lz2 - lz1;
+                var pz2 = -(lx2 - lx1);
+                var qwer = Math.Sqrt(px2*px2 + pz2*pz2);
+                Console.WriteLine(qwer);
+                // Reference to top (otherwise 90deg offset) - CCW
+                yawRoad = activeSegment.Type == Ets2NavigationSegmentType.Road ? -bestPoint.Heading + Math.PI/2 : bestPoint.Heading - Math.PI/2;
+
+                hook = bestPoint;
+                lineDistanceError = (px1*px2 + pz1*pz2)/Math.Sqrt(px2*px2 + pz2*pz2);
+                angleDistancError = yaw - yawRoad;
+                angleDistancError = angleDistancError%(Math.PI*2);
+                 //lineDistanceError = -lineDistanceError;
+                if (lineDistanceError > 7) lineDistanceError = 7;
+                if (lineDistanceError < -7) lineDistanceError = -7;
+                //if (Math.Abs(angleDistancError) < Math.PI/4) lineDistanceError = -lineDistanceError;
+                Console.WriteLine(lineDistanceError.ToString("0.00m") + " | " + angleDistancError.ToString("0.000rad"));
+
+                var gain = 2.5f + ets2Tel.Telemetry.Speed/2.5f;
+
+                SteerAngle = 0.5f - lineDistanceError/gain;// - angleDistancError * 0.1f;
                 //Debug.WriteLine(lineDistanceError + "px error / " + angleDistancError + " angle error / " + SteerAngle);
             }
         }
 
-        #endregion
-
-
-        #region DataMining
-
-        private IntPtr ets2Handle = IntPtr.Zero;
-
-        public int xLeft = 0;
-        public int xRight = 0;
-
-        public float aLeft = 0;
-        public float aRight = 0;
-
-        public bool driveOnLeftMirror = false;
-        public bool driveOnRightMirror = false;
-
-        public bool validLeftMirror = false;
-        public bool validRightMirror = false;
-
-        public const int mirrorWidth = 250;
-        public const int mirrorHeight = 100;
-        public float brightness = 0;
-
-
-        public void ScanMirrors()
+        private void FindNewSegments(Ets2NavigationRoute route, Ets2Point me)
         {
-            validLeftMirror = false;
-            validRightMirror = false;
+            if (route == null || route.Segments == null)
+                return;
+            var segs = new List<Ets2NavigationSegment>();
 
-            if (ets2Handle == IntPtr.Zero && UseDirectXCapture) return;
-            
-            try
+            var dstLimit = 1250;
+            rescan:
+
+            foreach (var seg in route.Segments)
             {
+                var dstEntry = seg.Entry.Point.DistanceTo(me) < dstLimit;
+                var dstExit = seg.Exit.Point.DistanceTo(me) < dstLimit;
 
-                var screenSrc = new Rectangle(0, 340, 1920, mirrorHeight);
-
-                Bitmap screenBitmap;
-
-                if (UseDirectXCapture)
-                    screenBitmap = null;//Direct3DCapture.CaptureRegionDirect3D(ets2Handle, screenSrc);
-                else
-                {
-                    screenBitmap = new Bitmap(screenSrc.Width, screenSrc.Height);
-                    var srcG = Graphics.FromImage(screenBitmap);
-                    srcG.CopyFromScreen(screenSrc.X, screenSrc.Y, 0, 0, new Size(screenSrc.Width, screenSrc.Height), CopyPixelOperation.SourceCopy);
-                }
-
-                var bL = new Bitmap(mirrorWidth, mirrorHeight);
-                var bR = new Bitmap(mirrorWidth, mirrorHeight);
-                var gL = Graphics.FromImage(bL);
-                var gR = Graphics.FromImage(bR);
-
-                //Copy mirros into 2 bitmaps
-                gL.DrawImage(screenBitmap, new Rectangle(0, 0, mirrorWidth, mirrorHeight), new Rectangle(35, 0, mirrorWidth, mirrorHeight), GraphicsUnit.Pixel);
-                gR.DrawImage(screenBitmap, new Rectangle(0, 0, mirrorWidth, mirrorHeight), new Rectangle(1640, 0, mirrorWidth, mirrorHeight), GraphicsUnit.Pixel);
-                //gL.DrawImage(screenBitmap, 0, 0, new Rectangle(35, 545, mirrorWidth, mirrorHeight), GraphicsUnit.Pixel);
-                //gR.DrawImage(screenBitmap, 0, 0, new Rectangle(1640, 545, mirrorWidth, mirrorHeight), GraphicsUnit.Pixel);
-
-                // Copy to camera in graphic
-                var cameraInGraphics = Graphics.FromImage(CameraInput);
-                cameraInGraphics.DrawImage(bL, 0, 0, bL.Width, bL.Height);
-                cameraInGraphics.DrawImage(bR, bL.Width, 0, bR.Width, bR.Height);
-
-                // Parse the bitmaps
-                var sL = ParseMirror(bL, false);
-                var sR = ParseMirror(bR, true);
-
-                // Update
-                bL = sL.image;
-                bR = sR.image;
-
-                if (sL.found)
-                {
-                    xLeft = sL.position;
-                    aLeft = sL.angle;
-                }
-                if (sR.found)
-                {
-                    xRight = sR.position;
-                    aRight = sR.angle;
-                }
-
-                validLeftMirror = sL.found;
-                validRightMirror = sR.found;
-
-                // Draw dots for tracking
-                gL = Graphics.FromImage(bL);
-                if (sL.position > 0)
-                    gL.FillEllipse(Brushes.Red, sL.position, mirrorHeight - 5, 10, 10);
-                gR = Graphics.FromImage(bR);
-                if (sR.position > 0)
-                    gR.FillEllipse(Brushes.Red, sR.position, mirrorHeight - 5, 10, 10);
-
-
-                var cameraOutGraphics = Graphics.FromImage(CameraOutput);
-                cameraOutGraphics.DrawImage(bL, 0, 0, bL.Width, bL.Height);
-                cameraOutGraphics.DrawImage(bR, bL.Width, 0, bR.Width, bR.Height);
-
-            }catch
-            {
+                if (dstEntry || dstExit)
+                    segs.Add(seg);
             }
-
-        }
-        public struct ScanResult
-        {
-            public bool found;
-            public Bitmap image;
-            public float brightness;
-            public int position;
-            public float angle;
-
-            public ScanResult(bool found, Bitmap image, float brightness, int position, float angle)
+            if (!segs.Any() && dstLimit == 1250)
             {
-                this.found = found;
-                this.image = image;
-                this.brightness = brightness;
-                this.position = position;
-                this.angle = angle;
+                dstLimit = 5000;
+                goto rescan;
             }
+            NearbySegments = segs;
         }
 
-        private ScanResult ParseMirror(Bitmap b, bool mirrored)
+        private float RoadDistance(Ets2Item road, float x, float y)
         {
-            var g = Graphics.FromImage(b);
+            if (road == null)
+                return float.MaxValue;
+            if (road.StartNode == null || road.EndNode == null)
+                return float.MaxValue;
 
-            g.CompositingQuality = CompositingQuality.HighSpeed;
-            g.CompositingMode = CompositingMode.SourceCopy;
+            if (Math.Abs(road.StartNode.X - x) > 500)
+                return float.MaxValue;
+            if (Math.Abs(road.StartNode.Z - y) > 500)
+                return float.MaxValue;
+            if (road.RoadPolygons == null)
+                road.GenerateRoadPolygon(64);
 
-            // Normalize
-            var pxVals = 0;
-            // calculate average pixel lightyness
-            for (int x = 0; x < b.Width; x++)
+            var minPerPoint = float.MaxValue;
+
+            foreach (var pt in road.RoadPolygons)
             {
-                for (int y = 0; y < b.Height; y++)
-                {
-                    var px = b.GetPixel(x, y);
 
-                    var grayNessValue = px.B + px.G + px.R;
-                    pxVals += grayNessValue;
-                }
+                var dx1 = pt.X - x;
+                var dy1 = pt.Y - y;
+                var r1 = (float)Math.Sqrt(dx1 * dx1 + dy1 * dy1);
+
+                if (minPerPoint >= r1)
+                    minPerPoint = r1;
             }
 
-            pxVals /= b.Width;
-            pxVals /= b.Height;
-            pxVals /= 2;
-            pxVals += 1;
-            // offset required
-            var offset = 100 - pxVals;
-            double gain = 0.75 + 130.0 / pxVals;
-            if (pxVals < 35 && false)
-            {
-                gain += 2 + (35 - pxVals) / 10.5;
-                offset -= 30;
-            }
-            //if (offset > 1)
-            {
-                for (int x = 0; x < b.Width; x++)
-                {
-                    for (int y = 0; y < b.Height; y++)
-                    {
-                        var px = b.GetPixel(x, y);
-                        var nR = px.R * gain + offset;
-                        var nB = (px.B - 4) * gain + offset;
-                        var nG = (px.G - 2) * gain + offset;
-                        if (nR > 220 && nB < 220)
-                        {
-                            px = Color.FromArgb(0, 0, 0);
-                        }
-                        else
-                        {
-                            nR /= 2;
-                            if (nR < 0) nR = 0;
-                            if (nR >= 255) nR = 255;
-                            if (nG < 0) nG = 0;
-                            if (nG >= 255) nG = 255;
-                            if (nB < 0) nB = 0;
-                            if (nB >= 255) nB = 255;
-
-                            px = Color.FromArgb((int)nR, (int)nG, (int)nB);
-                        }
-                        b.SetPixel(x, y, px);
-                    }
-                }
-            }
-
-            float brightness = pxVals;
-
-            GaussianBlur filter = new GaussianBlur(3, 10);
-            filter.ApplyInPlace(b);
-            b = AdjustBrightnessAndContrast(b, -8.25f, 13.5f, 1.0f);
-            //b = AdjustBrightnessAndContrast(b, 0.0f, 2.0f, 1.0f);
-
-
-            BlobCounter bc = new BlobCounter();
-            bc.MinWidth = 5;
-            bc.MinHeight =20;
-            bc.ObjectsOrder = ObjectsOrder.Size;
-            bc.BackgroundThreshold = Color.FromArgb(10, 10, 10);
-            bc.ProcessImage(b);
-            var blobs = bc.GetObjectsInformation();
-
-            g = Graphics.FromImage(b);
-            var f = new Font("Arial", 8);
-            Blob magicBlob = default(Blob);
-            bool foundBlob = false;
-
-            // Process each blob
-            foreach (var blob in blobs)
-            {
-                Rectangle rect = blob.Rectangle;
-                {
-                    g.DrawString(blob.ColorStdDev.R.ToString(), f, Brushes.White, 0, 0);
-                    if (blob.ColorStdDev.R > 5 && blob.ColorStdDev.R < 60)
-                        continue;
-                    g.DrawRectangle(new Pen(Brushes.PaleGoldenrod), rect );
-                    foundBlob = true;
-                    magicBlob = blob;
-
-                    break;
-
-                }
-
-            }
-
-            int position = -1;
-            float angle = 0;
-
-            // We have found a line, possibly 
-            if (foundBlob)
-            {
-                var lastDarkSpot = 0;
-                var rect = magicBlob.Rectangle;
-                for (int x = 0; x < magicBlob.Rectangle.Width; x++)
-                {
-                    var getX = rect.X + ((mirrored) ? x : (rect.Width - x));
-                    var px1 = b.GetPixel(getX, rect.Y + rect.Height - 3);
-                    var px2 = b.GetPixel(getX, rect.Y + rect.Height - 5);
-                    var intensity = px1.G + px1.B + px1.R + px2.G + px2.B + px2.R;
-                    intensity /= 2;
-                    if (intensity < 50)
-                    {
-                        // Dark pixel
-                        lastDarkSpot = x;
-                    }
-                    else
-                    {
-                        if (x - lastDarkSpot > 3)
-                            break;
-                    }
-                }
-                var angleRad = Math.Atan2(rect.Height, lastDarkSpot);
-                angle = (float)(180 - angleRad / Math.PI * 180);
-                position = (int) (rect.X + Math.Cos(angleRad)*(mirrorHeight-rect.Y));
-                //position = lastDarkSpot + rect.X+20;
-
-                // Project the position to the underside of the mirror
-                // This is we come across dotted lines.
-            }
-
-            ScanResult sr = new ScanResult(foundBlob, b, brightness, position, angle);
-
-            return sr;
+            return minPerPoint;
         }
-        private int GetRoadLine(Bitmap bitmap, int start, int end)
+
+        private bool OutsideRoad(Ets2Item road, float x, float y)
         {
-            for (var y = bitmap.Height - 15; y > 0; y--)
+            if (road == null)
+                return true;
+            if (road.StartNode == null || road.EndNode == null)
+                return true;
+            var minX = Math.Min(road.StartNode.X, road.EndNode.X);
+            var maxX = Math.Max(road.StartNode.X, road.EndNode.X);
+            var minY = Math.Min(road.StartNode.Z, road.EndNode.Z);
+            var maxY = Math.Max(road.StartNode.Z, road.EndNode.Z);
+
+            var margin = 10.5f;
+            if (minX - margin >= x && maxX + margin <= x &&
+                minY - margin >= y && maxY + margin <= y)
             {
-                var firstLinePixel = end;
-                var linePixels = 0;
-                var lastLinePixel = 0;
-                for (var x = start; x < end; x++)
-                {
-                    var px = bitmap.GetPixel(x, y);
-                    if ((px.B > 160 && px.G > 140 && px.R > 25 && Math.Abs(px.B - px.G) < 60) || // white
-                        (px.R > 150 && px.G > 150 && Math.Abs(px.R - px.G) < 30)) // yello
-                    {
-                        firstLinePixel = Math.Min(x, firstLinePixel);
-                        linePixels++;
-                        if (x - lastLinePixel > 3)
-                        {
-                            // reset..
-                            linePixels = 1;
-                            firstLinePixel = end;
-                        }
-                        if (linePixels > 4 && x - firstLinePixel < 12) break;
-                        lastLinePixel = x;
-
-                    }
-
-
-                }
-
-                if (linePixels >= 4)
-                {
-                    return firstLinePixel;
-                }
+                return false;
             }
-            return -1;
-        }
-        private Bitmap AdjustBrightnessAndContrast(Bitmap originalImage, float brightness, float contrast, float gamma)
-        {
-            Bitmap adjustedImage = new Bitmap(originalImage.Width, originalImage.Height);
-
-            float adjustedBrightness = brightness - 1.0f;
-            // create matrix that will brighten and contrast the image
-            float[][] ptsArray =
-                {
-                    new float[] {contrast, 0, 0, 0, 0}, // scale red
-                    new float[] {0, contrast, 0, 0, 0}, // scale green
-                    new float[] {0, 0, contrast, 0, 0}, // scale blue
-                    new float[] {0, 0, 0, 1.0f, 0}, // don't scale alpha
-                    new float[] {adjustedBrightness, adjustedBrightness, adjustedBrightness, 0, 1}
-                };
-
-            var imageAttributes = new ImageAttributes();
-            imageAttributes.ClearColorMatrix();
-            imageAttributes.SetColorMatrix(new ColorMatrix(ptsArray), ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-            //imageAttributes.SetGamma(gamma, ColorAdjustType.Bitmap);
-            Graphics g = Graphics.FromImage(adjustedImage);
-            g.DrawImage(originalImage, new Rectangle(0, 0, adjustedImage.Width, adjustedImage.Height)
-                        , 0, 0, originalImage.Width, originalImage.Height,
-                        GraphicsUnit.Pixel, imageAttributes);
-
-            return adjustedImage;
+            else
+            {
+                return true;
+            }
         }
 
         #endregion
+
     }
 }
