@@ -54,9 +54,6 @@ namespace SimShift.Services
                     else
                         return val;
                 case JoyControls.Brake:
-                    if (val > 0.05)
-                        Cruising = false;
-
                     if (Cruising)
                         return Math.Min(1, Math.Max(0, b));
                     else
@@ -116,29 +113,34 @@ namespace SimShift.Services
         {
             Speed = data.Telemetry.Speed;
 
+            if (Main.GetAxisIn(JoyControls.Brake) > 0.05)
+                Cruising = false;
+
             // Any tracked car?
             if (dlDebugInfo.TrackedCar != null)
             {
                 // Gap control?
-                var distanceTarget = 30;
+                var distanceTarget = 20;
                 var distanceError = distanceTarget - dlDebugInfo.TrackedCar.Distance;
 
-                var speedBias = distanceError/(distanceTarget/3); // 3m/s max decrement
+                var speedBias = 9*distanceError/distanceTarget; // 3m/s max decrement
+                if (distanceError < 0)
+                    speedBias /= 6;
                 var targetSpeed = dlDebugInfo.TrackedCar.Speed - speedBias;
 
                 if (targetSpeed >= SpeedCruise)
                     targetSpeed = (float)SpeedCruise;
 
-                var speedErr = data.Telemetry.Speed - targetSpeed;
+                var speedErr = data.Telemetry.Speed - targetSpeed-2;
                 if (speedErr > 0) // too fast
                 {
                     t = 0;
                     if (speedErr>1.5f)
-                        b = (float) Math.Pow(speedErr-1.5f,2)*0.03f;
+                        b = (float) Math.Pow(speedErr-1.5f,4)*0.015f;
                 }
                 else
                 {
-                    t = -speedErr*0.4f;
+                    t = -speedErr*0.2f;
                     b = 0;
                 }
             }

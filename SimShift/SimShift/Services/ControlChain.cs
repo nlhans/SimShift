@@ -27,9 +27,9 @@ namespace SimShift.Services
         {
             chain.Add(new ThrottleMapping());
             chain.Add(Main.LaneAssistance);
+            chain.Add(Main.ACC);
             chain.Add(Main.Speedlimiter);
             //chain.Add(Main.CruiseControl);
-            chain.Add(Main.ACC);
             if (Main.VST)
                 chain.Add(Main.VariableSpeedControl);
             else

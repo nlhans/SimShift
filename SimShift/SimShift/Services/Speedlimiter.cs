@@ -91,10 +91,11 @@ namespace SimShift.Services
                 if (limiterFactor > 1) limiterFactor = 1;
 
 
-                if (data.Telemetry.Speed*3.6 - 5 >= SpeedLimit)
+                if (data.Telemetry.Speed*3.6 - 2 >= SpeedLimit)
                 {
-                    var err = (data.Telemetry.Speed*3.6 - SpeedLimit)/25.0*0.25f;
+                    var err = (data.Telemetry.Speed*3.6 - 3 - SpeedLimit)/25.0*0.15f;
                     brakeFactor = err;
+                    limiterFactor = 0;
                 }
                 else
                 {
@@ -106,7 +107,7 @@ namespace SimShift.Services
                 Enabled = true;
                 limiterFactor *= Math.Max(0, 1 - (data.Telemetry.EngineRpm - 1750)/350.0f);
             }
-            var pwrLimiter = Main.Drivetrain.CalculateThrottleByPower(data.Telemetry.EngineRpm, 800);
+            var pwrLimiter = Main.Drivetrain.CalculateThrottleByPower(data.Telemetry.EngineRpm,1000);
 
             if (pwrLimiter > 1) pwrLimiter = 1;
             if (pwrLimiter < 0.2) pwrLimiter = 0.2;

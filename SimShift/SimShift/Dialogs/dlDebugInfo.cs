@@ -181,7 +181,7 @@ namespace SimShift.Dialogs
             }
 
             var pwr = Main.Drivetrain.CalculatePower(data.MyTelemetry.Drivetrain.EngineRpm, data.MyTelemetry.Controls.GameThrottle);
-            var scanDistance = 2.0f + Math.Pow(1 - Math.Abs(data.MyTelemetry.Controls.GameSteer), 64)*3;
+            var scanDistance = 2.0f + Math.Pow(1 - Math.Abs(data.MyTelemetry.Controls.GameSteer), 64)*3.5f;
             for (float ts = 0.0f; ts < scanDistance && !data.Cars.Any(x => x.Tracked); ts += step)
             {
                 // Interpolate the steer radius
@@ -201,7 +201,7 @@ namespace SimShift.Dialogs
                 py += (float) diy*steerRadius/2;
 
                 // Rotated polygon
-                var carL = 8.0f;
+                var carL = 12.0f;
                 var carW = 2.5f;
                 var hg = -heading; //
                 PointF[] poly = new PointF[]
