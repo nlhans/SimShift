@@ -28,16 +28,16 @@ namespace SimShift
 
         public FrmMain()
         {
-            var map = "europe.ets2";
-            var universalFolder = Directory.Exists(@"E:\map\" + map + "\\")
-                ? @"E:\map\" + map + "\\"
-                : Directory.Exists(@"E:\Games\Steam\steamapps\common\Euro Truck Simulator 2\base\map")
-                    ? @"E:\Games\Steam\steamapps\common\Euro Truck Simulator 2\base\map\" + map + "\\"
-                    : @"./europe/";
+            var map = "europe";
+           
+            var universalFolder = @"..\..\..\..\..\base\map\" + map + "\\";
 
-            var prefabs = @"E:\Mods\ETS2\data 1.19\base\prefab\";
+            // PREFAB FOLDER HERE
+            var prefabs = @"..\..\..\..\..\base\prefab\";
 
-            Ets2Map = new Ets2Mapper(universalFolder, prefabs, @"C:\Projects\Software\SimShift\Resources\LUT1.19");
+            // LUT FOLDER HERE
+            Ets2Map = new Ets2Mapper(universalFolder, prefabs, @"..\..\\Resources\LUT1.19");
+            
             Ets2Map.Parse();
             Main.SetMap(Ets2Map);
 
