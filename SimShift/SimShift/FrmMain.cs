@@ -29,14 +29,11 @@ namespace SimShift
         public FrmMain()
         {
             var map = "europe";
-           
             var universalFolder = @"..\..\..\..\..\base\map\" + map + "\\";
-
-            // PREFAB FOLDER HERE
             var prefabs = @"..\..\..\..\..\base\prefab\";
+            var lutFolder = @"..\..\\Resources\LUT1.19";
 
-            // LUT FOLDER HERE
-            Ets2Map = new Ets2Mapper(universalFolder, prefabs, @"..\..\\Resources\LUT1.19");
+            Ets2Map = new Ets2Mapper(universalFolder, prefabs, lutFolder);
             
             Ets2Map.Parse();
             Main.SetMap(Ets2Map);
