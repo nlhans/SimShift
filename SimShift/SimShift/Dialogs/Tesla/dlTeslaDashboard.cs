@@ -20,8 +20,7 @@ namespace SimShift.Dialogs.Tesla
         private int tachoW, tachoH;
         private Image gps;
 
-
-        public const string ResourceFolder = "C:/Projects/Software/SimShift/Resources/TeslaDash/";
+        public const string ResourceFolder = @"..\..\\Resources\TeslaDash";
 
         private float Speed = 1.0f;
         private float Power = 1.0f;
