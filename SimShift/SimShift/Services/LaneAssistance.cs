@@ -51,7 +51,8 @@ namespace SimShift.Services
 
         public bool ButtonActive { get { return DateTime.Now > ButtonCooldownPeriod; } }
 
-        private SoundPlayer beep = new SoundPlayer(@"C:\Projects\Software\SimShift\Resources\alert.wav");
+        private SoundPlayer beep = new SoundPlayer(@"..\..\\Resources\Alert.wav");
+
         public DateTime ButtonCooldownPeriod = DateTime.Now;
 
         #region Implementation of IControlChainObj
