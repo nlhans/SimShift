@@ -3,7 +3,7 @@ SimShift
 
 Driver utilities for various open roaming simulators like Euro Truck Simulator 2 and Test Drive Unlimited.
 
-## Windows Installation For ETS2
+## Windows Installation
 
 ### Place SimShift folder in ETS2 Main Folder
 - `steam\steamapps\common\Euro Truck Simulator 2\`
