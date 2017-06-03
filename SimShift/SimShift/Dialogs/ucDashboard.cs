@@ -27,7 +27,7 @@ namespace SimShift.Dialogs
         {
             transparant = t;
 
-            needle = (Bitmap)Image.FromFile(@"C:\Projects\Software\SimShift\Resources\needle_150px.png");
+            needle = (Bitmap) Image.FromFile(@"..\..\\Resources\Needle_150px.png");
 
             this.DoubleClick+=new EventHandler(ucDashboard_DoubleClick);
             InitializeComponent();

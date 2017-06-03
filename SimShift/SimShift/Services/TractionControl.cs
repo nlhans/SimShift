@@ -50,7 +50,7 @@ namespace SimShift.Services
 
         public TractionControl()
         {
-            tcSound = new SoundPlayer(@"C:\Projects\Software\SimShift\Resources\tractioncontrol.wav");
+            tcSound = new SoundPlayer(@"..\..\\Resources\tractioncontrol.wav");
             setVolume(0);
             SoundStopped = true;
             lastThrottle = 1;
